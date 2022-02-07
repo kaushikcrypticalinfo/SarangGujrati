@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?appBackground"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/ic_app_bg"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ProgressBar
+                    android:id="@+id/progressbar"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    android:layout_centerInParent="true"
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="15dp"
+        tools:ignore="MissingConstraints">
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:src="@drawable/ic_logo_app_name" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvGuest"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/shape_bg_green"
+            android:text="@string/guest_text"
+            android:padding="10dp"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/montserrat_bold"/>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/app_divider"
+            android:layout_marginTop="50dp"/>
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_in"
+            android:padding="10dp"
+            android:textSize="20sp"
+            android:textColor="@color/app_grey"
+            android:fontFamily="@font/montserrat_bold"/>
+
+
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:textSize="14sp"
+            android:hint="@string/email"
+            android:background="@drawable/shape_border_grey"
+            android:ems="0"
+            android:inputType="textEmailAddress"
+            android:textColor="?textColor"
+            android:fontFamily="@font/montserrat_bold"
+            android:imeOptions="actionNext"
+            android:text=""/>
+
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:textSize="14sp"
+            android:layout_marginTop="10dp"
+            android:hint="@string/password"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="?textColor"
+            android:background="@drawable/shape_border_grey"
+            android:ems="0"
+            android:textColor="?textColor"
+            android:inputType="textPassword"
+            android:fontFamily="@font/montserrat_bold"
+            android:imeOptions="actionDone"
+            android:text=""/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            tools:ignore="MissingConstraints">
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cbAgree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/i_agree_txt"
+            android:textSize="10sp"
+            android:textColor="?textColor"
+            android:fontFamily="@font/poppins_regular"
+            tools:ignore="SmallSp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTerms"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/terms"
+            android:padding="5dp"
+            android:textSize="10sp"
+            android:textColor="@color/app_orange"
+            android:fontFamily="@font/poppins_regular"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/and"
+            android:textSize="10sp"
+            android:textColor="?textColor"
+            android:fontFamily="@font/poppins_regular"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvPrivacyPolicy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/privacy_policy"
+            android:padding="5dp"
+            android:textSize="10sp"
+            android:textColor="@color/app_orange"
+            android:fontFamily="@font/poppins_regular"/>
+    </LinearLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forgot_password"
+            android:textSize="10sp"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:textColor="@color/app_orange"
+            android:fontFamily="@font/poppins_regular"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        tools:ignore="MissingConstraints">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_in"
+            android:background="@drawable/shape_bg_light_green"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:layout_marginEnd="5dp"
+            android:padding="10dp"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:layout_weight="1"/>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_up"
+            android:background="@drawable/shape_bg_light_orange"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:layout_marginEnd="5dp"
+            android:padding="10dp"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        tools:ignore="MissingConstraints">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:background="@color/app_divider" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/sign_up_with_text"
+            android:textSize="14sp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/app_divider"
+            android:fontFamily="@font/montserrat_regular"/>
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:background="@color/app_divider" />
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp"
+            tools:ignore="MissingConstraints">
+
+            <FrameLayout
+                android:id="@+id/FrameLayout1"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" >
+
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/login_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/llFacebook"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_bg_blue"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="5dp"
+                    tools:ignore="MissingConstraints">
+
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_facebook"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvFacebook"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/facebook"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:textSize="14dp"
+                        android:fontFamily="@font/montserrat_bold" />
+                </LinearLayout>
+
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/llGoogle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/shape_bg_red"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:layout_marginEnd="30dp"
+                tools:ignore="MissingConstraints">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/ic_google"/>
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvGoogle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/google"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textSize="14dp"
+                    android:fontFamily="@font/montserrat_bold" />
+            </LinearLayout>
+        </LinearLayout>
+        </LinearLayout>
+            </RelativeLayout>
+    </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
