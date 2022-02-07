@@ -41,7 +41,7 @@ import com.example.saranggujrati.adapter.FeaturedListAdapter
 import com.example.saranggujrati.model.*
 
 
-class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
+class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
 
     private lateinit var mActivity: MainActivity
     private lateinit var binding: FragmentHomeBinding
@@ -55,7 +55,6 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
 
     lateinit var categoryAdapter: CategoryListAdapter
     private var categoryList = ArrayList<CityCatageoryChild>()
-
 
 
     lateinit var mLayoutManager: RecyclerView.LayoutManager
@@ -72,8 +71,8 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
-        mActivity=(activity as MainActivity)
-        mActivity.toolbar.title=getString(R.string.app_name)
+        mActivity = (activity as MainActivity)
+        mActivity.toolbar.title = getString(R.string.app_name)
         mActivity.enableViews(false)
         setAdapter()
         attachListeners()
@@ -83,16 +82,15 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
         getCity()
         getCategory()
 
-        if(SavedPrefrence.is_Guest){
+        if (SavedPrefrence.is_Guest) {
             setHasOptionsMenu(false)
 
-        }else{
+        } else {
             setHasOptionsMenu(true)
 
         }
 
     }
-
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -121,7 +119,7 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
             override fun onClick(view: View, position: Int) {
                 if (view.id == R.id.llMain) {
                     val b = Bundle()
-                    b.putString("id",categoryList.get(position).id.toString())
+                    b.putString("id", categoryList.get(position).id.toString())
                     mActivity.pushFragment(FragmentCityCatBlogDetail(b))
                 }
 
@@ -133,10 +131,10 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
             override fun onClick(view: View, position: Int) {
                 if (view.id == R.id.llMain) {
                     val b = Bundle()
-                    b.putInt("position",position)
+                    b.putInt("position", position)
                     /*val fragobj = FragmentFeatureBlog()
                     fragobj.arguments=b*/
-                    Log.e("pos1",position.toString())
+                    Log.e("pos1", position.toString())
                     mActivity.pushFragment(FragmentFeatureBlog(b))
                 }
 
@@ -151,7 +149,7 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
             override fun onClick(view: View, position: Int) {
                 if (view.id == R.id.llCity) {
                     val b = Bundle()
-                    b.putString("id",topCitiesList.get(position).id.toString())
+                    b.putString("id", topCitiesList.get(position).id.toString())
                     mActivity.pushFragment(FragmentCityCatBlogDetail(b))
                 }
 
@@ -161,9 +159,6 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
 
 
     }
-
-
-
 
 
     private fun setRVLayoutManager() {
@@ -177,7 +172,8 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
 
         binding.rvFeaturedStories.recyclerview.layoutManager = mLayoutManagerHorizontal
         binding.rvFeaturedStories.recyclerview.setHasFixedSize(true)
-        binding.rvFeaturedStories.recyclerview.layoutManager = LinearLayoutManager(AppClass.appContext,  LinearLayoutManager.HORIZONTAL, false)
+        binding.rvFeaturedStories.recyclerview.layoutManager =
+            LinearLayoutManager(AppClass.appContext, LinearLayoutManager.HORIZONTAL, false)
 
 
         binding.rvTopCategory.recyclerview.layoutManager = mLayoutManager
@@ -189,6 +185,7 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
 
 
     }
+
     private fun attachListeners() {
         binding.llLiveNews.setOnClickListener(this)
         binding.llallGujNews.setOnClickListener(this)
@@ -198,7 +195,7 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
 
     }
 
-    private fun getCity(){
+    private fun getCity() {
         viewModel.gettTopCitiesCategories()
         setupObserversTopCities()
     }
@@ -216,7 +213,7 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
                     if (it.value.status) {
                         binding.rvTopCities.progressbar.visible(false)
                         getTopCitiesList(it.value)
-                    }else{
+                    } else {
                         binding.rvTopCities.progressbar.visible(false)
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
                     }
@@ -227,33 +224,32 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
                     when {
                         it.isNetworkError -> {
                             if (!isOnline(AppClass.appContext)) {
-                                Snackbar.make(binding.layout,
+                                Snackbar.make(
+                                    binding.layout,
                                     resources.getString(R.string.check_internet),
-                                    Snackbar.LENGTH_LONG).show()
+                                    Snackbar.LENGTH_LONG
+                                ).show()
                             }
                         }
                         else -> {
-                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
-
+                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
+                                .show()
                         }
-
-
                     }
-
-
                 }
             }
 
         })
     }
-    private fun getTopCitiesList(response: CitCategoryListResponse) {
-        if(response.data.isEmpty() ){
-            binding.rvTopCities.tvNoData.visibility=View.VISIBLE
-            binding.rvTopCities.recyclerview.visibility=View.GONE
-        }else{
 
-            for(i in response.data.indices){
-                if(response.data[i].index==1) {
+    private fun getTopCitiesList(response: CitCategoryListResponse) {
+        if (response.data.isEmpty()) {
+            binding.rvTopCities.tvNoData.visibility = View.VISIBLE
+            binding.rvTopCities.recyclerview.visibility = View.GONE
+        } else {
+
+            for (i in response.data.indices) {
+                if (response.data[i].index == 1) {
                     topCitiesList.addAll(response.data[i].child)
                     adapter.notifyDataSetChanged()
                 }
@@ -266,10 +262,11 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
 
     //Feature List
 
-    private fun getFeaturedListData(){
+    private fun getFeaturedListData() {
         viewModel.gettFeatureList()
         setupObserversFeatureList()
     }
+
     private fun setupObserversFeatureList() {
         viewModel.featureListResponse.observe(this, Observer {
             when (it) {
@@ -282,7 +279,7 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
                     if (it.value.status) {
                         binding.rvFeaturedStories.progressbar.visible(false)
                         getFeatureList(it.value)
-                    }else{
+                    } else {
                         binding.rvFeaturedStories.progressbar.visible(false)
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
                     }
@@ -293,13 +290,16 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
                     when {
                         it.isNetworkError -> {
                             if (!isOnline(AppClass.appContext)) {
-                                Snackbar.make(binding.layout,
+                                Snackbar.make(
+                                    binding.layout,
                                     resources.getString(R.string.check_internet),
-                                    Snackbar.LENGTH_LONG).show()
+                                    Snackbar.LENGTH_LONG
+                                ).show()
                             }
                         }
                         else -> {
-                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
+                                .show()
 
                         }
 
@@ -312,11 +312,12 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
 
         })
     }
+
     private fun getFeatureList(response: BlogFeatureList) {
-        if(response.data.isEmpty() ){
-            binding.rvFeaturedStories.tvNoData.visibility=View.VISIBLE
-            binding.rvFeaturedStories.recyclerview.visibility=View.GONE
-        }else{
+        if (response.data.isEmpty()) {
+            binding.rvFeaturedStories.tvNoData.visibility = View.VISIBLE
+            binding.rvFeaturedStories.recyclerview.visibility = View.GONE
+        } else {
             featureList.addAll(response.data)
             featureAdapter.notifyDataSetChanged()
 
@@ -324,7 +325,7 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
 
     }
 
-    private fun getCategory(){
+    private fun getCategory() {
         viewModel.gettTopCategories()
         setupObserversTopCategory()
     }
@@ -343,7 +344,7 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
                     if (it.value.status) {
                         binding.rvTopCategory.progressbar.visible(false)
                         getTopCategoryList(it.value)
-                    }else{
+                    } else {
                         binding.rvTopCategory.progressbar.visible(false)
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
 
@@ -355,13 +356,16 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
                     when {
                         it.isNetworkError -> {
                             if (!isOnline(AppClass.appContext)) {
-                                Snackbar.make(binding.layout,
+                                Snackbar.make(
+                                    binding.layout,
                                     resources.getString(R.string.check_internet),
-                                    Snackbar.LENGTH_LONG).show()
+                                    Snackbar.LENGTH_LONG
+                                ).show()
                             }
                         }
                         else -> {
-                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
+                                .show()
 
                         }
 
@@ -374,13 +378,14 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
 
         })
     }
+
     private fun getTopCategoryList(response: CitCategoryListResponse) {
-        if(response.data.isEmpty() ){
-            binding.rvTopCategory.tvNoData.visibility=View.VISIBLE
-            binding.rvTopCategory.recyclerview.visibility=View.GONE
-        }else{
-            for(i in response.data.indices){
-                if(response.data[i].index==0) {
+        if (response.data.isEmpty()) {
+            binding.rvTopCategory.tvNoData.visibility = View.VISIBLE
+            binding.rvTopCategory.recyclerview.visibility = View.GONE
+        } else {
+            for (i in response.data.indices) {
+                if (response.data[i].index == 0) {
                     categoryList.addAll(response.data[i].child)
                     categoryAdapter.notifyDataSetChanged()
                 }
@@ -392,20 +397,21 @@ class HomeFragment :BaseFragment<HomeViewModel>() ,View.OnClickListener{
     }
 
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.logo->mActivity.pushFragment(FragmentEditProfile())
+        when (item.itemId) {
+            R.id.logo -> mActivity.pushFragment(FragmentEditProfile())
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onClick(p0: View?) {
-        when(p0){
-            binding.llLiveNews ->mActivity.pushFragment(FragmentAllNewsChannel())
-            binding.llallGujNews ->mActivity.pushFragment(FragmentAllNewsPaper())
-            binding.llLatestNews ->mActivity.pushFragment(FragmentAllBlog())
-            binding.tvLiveTempleDarshan ->mActivity.pushFragment(FragmentLiveTempleDarshanChannelList())
+        when (p0) {
+            binding.llLiveNews -> mActivity.pushFragment(FragmentAllNewsChannel())
+            binding.llallGujNews -> mActivity.pushFragment(FragmentAllNewsPaper())
+            binding.llLatestNews -> mActivity.pushFragment(FragmentAllBlog())
+            binding.tvLiveTempleDarshan -> mActivity.pushFragment(
+                FragmentLiveTempleDarshanChannelList()
+            )
         }
     }
 

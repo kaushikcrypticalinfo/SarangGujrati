@@ -1,4 +1,4 @@
-package com.test.pausernew.api.factory
+package com.example.saranggujrati.webservice.factory
 
 import retrofit2.Retrofit
 import okhttp3.ResponseBody

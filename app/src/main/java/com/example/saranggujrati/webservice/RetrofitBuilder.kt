@@ -4,12 +4,15 @@ import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.BuildConfig
 import com.example.saranggujrati.ui.SavedPrefrence
 import com.example.saranggujrati.webservice.ApiService
-import com.test.pausernew.api.factory.QualifiedTypeConverterFactory
+import com.example.saranggujrati.webservice.factory.QualifiedTypeConverterFactory
 import okhttp3.Authenticator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory
+
+
 import java.util.concurrent.TimeUnit
 
 
@@ -23,8 +26,11 @@ object RetrofitBuilder {
         return OkHttpClient.Builder()
             .addInterceptor { chain ->
                 chain.proceed(chain.request().newBuilder().also {
-                    if(SavedPrefrence.getApiToken(AppClass.appContext)!=""){
-                        it.addHeader("Authorization", "Bearer ${SavedPrefrence.getApiToken(AppClass.appContext)}")
+                    if (SavedPrefrence.getApiToken(AppClass.appContext) != "") {
+                        it.addHeader(
+                            "Authorization",
+                            "Bearer ${SavedPrefrence.getApiToken(AppClass.appContext)}"
+                        )
                     }
                 }.build())
             }
@@ -44,12 +50,18 @@ object RetrofitBuilder {
 
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(QualifiedTypeConverterFactory(GsonConverterFactory.create(),Simpl))
+            .addConverterFactory(
+                QualifiedTypeConverterFactory(
+                    GsonConverterFactory.create(),
+                    SimpleXmlConverterFactory.create()
+                )
+            )
             .addConverterFactory(GsonConverterFactory.create())
             .client(getRetrofitClient())
             .build()
 
     }
+
     val apiService: ApiService = getRetrofit().create(ApiService::class.java)
 }
 

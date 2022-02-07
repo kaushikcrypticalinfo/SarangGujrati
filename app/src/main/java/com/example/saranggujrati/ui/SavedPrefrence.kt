@@ -32,7 +32,7 @@ object SavedPrefrence {
 
 
     private  fun getSharedPreference(ctx: Context?): SharedPreferences? {
-        return PreferenceManager.getDefaultSharedPreferences(ctx)
+        return PreferenceManager.getDefaultSharedPreferences(ctx!!)
     }
 
     private fun  editor(context: Context, const:String, string: String){

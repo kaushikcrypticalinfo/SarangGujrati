@@ -1,33 +1,28 @@
 package com.example.saranggujrati.adapter
 
-import android.content.Context
 import android.view.View
 import androidx.viewpager.widget.PagerAdapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.example.saranggujrati.model.BlogData
-import android.annotation.SuppressLint
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.NonNull
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.R
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.*
 import java.util.*
 
 
-class AllBlogViewPagerAdapter constructor (private var blogList: ArrayList<BlogData>): PagerAdapter() {
+class AllBlogViewPagerAdapter constructor(private var blogList: ArrayList<BlogData>) :
+    PagerAdapter() {
 
     private var mLayoutInflater: LayoutInflater? = null
     var adapterListener: AdapterListener? = null
-     var adView: AdView? = null
+    var adView: AdView? = null
     override fun getCount(): Int {
         return blogList.size
     }
@@ -38,13 +33,12 @@ class AllBlogViewPagerAdapter constructor (private var blogList: ArrayList<BlogD
     }
 
 
-
-
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val itemView: View =
-            LayoutInflater.from(container.context).inflate(R.layout.item_news_detail, container, false)
+            LayoutInflater.from(container.context)
+                .inflate(R.layout.item_news_detail, container, false)
 
-        val data= blogList[position]
+        val data = blogList[position]
 
         val imageView: ImageView = (itemView).findViewById(R.id.iv_news_image)
         val ivBack: ImageView = (itemView).findViewById(R.id.ic_back)
@@ -59,24 +53,26 @@ class AllBlogViewPagerAdapter constructor (private var blogList: ArrayList<BlogD
 
 
 
-        tvNewsHighlight.text=data.title
-        tvNewsDetail.text=data.description
-        tvPaperName.text=data.category_name
+        tvNewsHighlight.text = data.title
+        tvNewsDetail.text = data.description
+        tvPaperName.text = data.category_name
 
         Glide.with(AppClass.appContext)
             .load(data.image)
-            .apply(RequestOptions.placeholderOf(R.drawable.placeholder).error(R.drawable.placeholder))
+            .apply(
+                RequestOptions.placeholderOf(R.drawable.placeholder).error(R.drawable.placeholder)
+            )
             .into(imageView)
         ivBack.setOnClickListener {
-            adapterListener?.onClick( ivBack, position)
+            adapterListener?.onClick(ivBack, position)
         }
 
         tvFullStory.setOnClickListener {
-            adapterListener?.onClick( tvFullStory, position)
+            adapterListener?.onClick(tvFullStory, position)
         }
 
         ivShare.setOnClickListener {
-            adapterListener?.onClick( ivShare, position)
+            adapterListener?.onClick(ivShare, position)
         }
 
 
@@ -86,50 +82,15 @@ class AllBlogViewPagerAdapter constructor (private var blogList: ArrayList<BlogD
     }
 
 
-
-    private fun loadBannerAd(){
+    private fun loadBannerAd() {
         val adRequest = AdRequest.Builder().build()
         adView!!.loadAd(adRequest)
 
-        adView!!.adListener  = object : AdListener(){
-            override fun onAdFailedToLoad(p0: Int) {
+        adView!!.adListener = object : AdListener() {
+            override fun onAdFailedToLoad(@NonNull p0: LoadAdError) {
                 super.onAdFailedToLoad(p0)
-                /*val toastMessage: String = "ad fail to load"
-                Toast.makeText(AppClass.appContext, toastMessage.toString(), Toast.LENGTH_LONG).show()*/
-            }
-            override fun onAdLoaded() {
-                super.onAdLoaded()
-                /*val toastMessage: String = "ad loaded"
-                Toast.makeText(AppClass.appContext, toastMessage.toString(), Toast.LENGTH_LONG).show()*/
-            }
-            override fun onAdOpened() {
-                super.onAdOpened()
-               /* val toastMessage: String = "ad is open"
-                Toast.makeText(AppClass.appContext, toastMessage.toString(), Toast.LENGTH_LONG).show()*/
-            }
-            override fun onAdClicked() {
-                super.onAdClicked()
-               /* val toastMessage: String = "ad is clicked"
-                Toast.makeText(AppClass.appContext, toastMessage.toString(), Toast.LENGTH_LONG).show()*/
-            }
-
-            override fun onAdClosed() {
-                super.onAdClosed()
-                /*val toastMessage: String = "ad is closed"
-                Toast.makeText(AppClass.appContext, toastMessage.toString(), Toast.LENGTH_LONG).show()*/
-            }
-            override fun onAdImpression() {
-                super.onAdImpression()
-              /*  val toastMessage: String = "ad impression"
-                Toast.makeText(AppClass.appContext, toastMessage.toString(), Toast.LENGTH_LONG).show()*/
-            }
-            override fun onAdLeftApplication() {
-                super.onAdLeftApplication()
-              /*  val toastMessage: String = "ad left application"
-                Toast.makeText(AppClass.appContext, toastMessage.toString(), Toast.LENGTH_LONG).show()*/
             }
         }
-
 
 
     }
@@ -138,6 +99,7 @@ class AllBlogViewPagerAdapter constructor (private var blogList: ArrayList<BlogD
     interface AdapterListener {
         fun onClick(view: View, position: Int)
     }
+
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         container.removeView(`object` as LinearLayout)
     }

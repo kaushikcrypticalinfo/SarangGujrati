@@ -36,9 +36,11 @@ import android.widget.Toast
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.example.saranggujrati.ui.viewModel.CityCatBlogDetailViewModel
+import timber.log.Timber
 
 
-class FragmentCityCatBlogDetail(val b:Bundle):BaseFragment<CityCatBlogDetailViewModel> (),View.OnClickListener{
+class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailViewModel>(),
+    View.OnClickListener {
 
     private lateinit var mActivity: MainActivity
     lateinit var cityCatBlogDetailAdapter: CityCategoryBlogDetailViewPagerAdapter
@@ -57,10 +59,10 @@ class FragmentCityCatBlogDetail(val b:Bundle):BaseFragment<CityCatBlogDetailView
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
         cityCatBlogDetailAdapter = CityCategoryBlogDetailViewPagerAdapter(blogList)
-        val bundle=b
-        val id= bundle.getString("id")
-        Log.e("id", id.toString())
-        mActivity=(activity as MainActivity)
+        val bundle = b
+        val id = bundle.getString("id")
+        Timber.e(id.toString())
+        mActivity = (activity as MainActivity)
         mActivity.enableViews(true)
         mActivity.supportActionBar?.hide()
         if (id != null) {
@@ -70,8 +72,8 @@ class FragmentCityCatBlogDetail(val b:Bundle):BaseFragment<CityCatBlogDetailView
 
 
     override fun onPause() {
-        if (cityCatBlogDetailAdapter.adView!=null) {
-            cityCatBlogDetailAdapter.adView!!.pause();
+        if (cityCatBlogDetailAdapter.adView != null) {
+            cityCatBlogDetailAdapter.adView!!.pause()
         }
         super.onPause()
     }
@@ -79,23 +81,23 @@ class FragmentCityCatBlogDetail(val b:Bundle):BaseFragment<CityCatBlogDetailView
     override fun onResume() {
         super.onResume()
         if (cityCatBlogDetailAdapter.adView != null) {
-            cityCatBlogDetailAdapter.adView!!.resume();
+            cityCatBlogDetailAdapter.adView!!.resume()
         }
 
 
         requireView().isFocusableInTouchMode = true
         requireView().requestFocus()
 
-        requireView().setOnKeyListener(object : View.OnKeyListener{
+        requireView().setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
-                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                    Log.i(tag, "onKey Back listener is working!!!");
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
+                    Timber.i("onKey Back listener is working!!!")
                     mActivity.supportActionBar?.show()
                     mActivity.onBackPressed()
 /*
                     getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 */
-                    return true;
+                    return true
                 }
                 return false
             }
@@ -104,26 +106,27 @@ class FragmentCityCatBlogDetail(val b:Bundle):BaseFragment<CityCatBlogDetailView
 
     override fun onDestroy() {
         if (cityCatBlogDetailAdapter.adView != null) {
-            cityCatBlogDetailAdapter.adView!!.destroy();
+            cityCatBlogDetailAdapter.adView!!.destroy()
         }
-        super.onDestroy();
+        super.onDestroy()
     }
 
 
-
-    private fun getAllBlogList(id:String){
-        viewModel.getCityCatBlogDetail(id)
+    private fun getAllBlogList(id: String) {
         setupObservers(id)
+
+        viewModel.getCityCatBlogDetail(id)
+        viewModel.getRssfeedList(id)
 
     }
 
 
     //setup observer
-    private fun setupObservers(id:String) {
-        viewModel.cityCatBlogDetailResponse.observe(this, Observer {
+    private fun setupObservers(id: String) {
+        viewModel.feedList.observe(this, Observer { it ->
             when (it) {
                 is Resource.Loading -> {
-                    binding.progressbar.isVisible=true
+                    binding.progressbar.isVisible = true
                 }
 
                 is Resource.Success -> {
@@ -131,30 +134,30 @@ class FragmentCityCatBlogDetail(val b:Bundle):BaseFragment<CityCatBlogDetailView
                         blogList.clear()
                         if (it.value.status) {
                             binding.progressbar.visible(false)
-
-                            getAllBlogList(it.value,id)
+                            it.value.data.forEach {
+                                viewModel.getLiveData(it.rssUrl)
+                            }
 
                         }
-
-                    }else{
+                    } else {
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
-
                     }
-
-
                 }
                 is Resource.Failure -> {
-                    binding.progressbar.isVisible=false
+                    binding.progressbar.isVisible = false
                     when {
                         it.isNetworkError -> {
                             if (!isOnline(AppClass.appContext)) {
-                                Snackbar.make(binding.layout,
+                                Snackbar.make(
+                                    binding.layout,
                                     resources.getString(R.string.check_internet),
-                                    Snackbar.LENGTH_LONG).show()
+                                    Snackbar.LENGTH_LONG
+                                ).show()
                             }
                         }
                         else -> {
-                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
+                                .show()
 
                         }
 
@@ -165,14 +168,42 @@ class FragmentCityCatBlogDetail(val b:Bundle):BaseFragment<CityCatBlogDetailView
 
             }
         })
-    }
-    private fun getAllBlogList(response: CityCategoryBlogDetailResponse,id:String) {
-        if(response.data.isEmpty() ){
-            binding.tvNoData.visibility=View.VISIBLE
-            binding.appBarLayout.visibility=View.VISIBLE
-            binding.verticalViewPager.visibility=View.GONE
 
-            binding.tvTitle.text=getString(R.string.app_name)
+        viewModel.feedLiveData.observe(this, Observer {
+            when (it) {
+                is Resource.Loading -> {
+                    binding.progressbar.isVisible = true
+                }
+
+                is Resource.Success -> {
+                    binding.progressbar.isVisible = false
+                    Timber.e(it.toString())
+                }
+                is Resource.Failure -> {
+                    binding.progressbar.isVisible = false
+                    when {
+                        it.isNetworkError -> {
+                            if (!isOnline(AppClass.appContext)) {
+                                Snackbar.make(
+                                    binding.layout,
+                                    resources.getString(R.string.check_internet),
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
+
+    private fun getAllBlogList(response: CityCategoryBlogDetailResponse, id: String) {
+        if (response.data.isEmpty()) {
+            binding.tvNoData.visibility = View.VISIBLE
+            binding.appBarLayout.visibility = View.VISIBLE
+            binding.verticalViewPager.visibility = View.GONE
+
+            binding.tvTitle.text = getString(R.string.app_name)
             binding.icBack.setOnClickListener {
                 mActivity.onBackPressed()
             }
@@ -180,53 +211,48 @@ class FragmentCityCatBlogDetail(val b:Bundle):BaseFragment<CityCatBlogDetailView
             binding.toolbar.setOnClickListener {
                 mActivity.onBackPressed()
             }
-        }else{
-            for(i in response.data.indices) {
+        } else {
+            for (i in response.data.indices) {
                 blogList.addAll(response.data[i].blog)
 
             }
             binding.verticalViewPager.adapter = cityCatBlogDetailAdapter
             cityCatBlogDetailAdapter.notifyDataSetChanged()
 
+            cityCatBlogDetailAdapter.adapterListener =
+                object : CityCategoryBlogDetailViewPagerAdapter.AdapterListener {
+                    override fun onClick(view: View, position: Int) {
+                        if (view.id == R.id.ic_back) {
+                            mActivity.supportActionBar?.show()
+                            mActivity.onBackPressed()
+                        }
 
+                        if (view.id == R.id.tvFullStory) {
+                            val i = Intent(requireContext(), WebViewActivity::class.java)
+                            i.putExtra("url", blogList[position].url)
+                            i.putExtra("title", blogList[position].title)
+                            startActivity(i)
 
+                        }
+                        if (view.id == R.id.ic_share) {
+                            val sendIntent = Intent()
+                            sendIntent.action = Intent.ACTION_SEND
+                            sendIntent.putExtra(
+                                Intent.EXTRA_TEXT,
+                                "Hey check out this link:" + getString(R.string.empty) + blogList[position].url + BuildConfig.APPLICATION_ID
+                            )
+                            sendIntent.type = "text/plain"
+                            startActivity(sendIntent)
+                        }
 
-            cityCatBlogDetailAdapter.adapterListener = object : CityCategoryBlogDetailViewPagerAdapter.AdapterListener{
-                override fun onClick(view: View, position: Int) {
-                    if (view.id == R.id.ic_back) {
-                        mActivity.supportActionBar?.show()
-                        mActivity.onBackPressed()
-                    }
-
-                    if (view.id == R.id.tvFullStory) {
-                        val i = Intent(requireContext(), WebViewActivity::class.java)
-                        i.putExtra("url", blogList[position].url)
-                        i.putExtra("title", blogList[position].title)
-                        startActivity(i)
-
-                    }
-                    if (view.id == R.id.ic_share) {
-                        val sendIntent = Intent()
-                        sendIntent.action = Intent.ACTION_SEND
-                        sendIntent.putExtra(Intent.EXTRA_TEXT,
-                            "Hey check out this link:"+getString(R.string.empty)+ blogList[position].url + BuildConfig.APPLICATION_ID)
-                        sendIntent.type = "text/plain"
-                        startActivity(sendIntent)
                     }
 
                 }
 
-            }
-
         }
 
 
-
-
-
-
-}
-
+    }
 
 
     override fun onClick(p0: View?) {

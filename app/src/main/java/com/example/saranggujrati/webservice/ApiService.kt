@@ -1,6 +1,10 @@
 package com.example.saranggujrati.webservice
 
 import com.example.saranggujrati.model.*
+import com.example.saranggujrati.model.RSS.Bean.RssBean
+import com.example.saranggujrati.model.RSS.Bean.RssFeed
+import com.test.pausernew.api.annot.Json
+import com.test.pausernew.api.annot.Xml
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.*
@@ -10,6 +14,7 @@ interface ApiService {
     //login Api
     @FormUrlEncoded
     @POST("login")
+    @Json
     suspend fun login(
         @Field("email") email: String,
         @Field("password") password: String,
@@ -18,6 +23,7 @@ interface ApiService {
     //SignUp Api
     @FormUrlEncoded
     @POST("register")
+    @Json
     suspend fun signUp(
         @Field("email") email: String,
         @Field("password") password: String,
@@ -28,6 +34,7 @@ interface ApiService {
     //Forgot Password Api
     @FormUrlEncoded
     @POST("forgot-password")
+    @Json
     suspend fun forgotPassword(
         @Field("email") email: String,
     ): ForgotPasswordResponse
@@ -36,6 +43,7 @@ interface ApiService {
     //Reset Password Api
     @FormUrlEncoded
     @POST("reset-password")
+    @Json
     suspend fun resetPassword(
         @Field("id") id: String,
         @Field("otp") otp: String,
@@ -48,6 +56,7 @@ interface ApiService {
     //Social Login Api
     @FormUrlEncoded
     @POST("socialMediaLogin")
+    @Json
     suspend fun socialLogin(
         @Field("email") email: String,
         @Field("name") name: String,
@@ -59,36 +68,42 @@ interface ApiService {
 
     //city & category value list
     @GET("category-list")
+    @Json
     suspend fun getTopCitiesCategories(): CitCategoryListResponse
 
     //city & category detail
     @GET("blog-category-list/{id}")
+    @Json
     suspend fun getCitiesCategoriesDetailBlog(@Path("id") id: String): CityCategoryBlogDetailResponse
-
 
 
     //Featured List
     @GET("blog-list")
+    @Json
     suspend fun getFeatureList(): BlogFeatureList
 
     //news channel list
     @GET("live-news-list")
-    suspend fun getLiveNewsChannelList( @Query("page") page: String,): NewsChannelListRespnse
+    @Json
+    suspend fun getLiveNewsChannelList(@Query("page") page: String): NewsChannelListRespnse
 
 
     //news paper list
     @GET("news-paper-list")
-    suspend fun getNewsPaperlList( @Query("page") page: String): NewsPaperListResponse
+    @Json
+    suspend fun getNewsPaperlList(@Query("page") page: String): NewsPaperListResponse
 
 
     //All Blog Data
     @GET("blog-all-list")
+    @Json
     suspend fun getAllBlogList(): AllBlogListResponse
 
 
     //GetProfile Api
     @FormUrlEncoded
     @POST("getProfile")
+    @Json
     suspend fun getProfile(
         @Field("id") id: String,
     ): GetEditProfileResponse
@@ -96,6 +111,7 @@ interface ApiService {
     //EditProfile Api
     @FormUrlEncoded
     @POST("updateProfile")
+    @Json
     suspend fun editProfile(
         @Field("id") id: String,
         @Field("email") email: String,
@@ -107,15 +123,18 @@ interface ApiService {
     //EditProfile Api
     @FormUrlEncoded
     @POST("updateProfile")
+    @Json
     suspend fun editProfileWithoutPassword(
         @Field("id") id: String,
         @Field("email") email: String,
         @Field("phone") phone: String,
         @Field("name") name: String,
     ): GetEditProfileResponse
+
     //EditProfilePicture Api
     @Multipart
     @POST("updateProfilePicture")
+    @Json
     suspend fun updateProfilePhoto(
         @Part("id") id: RequestBody,
         @Part photo: MultipartBody.Part,
@@ -124,7 +143,22 @@ interface ApiService {
     //DeleteAccount Api
     @FormUrlEncoded
     @POST("deleteAccount")
+    @Json
     suspend fun deleteAccount(
         @Field("id") id: String,
     ): DeleteAccountResponse
+
+
+    @GET("rss-feed-list/{id}")
+    @Json
+    suspend fun getRssfeedList(
+        @Path("id") id: String,
+    ): FeedResponse
+
+
+    @GET("{fullUrl}")
+    @Xml
+    suspend fun getFeedLiveData(
+        @Path("fullUrl", encoded = true) fullUrl: String
+    ): RssFeed
 }

@@ -22,6 +22,7 @@ import android.view.View
 import java.lang.IllegalStateException
 import android.widget.FrameLayout
 import android.content.Intent
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.saranggujrati.databinding.ActivityMainBinding
@@ -30,6 +31,7 @@ import com.example.saranggujrati.ui.mainActivity
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.LoadAdError
 
 
 import com.google.android.youtube.player.YouTubeInitializationResult
@@ -88,42 +90,10 @@ class YouTubeActivity: YouTubeBaseActivity() {
         binding.adView.loadAd(adRequest)
 
         binding.adView.adListener  = object : AdListener(){
-            override fun onAdFailedToLoad(p0: Int) {
+            override fun onAdFailedToLoad(@NonNull p0: LoadAdError) {
                 super.onAdFailedToLoad(p0)
-                /*val toastMessage: String = "ad fail to load"
-                Toast.makeText(AppClass.appContext, toastMessage.toString(), Toast.LENGTH_LONG).show()*/
-            }
-            override fun onAdLoaded() {
-                super.onAdLoaded()
-                /*val toastMessage: String = "ad loaded"
-                Toast.makeText(AppClass.appContext, toastMessage.toString(), Toast.LENGTH_LONG).show()*/
-            }
-            override fun onAdOpened() {
-                super.onAdOpened()
-                /* val toastMessage: String = "ad is open"
-                 Toast.makeText(AppClass.appContext, toastMessage.toString(), Toast.LENGTH_LONG).show()*/
-            }
-            override fun onAdClicked() {
-                super.onAdClicked()
-              /*  val toastMessage: String = "ad is clicked"
-                Toast.makeText(AppClass.appContext, toastMessage.toString(), Toast.LENGTH_LONG).show()*/
             }
 
-            override fun onAdClosed() {
-                super.onAdClosed()
-                /*val toastMessage: String = "ad is closed"
-                Toast.makeText(AppClass.appContext, toastMessage.toString(), Toast.LENGTH_LONG).show()*/
-            }
-            override fun onAdImpression() {
-                super.onAdImpression()
-                /*  val toastMessage: String = "ad impression"
-                  Toast.makeText(AppClass.appContext, toastMessage.toString(), Toast.LENGTH_LONG).show()*/
-            }
-            override fun onAdLeftApplication() {
-                super.onAdLeftApplication()
-                /*  val toastMessage: String = "ad left application"
-                  Toast.makeText(AppClass.appContext, toastMessage.toString(), Toast.LENGTH_LONG).show()*/
-            }
         }
 
 
