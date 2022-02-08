@@ -44,8 +44,8 @@ class AllBlogListAdapter constructor (private var blogList: ArrayList<BlogData>)
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: BlogData) {
 
-            binding.tvnewsHighLight.text=data.title
-            binding.tvnewsDetail.text=data.description
+            binding.tvNewsHighLight.text=data.title
+            binding.tvNewsDetail.text=data.description
             binding.tvNewsPaperName.text=data.category_name
 
             Glide.with(AppClass.appContext)

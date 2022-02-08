@@ -5,8 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.model.*
-import com.example.saranggujrati.model.RSS.Bean.RssBean
-import com.example.saranggujrati.model.RSS.Bean.RssFeed
+import com.example.saranggujrati.model.rssFeed.RssFeed
 
 import com.example.saranggujrati.repositories.CityCategoryBlogDetailRepository
 import com.example.saranggujrati.webservice.Resource

@@ -3,9 +3,9 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
     android:background="?appBackground"
-    android:layout_height="match_parent">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,8 +39,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="225dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="225dp"
                 android:layout_marginEnd="20dp"
                 android:orientation="horizontal">
 
@@ -66,12 +66,12 @@
                     android:id="@+id/ic_share"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:background="@drawable/shape_bg_blue"
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
+                    android:background="@drawable/shape_bg_blue"
+                    android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
-                    android:paddingLeft="15dp"
                     android:paddingBottom="10dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_share_white" />
@@ -81,35 +81,33 @@
 
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvnewsHighLight"
+            android:id="@+id/tvNewsHighLight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
             android:layout_gravity="start|center_horizontal"
-            android:textSize="16dp"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-            android:textColor="?textColor"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:gravity="start"
             android:inputType="textMultiLine"
-            android:fontFamily="@font/montserrat_bold"/>
+            android:textColor="?textColor"
+            android:textSize="16dp" />
 
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvnewsDetail"
+            android:id="@+id/tvNewsDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
             android:layout_gravity="start|center_horizontal"
-            android:textSize="12dp"
-            android:text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-            android:textColor="?textColor"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:gravity="start"
             android:inputType="textMultiLine"
-            android:fontFamily="@font/montserrat_regular"/>
+            android:textColor="?textColor"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -122,8 +120,8 @@
             android:id="@+id/tvFullStory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="120dp"
             android:layout_marginStart="20dp"
+            android:layout_marginTop="120dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/shape_bg_light_orange"
             android:fontFamily="@font/montserrat_bold"
@@ -133,8 +131,6 @@
             android:text="@string/tap_to_read_full_story"
             android:textColor="@color/white"
             android:textSize="18sp" />
-
-
 
 
         <!-- view for AdMob Banner Ad -->

@@ -51,7 +51,7 @@ class ViewModelFactory(application: Application, private val api: ApiService) : 
             INSTANCE ?: synchronized(ViewModelFactory::class.java) {
                 INSTANCE ?: ViewModelFactory(
                     application,
-                    RetrofitBuilder.apiService
+                    apiService
                 ).also { INSTANCE = it }
             }
 

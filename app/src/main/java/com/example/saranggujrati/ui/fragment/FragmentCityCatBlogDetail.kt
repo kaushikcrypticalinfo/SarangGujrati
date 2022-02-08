@@ -1,50 +1,40 @@
 package com.example.saranggujrati.ui.fragment
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.*
-import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.SnapHelper
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.BuildConfig
 import com.example.saranggujrati.R
 import com.example.saranggujrati.adapter.*
 import com.example.saranggujrati.databinding.FragmentAllNewsBlogBinding
-import com.example.saranggujrati.loadmore.EndlessScrollListener
 import com.example.saranggujrati.model.*
 import com.example.saranggujrati.ui.activity.MainActivity
 import com.example.saranggujrati.ui.activity.WebViewActivity
-import com.example.saranggujrati.ui.activity.YouTubeActivity
 import com.example.saranggujrati.ui.isOnline
-import com.example.saranggujrati.ui.viewModel.AllBlogListViewModel
-import com.example.saranggujrati.ui.viewModel.FeatureBlogListViewModel
+import com.example.saranggujrati.ui.viewModel.CityCatBlogDetailViewModel
 import com.example.saranggujrati.ui.visible
 import com.example.saranggujrati.webservice.Resource
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
-import kotlin.collections.ArrayList
-import android.widget.Toast
-
-import androidx.viewpager.widget.ViewPager
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import com.example.saranggujrati.ui.viewModel.CityCatBlogDetailViewModel
 import timber.log.Timber
 
 
 class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailViewModel>(),
     View.OnClickListener {
 
+    private lateinit var liveFeedlist: ArrayList<CategoryDataModel>
     private lateinit var mActivity: MainActivity
-    lateinit var cityCatBlogDetailAdapter: CityCategoryBlogDetailViewPagerAdapter
+
+    lateinit var feedListAdapter: FeedListAdapter
+
     private var blogList = ArrayList<BlogData>()
+
     lateinit var binding: FragmentAllNewsBlogBinding
 
 
@@ -58,7 +48,45 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
-        cityCatBlogDetailAdapter = CityCategoryBlogDetailViewPagerAdapter(blogList)
+        liveFeedlist = ArrayList()
+        feedListAdapter = FeedListAdapter(blogList)
+
+        feedListAdapter.adapterListener = object : FeedListAdapter.AdapterListener {
+            override fun onClick(view: View, position: Int) {
+                when (view.id) {
+                    R.id.ic_back -> {
+                        mActivity.supportActionBar?.show()
+                        mActivity.onBackPressed()
+                    }
+                    R.id.tvFullStory -> {
+                        val i = Intent(requireContext(), WebViewActivity::class.java)
+                        i.putExtra("url", blogList[position].url)
+                        i.putExtra("title", blogList[position].title)
+                        startActivity(i)
+                    }
+                    R.id.ic_share -> {
+                        val sendIntent = Intent()
+                        sendIntent.action = Intent.ACTION_SEND
+                        sendIntent.putExtra(
+                            Intent.EXTRA_TEXT,
+                            "Hey check out this link:" + getString(R.string.empty) + blogList[position].url + BuildConfig.APPLICATION_ID
+                        )
+                        sendIntent.type = "text/plain"
+                        startActivity(sendIntent)
+                    }
+                }
+
+            }
+        }
+        val snapHelper: SnapHelper = PagerSnapHelper()
+        with(binding.rvNewsFeed)
+        {
+            layoutManager = LinearLayoutManager(context)
+            snapHelper.attachToRecyclerView(this)
+            adapter = feedListAdapter
+        }
+
+
         val bundle = b
         val id = bundle.getString("id")
         Timber.e(id.toString())
@@ -72,18 +100,11 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
 
 
     override fun onPause() {
-        if (cityCatBlogDetailAdapter.adView != null) {
-            cityCatBlogDetailAdapter.adView!!.pause()
-        }
         super.onPause()
     }
 
     override fun onResume() {
         super.onResume()
-        if (cityCatBlogDetailAdapter.adView != null) {
-            cityCatBlogDetailAdapter.adView!!.resume()
-        }
-
 
         requireView().isFocusableInTouchMode = true
         requireView().requestFocus()
@@ -94,9 +115,6 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
                     Timber.i("onKey Back listener is working!!!")
                     mActivity.supportActionBar?.show()
                     mActivity.onBackPressed()
-/*
-                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-*/
                     return true
                 }
                 return false
@@ -105,25 +123,20 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
     }
 
     override fun onDestroy() {
-        if (cityCatBlogDetailAdapter.adView != null) {
-            cityCatBlogDetailAdapter.adView!!.destroy()
-        }
         super.onDestroy()
     }
 
 
     private fun getAllBlogList(id: String) {
         setupObservers(id)
-
         viewModel.getCityCatBlogDetail(id)
         viewModel.getRssfeedList(id)
-
     }
 
 
     //setup observer
     private fun setupObservers(id: String) {
-        viewModel.feedList.observe(this, Observer { it ->
+        viewModel.cityCatBlogDetailResponse.observe(this, Observer { it ->
             when (it) {
                 is Resource.Loading -> {
                     binding.progressbar.isVisible = true
@@ -134,10 +147,7 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
                         blogList.clear()
                         if (it.value.status) {
                             binding.progressbar.visible(false)
-                            it.value.data.forEach {
-                                viewModel.getLiveData(it.rssUrl)
-                            }
-
+                            getAllBlogList(it.value, id)
                         }
                     } else {
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
@@ -158,18 +168,57 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
                         else -> {
                             Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
                                 .show()
-
                         }
-
-
                     }
-
                 }
-
             }
         })
 
-        viewModel.feedLiveData.observe(this, Observer {
+        viewModel.feedList.observe(this, Observer { it ->
+            when (it) {
+                is Resource.Loading -> {
+                    binding.progressbar.isVisible = true
+                }
+
+                is Resource.Success -> {
+                    if (it.value.status) {
+                        blogList.clear()
+                        if (it.value.status) {
+                            binding.progressbar.visible(false)
+                            val data = it.value.data
+                            liveFeedlist.addAll(data)
+
+
+                            data.forEach {
+                                viewModel.getLiveData(it.rssUrl)
+                            }
+                        }
+                    } else {
+                        Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
+                    }
+                }
+                is Resource.Failure -> {
+                    binding.progressbar.isVisible = false
+                    when {
+                        it.isNetworkError -> {
+                            if (!isOnline(AppClass.appContext)) {
+                                Snackbar.make(
+                                    binding.layout,
+                                    resources.getString(R.string.check_internet),
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                        else -> {
+                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
+                                .show()
+                        }
+                    }
+                }
+            }
+        })
+
+        viewModel.feedLiveData.observe(this, Observer { it ->
             when (it) {
                 is Resource.Loading -> {
                     binding.progressbar.isVisible = true
@@ -177,7 +226,25 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
 
                 is Resource.Success -> {
                     binding.progressbar.isVisible = false
-                    Timber.e(it.toString())
+
+                    liveFeedlist.map { Timber.e(it.rssUrl) }
+
+                    val elements = it.value.newsChannel!!.links?.map { it.href }?.toList()!!
+                    it.value.newsChannel?.newsItems?.forEach { rssItem ->
+                        val blogData = BlogData()
+                        blogData.title = rssItem.title
+                        blogData.description = rssItem.description
+                        blogData.category_name =
+                            liveFeedlist.find {urlLink-> elements.contains(urlLink.rssUrl) }
+                                ?.categoryName
+                                ?: kotlin.run { "" }
+                        blogData.image = rssItem.thumbnail?.thumbnailUrl.toString()
+
+                        blogList.add(blogData)
+                    }
+
+                    feedListAdapter.notifyDataSetChanged()
+
                 }
                 is Resource.Failure -> {
                     binding.progressbar.isVisible = false
@@ -214,41 +281,9 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
         } else {
             for (i in response.data.indices) {
                 blogList.addAll(response.data[i].blog)
-
             }
-            binding.verticalViewPager.adapter = cityCatBlogDetailAdapter
-            cityCatBlogDetailAdapter.notifyDataSetChanged()
 
-            cityCatBlogDetailAdapter.adapterListener =
-                object : CityCategoryBlogDetailViewPagerAdapter.AdapterListener {
-                    override fun onClick(view: View, position: Int) {
-                        if (view.id == R.id.ic_back) {
-                            mActivity.supportActionBar?.show()
-                            mActivity.onBackPressed()
-                        }
-
-                        if (view.id == R.id.tvFullStory) {
-                            val i = Intent(requireContext(), WebViewActivity::class.java)
-                            i.putExtra("url", blogList[position].url)
-                            i.putExtra("title", blogList[position].title)
-                            startActivity(i)
-
-                        }
-                        if (view.id == R.id.ic_share) {
-                            val sendIntent = Intent()
-                            sendIntent.action = Intent.ACTION_SEND
-                            sendIntent.putExtra(
-                                Intent.EXTRA_TEXT,
-                                "Hey check out this link:" + getString(R.string.empty) + blogList[position].url + BuildConfig.APPLICATION_ID
-                            )
-                            sendIntent.type = "text/plain"
-                            startActivity(sendIntent)
-                        }
-
-                    }
-
-                }
-
+            feedListAdapter.notifyDataSetChanged()
         }
 
 

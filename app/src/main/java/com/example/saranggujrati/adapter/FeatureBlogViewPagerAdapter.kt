@@ -1,16 +1,12 @@
 package com.example.saranggujrati.adapter
 
-import android.content.Context
 import android.view.View
 import androidx.viewpager.widget.PagerAdapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import com.example.saranggujrati.model.BlogData
-import android.annotation.SuppressLint
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.NonNull
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -47,8 +43,8 @@ class FeatureBlogViewPagerAdapter constructor (private var blogList: ArrayList<F
         val imageView: ImageView = (itemView).findViewById(R.id.iv_news_image)
         val ivBack: ImageView = (itemView).findViewById(R.id.ic_back)
         val ivShare: ImageView = (itemView).findViewById(R.id.ic_share)
-        val tvNewsHighlight: TextView = (itemView).findViewById(R.id.tvnewsHighLight)
-        val tvNewsDetail: TextView = (itemView).findViewById(R.id.tvnewsDetail)
+        val tvNewsHighlight: TextView = (itemView).findViewById(R.id.tvNewsHighLight)
+        val tvNewsDetail: TextView = (itemView).findViewById(R.id.tvNewsDetail)
         val tvFullStory: TextView = (itemView).findViewById(R.id.tvFullStory)
         val tvPaperName: TextView = (itemView).findViewById(R.id.tvNewsPaperName)
         adView = (itemView).findViewById(R.id.adView)

@@ -1,8 +1,7 @@
 package com.example.saranggujrati.webservice
 
 import com.example.saranggujrati.model.*
-import com.example.saranggujrati.model.RSS.Bean.RssBean
-import com.example.saranggujrati.model.RSS.Bean.RssFeed
+import com.example.saranggujrati.model.rssFeed.RssFeed
 import com.test.pausernew.api.annot.Json
 import com.test.pausernew.api.annot.Xml
 import okhttp3.MultipartBody
