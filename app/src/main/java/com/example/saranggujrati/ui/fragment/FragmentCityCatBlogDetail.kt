@@ -29,6 +29,7 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
     View.OnClickListener {
 
     private lateinit var liveFeedlist: ArrayList<CategoryDataModel>
+    private lateinit var dummyFeedlist: ArrayList<CategoryDataModel>
     private lateinit var mActivity: MainActivity
 
     lateinit var feedListAdapter: FeedListAdapter
@@ -37,6 +38,7 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
 
     lateinit var binding: FragmentAllNewsBlogBinding
 
+    var callCount = 0
 
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
         binding = FragmentAllNewsBlogBinding.inflate(inflater, container, false)
@@ -49,6 +51,8 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
         liveFeedlist = ArrayList()
+        dummyFeedlist = ArrayList()
+
         feedListAdapter = FeedListAdapter(blogList)
 
         feedListAdapter.adapterListener = object : FeedListAdapter.AdapterListener {
@@ -176,22 +180,25 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
 
         viewModel.feedList.observe(this, Observer { it ->
             when (it) {
+
                 is Resource.Loading -> {
                     binding.progressbar.isVisible = true
                 }
 
                 is Resource.Success -> {
                     if (it.value.status) {
-                        blogList.clear()
                         if (it.value.status) {
                             binding.progressbar.visible(false)
                             val data = it.value.data
-                            liveFeedlist.addAll(data)
-
 
                             data.forEach {
-                                viewModel.getLiveData(it.rssUrl)
+                                liveFeedlist.add(it)
                             }
+
+                            dummyFeedlist.addAll(data)
+
+                            if (dummyFeedlist.isNotEmpty())
+                                callLiveFeesListApi(dummyFeedlist, callCount)
                         }
                     } else {
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
@@ -226,24 +233,21 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
 
                 is Resource.Success -> {
                     binding.progressbar.isVisible = false
-
-                    liveFeedlist.map { Timber.e(it.rssUrl) }
-
-                    val elements = it.value.newsChannel!!.links?.map { it.href }?.toList()!!
                     it.value.newsChannel?.newsItems?.forEach { rssItem ->
                         val blogData = BlogData()
                         blogData.title = rssItem.title
                         blogData.description = rssItem.description
-                        blogData.category_name =
-                            liveFeedlist.find {urlLink-> elements.contains(urlLink.rssUrl) }
-                                ?.categoryName
-                                ?: kotlin.run { "" }
+                        blogData.category_name = liveFeedlist[callCount].rssName
                         blogData.image = rssItem.thumbnail?.thumbnailUrl.toString()
-
                         blogList.add(blogData)
                     }
 
                     feedListAdapter.notifyDataSetChanged()
+
+                    callCount += 1
+                    if (callCount < dummyFeedlist.size - 1) {
+                        callLiveFeesListApi(dummyFeedlist, callCount)
+                    }
 
                 }
                 is Resource.Failure -> {
@@ -262,6 +266,10 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
                 }
             }
         })
+    }
+
+    private fun callLiveFeesListApi(data: List<CategoryDataModel>, callCount: Int) {
+        viewModel.getLiveData(data[callCount].rssUrl)
     }
 
     private fun getAllBlogList(response: CityCategoryBlogDetailResponse, id: String) {

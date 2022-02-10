@@ -23,6 +23,7 @@ import com.google.gson.JsonSyntaxException
 import okhttp3.ResponseBody.Companion.toResponseBody
 import java.lang.IllegalStateException
 import org.json.JSONObject
+import retrofit2.Call
 import java.lang.IllegalArgumentException
 
 
@@ -31,25 +32,24 @@ abstract class BaseRepository {
     suspend fun <T> safeApiCall(apiCall: suspend () -> T): Resource<T> {
         return withContext(Dispatchers.IO) {
             Resource.Loading
-
             try {
                 Resource.Success(apiCall.invoke())
             } catch (throwable: Throwable) {
                 when (throwable) {
                     is HttpException -> {
-                        Resource.Failure(false, apiCall.invoke(),throwable.code())
+                        Resource.Failure(false, apiCall.invoke(), throwable.code())
                     }
                     is IllegalStateException -> {
-                        Resource.Failure(false, apiCall.invoke(),0)
+                        Resource.Failure(false, apiCall.invoke(), 0)
                     }
                     is JsonSyntaxException -> {
-                        Resource.Failure(false, apiCall.invoke(),0)
+                        Resource.Failure(false, apiCall.invoke(), 0)
                     }
                     is IllegalArgumentException -> {
-                    Resource.Failure(false, apiCall.invoke(),0)
-                }
+                        Resource.Failure(false, apiCall.invoke(), 0)
+                    }
                     else -> {
-                        Resource.Failure(true, null,0)
+                        Resource.Failure(true, null, 0)
                     }
                 }
             } as Resource<T>
@@ -58,8 +58,6 @@ abstract class BaseRepository {
         }
     }
 }
-
-
 
 
 /*  is HttpException -> {
