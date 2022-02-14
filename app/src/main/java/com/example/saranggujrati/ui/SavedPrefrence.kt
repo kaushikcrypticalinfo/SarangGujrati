@@ -7,51 +7,72 @@ import com.google.gson.Gson
 
 object SavedPrefrence {
 
-    const val EMAIL= "email"
-    const val USERID= "id"
-    const val TYPE= "type"
-    const val LOGIN_FROM= "login_from"
-    const val USERNAME= "name"
-    const val PHOTO= "photo"
-    const val PHONE= "phone"
-    const val GENDER= "gender"
-    const val FB_TOKEN= "fb_token"
-    const val GOOGLE_TOKEN= "google_token"
-    const val DEVICE_TOKEN= "device_token"
-    const val LANG_CODE= "lang_code"
-    const val DELETED_AT= "deleted_at"
-    const val CREATED_AT= "created_at"
-    const val UPDATED_AT= "updated_at"
-    const val API_TOKEN= "api_token"
-    const val OTP= "otp"
+    const val EMAIL = "email"
+    const val USERID = "id"
+    const val TYPE = "type"
+    const val LOGIN_FROM = "login_from"
+    const val USERNAME = "name"
+    const val PHOTO = "photo"
+    const val PHONE = "phone"
+    const val GENDER = "gender"
+    const val FB_TOKEN = "fb_token"
+    const val GOOGLE_TOKEN = "google_token"
+    const val DEVICE_TOKEN = "device_token"
+    const val LANG_CODE = "lang_code"
+    const val DELETED_AT = "deleted_at"
+    const val CREATED_AT = "created_at"
+    const val UPDATED_AT = "updated_at"
+    const val API_TOKEN = "api_token"
+    const val OTP = "otp"
     const val USER = "user"
+    const val is_guest = "is_guest"
 
-    var iS_LOGIN:Boolean=false
-    var is_DARKMODE:Boolean=false
-    var is_Guest:Boolean=false
+    var is_LOGIN: Boolean = false
+    var is_DARKMODE: Boolean = false
+    var is_Guest: Boolean
+        get() = false
+        set(value) = TODO()
 
+    fun getIsGuest(context: Context) = getSharedPreference(
+        context
+    )?.getBoolean(is_guest, false)
 
-    private  fun getSharedPreference(ctx: Context?): SharedPreferences? {
+    fun setGuest(context: Context, type: Boolean) {
+        editor(
+            context,
+            is_guest,
+            type
+        )
+    }
+
+    private fun getSharedPreference(ctx: Context?): SharedPreferences? {
         return PreferenceManager.getDefaultSharedPreferences(ctx!!)
     }
 
-    private fun  editor(context: Context, const:String, string: String){
+    private fun editor(context: Context, const: String, string: String) {
         getSharedPreference(
             context
-        )?.edit()?.putString(const,string)?.apply()
+        )?.edit()?.putString(const, string)?.apply()
     }
-    fun clearPrefrence(context: Context?){
+
+    private fun editor(context: Context, const: String, string: Boolean) {
+        getSharedPreference(
+            context
+        )?.edit()?.putBoolean(const, string)?.apply()
+    }
+
+    fun clearPrefrence(context: Context?) {
         val editor = getSharedPreference(context)?.edit()
         editor?.clear()
         editor?.apply()
     }
 
 
-    fun getEmail(context: Context)= getSharedPreference(
+    fun getEmail(context: Context) = getSharedPreference(
         context
-    )?.getString(EMAIL,"")
+    )?.getString(EMAIL, "")
 
-    fun setEmail(context: Context, email: String){
+    fun setEmail(context: Context, email: String) {
         editor(
             context,
             EMAIL,
@@ -59,18 +80,11 @@ object SavedPrefrence {
         )
     }
 
-
-
-
-
-
-
-
-    fun getUserId(context: Context)= getSharedPreference(
+    fun getUserId(context: Context) = getSharedPreference(
         context
-    )?.getString(USERID,"")
+    )?.getString(USERID, "")
 
-    fun setUserId(context: Context, id: String){
+    fun setUserId(context: Context, id: String) {
         editor(
             context,
             USERID,
@@ -78,11 +92,11 @@ object SavedPrefrence {
         )
     }
 
-    fun getType(context: Context)= getSharedPreference(
+    fun getType(context: Context) = getSharedPreference(
         context
-    )?.getString(TYPE,"")
+    )?.getString(TYPE, "")
 
-    fun setType(context: Context, type: String){
+    fun setType(context: Context, type: String) {
         editor(
             context,
             TYPE,
@@ -90,11 +104,11 @@ object SavedPrefrence {
         )
     }
 
-    fun getLoginFrom(context: Context)= getSharedPreference(
+    fun getLoginFrom(context: Context) = getSharedPreference(
         context
-    )?.getString(LOGIN_FROM,"")
+    )?.getString(LOGIN_FROM, "")
 
-    fun setLoginFrom(context: Context, loginFrom: String){
+    fun setLoginFrom(context: Context, loginFrom: String) {
         editor(
             context,
             LOGIN_FROM,
@@ -102,11 +116,11 @@ object SavedPrefrence {
         )
     }
 
-    fun getUserName(context: Context)= getSharedPreference(
+    fun getUserName(context: Context) = getSharedPreference(
         context
-    )?.getString(USERNAME,"")
+    )?.getString(USERNAME, "")
 
-    fun setUserName(context: Context, name: String){
+    fun setUserName(context: Context, name: String) {
         editor(
             context,
             USERNAME,
@@ -114,11 +128,11 @@ object SavedPrefrence {
         )
     }
 
-    fun getPhoto(context: Context)= getSharedPreference(
+    fun getPhoto(context: Context) = getSharedPreference(
         context
-    )?.getString(PHOTO,"")
+    )?.getString(PHOTO, "")
 
-    fun setPhoto(context: Context, photo: String){
+    fun setPhoto(context: Context, photo: String) {
         editor(
             context,
             PHOTO,
@@ -126,11 +140,11 @@ object SavedPrefrence {
         )
     }
 
-    fun getPhone(context: Context)= getSharedPreference(
+    fun getPhone(context: Context) = getSharedPreference(
         context
-    )?.getString(PHONE,"")
+    )?.getString(PHONE, "")
 
-    fun setPhone(context: Context, phone: String){
+    fun setPhone(context: Context, phone: String) {
         editor(
             context,
             PHONE,
@@ -138,11 +152,11 @@ object SavedPrefrence {
         )
     }
 
-    fun getGender(context: Context)= getSharedPreference(
+    fun getGender(context: Context) = getSharedPreference(
         context
-    )?.getString(GENDER,"")
+    )?.getString(GENDER, "")
 
-    fun setGender(context: Context, gender: String){
+    fun setGender(context: Context, gender: String) {
         editor(
             context,
             GENDER,
@@ -150,22 +164,23 @@ object SavedPrefrence {
         )
     }
 
-    fun getFbToken(context: Context)= getSharedPreference(
+    fun getFbToken(context: Context) = getSharedPreference(
         context
-    )?.getString(FB_TOKEN,"")
+    )?.getString(FB_TOKEN, "")
 
-    fun setFbToken(context: Context, fbToken: String){
+    fun setFbToken(context: Context, fbToken: String) {
         editor(
             context,
             FB_TOKEN,
             fbToken
         )
     }
-    fun getGoogleToken(context: Context)= getSharedPreference(
-        context
-    )?.getString(GOOGLE_TOKEN,"")
 
-    fun setGoogleToken(context: Context, googleToken: String){
+    fun getGoogleToken(context: Context) = getSharedPreference(
+        context
+    )?.getString(GOOGLE_TOKEN, "")
+
+    fun setGoogleToken(context: Context, googleToken: String) {
         editor(
             context,
             GOOGLE_TOKEN,
@@ -173,33 +188,35 @@ object SavedPrefrence {
         )
     }
 
-    fun getDeviceToken(context: Context)= getSharedPreference(
+    fun getDeviceToken(context: Context) = getSharedPreference(
         context
-    )?.getString(DEVICE_TOKEN,"")
+    )?.getString(DEVICE_TOKEN, "")
 
-    fun setDeviceToken(context: Context, deviceToken: String){
+    fun setDeviceToken(context: Context, deviceToken: String) {
         editor(
             context,
             DEVICE_TOKEN,
             deviceToken
         )
     }
-    fun getDeletedAt(context: Context)= getSharedPreference(
-        context
-    )?.getString(DELETED_AT,"")
 
-    fun setDeletedAt(context: Context, deletedAt: String){
+    fun getDeletedAt(context: Context) = getSharedPreference(
+        context
+    )?.getString(DELETED_AT, "")
+
+    fun setDeletedAt(context: Context, deletedAt: String) {
         editor(
             context,
             DELETED_AT,
             deletedAt
         )
     }
-    fun getCreatedAt(context: Context)= getSharedPreference(
-        context
-    )?.getString(CREATED_AT,"")
 
-    fun setCreatedAt(context: Context, CreatedAt: String){
+    fun getCreatedAt(context: Context) = getSharedPreference(
+        context
+    )?.getString(CREATED_AT, "")
+
+    fun setCreatedAt(context: Context, CreatedAt: String) {
         editor(
             context,
             CREATED_AT,
@@ -207,11 +224,11 @@ object SavedPrefrence {
         )
     }
 
-    fun getUpdatedAt(context: Context)= getSharedPreference(
+    fun getUpdatedAt(context: Context) = getSharedPreference(
         context
-    )?.getString(UPDATED_AT,"")
+    )?.getString(UPDATED_AT, "")
 
-    fun setUpdatedAt(context: Context, updatedAt: String){
+    fun setUpdatedAt(context: Context, updatedAt: String) {
         editor(
             context,
             UPDATED_AT,
@@ -219,11 +236,11 @@ object SavedPrefrence {
         )
     }
 
-    fun getLangCode(context: Context)= getSharedPreference(
+    fun getLangCode(context: Context) = getSharedPreference(
         context
-    )?.getString(LANG_CODE,"")
+    )?.getString(LANG_CODE, "")
 
-    fun setLangCode(context: Context, languageCode: String){
+    fun setLangCode(context: Context, languageCode: String) {
         editor(
             context,
             LANG_CODE,
@@ -231,39 +248,42 @@ object SavedPrefrence {
         )
     }
 
-    fun getApiToken(context: Context)= getSharedPreference(
+    fun getApiToken(context: Context) = getSharedPreference(
         context
-    )?.getString(API_TOKEN,"")
+    )?.getString(API_TOKEN, "")
 
-    fun setApiToken(context: Context, apiToken: String){
+    fun setApiToken(context: Context, apiToken: String) {
         editor(
             context,
             API_TOKEN,
             apiToken
         )
     }
-    fun getOtp(context: Context)= getSharedPreference(
-        context
-    )?.getString(OTP,"")
 
-    fun setOtp(context: Context, otp: String){
+    fun getOtp(context: Context) = getSharedPreference(
+        context
+    )?.getString(OTP, "")
+
+    fun setOtp(context: Context, otp: String) {
         editor(
             context,
             OTP,
             otp
         )
     }
+
     fun setUser(user: Any, context: Context?) {
-        iS_LOGIN =true
+        is_LOGIN = true
         val editor = getSharedPreference(context)?.edit()
         val gson: Gson = Gson()
-        val userData= gson.toJson(user)
+        val userData = gson.toJson(user)
         editor?.putString(USER, userData)
         editor?.apply()
 
     }
-    fun getUser(context: Context?):Any {
-        val preferences  = getSharedPreference(context)
+
+    fun getUser(context: Context?): Any {
+        val preferences = getSharedPreference(context)
         val gson = Gson()
         val json: String = preferences?.getString(USER, "").toString()
         val obj: Any = gson.fromJson(json, Any::class.java)

@@ -76,11 +76,7 @@ class FeedListAdapter constructor(private var categoryList: ArrayList<BlogData>)
                 adapterListener?.onClick(it, adapterPosition)
             }
 
-            binding.tvFullStory.setOnClickListener {
-                adapterListener?.onClick(it, adapterPosition)
-            }
-
-            binding.icShare.setOnClickListener {
+            binding.txtReadMore.setOnClickListener {
                 adapterListener?.onClick(it, adapterPosition)
             }
 

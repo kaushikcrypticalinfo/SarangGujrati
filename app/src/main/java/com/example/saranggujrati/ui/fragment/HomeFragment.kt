@@ -118,13 +118,12 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         categoryAdapter.adapterListener = object : CategoryListAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
                 if (view.id == R.id.llMain) {
-                    val b = Bundle()
-                    b.putString("id", categoryList.get(position).id.toString())
-                    mActivity.pushFragment(FragmentCityCatBlogDetail(b))
+                    FragmentCityCatBlogDetail.startActivity(
+                        activity!!,
+                        categoryList.get(position).id.toString()
+                    )
                 }
-
             }
-
         }
 
         featureAdapter.adapterListener = object : FeaturedListAdapter.AdapterListener {
@@ -137,27 +136,19 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                     Log.e("pos1", position.toString())
                     mActivity.pushFragment(FragmentFeatureBlog(b))
                 }
-
             }
-
         }
-
-
-
 
         adapter.adapterListener = object : TopCitiesAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
                 if (view.id == R.id.llCity) {
-                    val b = Bundle()
-                    b.putString("id", topCitiesList.get(position).id.toString())
-                    mActivity.pushFragment(FragmentCityCatBlogDetail(b))
+                    FragmentCityCatBlogDetail.startActivity(
+                        activity!!,
+                        topCitiesList.get(position).id.toString()
+                    )
                 }
-
             }
-
         }
-
-
     }
 
 

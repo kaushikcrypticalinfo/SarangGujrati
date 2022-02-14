@@ -1,31 +1,19 @@
 package com.example.saranggujrati.ui.fragment
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.*
-import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.BuildConfig
 import com.example.saranggujrati.R
-import com.example.saranggujrati.adapter.AllBlogListAdapter
 import com.example.saranggujrati.adapter.AllBlogViewPagerAdapter
-import com.example.saranggujrati.adapter.AllNewsChannelAdapter
-import com.example.saranggujrati.adapter.TopCitiesAdapter
 import com.example.saranggujrati.databinding.FragmentAllNewsBlogBinding
-import com.example.saranggujrati.loadmore.EndlessScrollListener
 import com.example.saranggujrati.model.*
 import com.example.saranggujrati.ui.activity.MainActivity
 import com.example.saranggujrati.ui.activity.WebViewActivity
-import com.example.saranggujrati.ui.activity.YouTubeActivity
 import com.example.saranggujrati.ui.isOnline
 import com.example.saranggujrati.ui.viewModel.AllBlogListViewModel
 import com.example.saranggujrati.ui.visible
@@ -196,21 +184,21 @@ class FragmentAllBlog:BaseFragment<AllBlogListViewModel> (),View.OnClickListener
                         mActivity.onBackPressed()
                     }
 
-                    if (view.id == R.id.tvFullStory) {
+                    if (view.id == R.id.txtReadMore) {
                         val i = Intent(requireContext(), WebViewActivity::class.java)
                         i.putExtra("url", bloglList[position].url)
                         i.putExtra("title", bloglList[position].title)
                         startActivity(i)
 
                     }
-                    if (view.id == R.id.ic_share) {
+                    /*if (view.id == R.id.txtReadMore) {
                         val sendIntent = Intent()
                         sendIntent.action = Intent.ACTION_SEND
                         sendIntent.putExtra(Intent.EXTRA_TEXT,
                             "Hey check out this link:"+getString(R.string.empty)+ bloglList[position].url + BuildConfig.APPLICATION_ID)
                         sendIntent.type = "text/plain"
                         startActivity(sendIntent)
-                    }
+                    }*/
 
                 }
 

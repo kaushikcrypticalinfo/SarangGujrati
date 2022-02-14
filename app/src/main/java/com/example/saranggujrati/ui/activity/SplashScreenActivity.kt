@@ -9,19 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.R
 import com.example.saranggujrati.ui.SavedPrefrence
-import com.example.saranggujrati.ui.startNewActivity
-import android.graphics.drawable.Drawable
-import android.view.View
-import android.widget.ImageView
-
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.Target
 
 
 @Suppress("DEPRECATION")
 class SplashScreenActivity : AppCompatActivity() {
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,16 +31,19 @@ class SplashScreenActivity : AppCompatActivity() {
         // we used the postDelayed(Runnable, time) method
         // to send a message with a delayed time.
         Handler().postDelayed({
-            if(SavedPrefrence.getUserId(AppClass.appContext)!= "" ){
-                val intenr = Intent(this, MainActivity::class.java)
-                startActivity(intenr)
-                finish()
-            }else{
-
-                val intenr = Intent(this, LoginActivity::class.java)
-                startActivity(intenr)
-                finish()
+            val intent = when {
+                SavedPrefrence.getUserId(AppClass.appContext) != "" -> {
+                    Intent(this, MainActivity::class.java)
+                }
+                SavedPrefrence.is_Guest -> {
+                    Intent(this, MainActivity::class.java)
+                }
+                else -> {
+                    Intent(this, LoginActivity::class.java)
+                }
             }
+            startActivity(intent)
+            finish()
         }, 2500) // 3000 is the delayed time in milliseconds.
     }
 }

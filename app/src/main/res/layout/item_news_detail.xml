@@ -62,19 +62,21 @@
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 
-                <ImageView
-                    android:id="@+id/ic_share"
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtReadMore"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/shape_bg_blue"
+                    android:background="@drawable/shape_bg_light_orange"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_share_white" />
+                    android:src="@drawable/ic_share_white"
+                    android:text="Read More"
+                    android:textColor="@color/white" />
 
             </RelativeLayout>
         </RelativeLayout>
@@ -115,23 +117,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvFullStory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="120dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/shape_bg_light_orange"
-            android:fontFamily="@font/montserrat_bold"
-            android:gravity="center"
-            android:padding="15dp"
-            android:text="@string/tap_to_read_full_story"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-
 
         <!-- view for AdMob Banner Ad -->
         <com.google.android.gms.ads.AdView

@@ -17,11 +17,12 @@ import com.google.android.gms.ads.*
 import java.util.*
 
 
-class FeatureBlogViewPagerAdapter constructor (private var blogList: ArrayList<FeatureData>): PagerAdapter() {
+class FeatureBlogViewPagerAdapter constructor(private var blogList: ArrayList<FeatureData>) :
+    PagerAdapter() {
 
     private var mLayoutInflater: LayoutInflater? = null
     var adapterListener: AdapterListener? = null
-     var adView: AdView? = null
+    var adView: AdView? = null
     override fun getCount(): Int {
         return blogList.size
     }
@@ -32,20 +33,19 @@ class FeatureBlogViewPagerAdapter constructor (private var blogList: ArrayList<F
     }
 
 
-
-
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val itemView: View =
-            LayoutInflater.from(container.context).inflate(R.layout.item_news_detail, container, false)
+            LayoutInflater.from(container.context)
+                .inflate(R.layout.item_news_detail, container, false)
 
-        val data= blogList[position]
+        val data = blogList[position]
 
         val imageView: ImageView = (itemView).findViewById(R.id.iv_news_image)
         val ivBack: ImageView = (itemView).findViewById(R.id.ic_back)
-        val ivShare: ImageView = (itemView).findViewById(R.id.ic_share)
+        val txtReadMore: ImageView = (itemView).findViewById(R.id.txtReadMore)
         val tvNewsHighlight: TextView = (itemView).findViewById(R.id.tvNewsHighLight)
         val tvNewsDetail: TextView = (itemView).findViewById(R.id.tvNewsDetail)
-        val tvFullStory: TextView = (itemView).findViewById(R.id.tvFullStory)
+
         val tvPaperName: TextView = (itemView).findViewById(R.id.tvNewsPaperName)
         adView = (itemView).findViewById(R.id.adView)
 
@@ -53,24 +53,22 @@ class FeatureBlogViewPagerAdapter constructor (private var blogList: ArrayList<F
 
 
 
-        tvNewsHighlight.text=data.title
-        tvNewsDetail.text=data.description
-        tvPaperName.text=data.category_name
+        tvNewsHighlight.text = data.title
+        tvNewsDetail.text = data.description
+        tvPaperName.text = data.category_name
 
         Glide.with(AppClass.appContext)
             .load(data.image)
-            .apply(RequestOptions.placeholderOf(R.drawable.placeholder).error(R.drawable.placeholder))
+            .apply(
+                RequestOptions.placeholderOf(R.drawable.placeholder).error(R.drawable.placeholder)
+            )
             .into(imageView)
         ivBack.setOnClickListener {
-            adapterListener?.onClick( ivBack, position)
+            adapterListener?.onClick(ivBack, position)
         }
 
-        tvFullStory.setOnClickListener {
-            adapterListener?.onClick( tvFullStory, position)
-        }
-
-        ivShare.setOnClickListener {
-            adapterListener?.onClick( ivShare, position)
+        txtReadMore.setOnClickListener {
+            adapterListener?.onClick(txtReadMore, position)
         }
 
 
@@ -80,17 +78,15 @@ class FeatureBlogViewPagerAdapter constructor (private var blogList: ArrayList<F
     }
 
 
-
-    private fun loadBannerAd(){
+    private fun loadBannerAd() {
         val adRequest = AdRequest.Builder().build()
         adView!!.loadAd(adRequest)
 
-        adView!!.adListener  = object : AdListener(){
+        adView!!.adListener = object : AdListener() {
             override fun onAdFailedToLoad(@NonNull p0: LoadAdError) {
                 super.onAdFailedToLoad(p0)
             }
         }
-
 
 
     }
@@ -99,6 +95,7 @@ class FeatureBlogViewPagerAdapter constructor (private var blogList: ArrayList<F
     interface AdapterListener {
         fun onClick(view: View, position: Int)
     }
+
     override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
         container.removeView(`object` as LinearLayout)
     }

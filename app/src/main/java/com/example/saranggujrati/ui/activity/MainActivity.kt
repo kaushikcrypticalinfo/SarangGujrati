@@ -98,7 +98,6 @@ class MainActivity : BaseActicvity<MainViewModel>(),
             R.string.navigation_drawer_close
         )
 
-
         binding.drawerLayout.addDrawerListener(mDrawerToggle)
         mDrawerToggle.syncState()
 
@@ -107,7 +106,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
         val login = menu.findItem(R.id.nav_Login)
         val logout = menu.findItem(R.id.nav_Logout)
 
-       mySwitch= menu.findItem(R.id.nav_dark_mode).actionView as SwitchCompat;
+       mySwitch= menu.findItem(R.id.nav_dark_mode).actionView as SwitchCompat
 
         if (SavedPrefrence.getUserId(AppClass.appContext)== "" ) {
             login.isVisible = true
@@ -118,10 +117,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
             login.isVisible = false
             logout.isVisible = true
             enableViews(false)
-
         }
-
-
 
         setDarkMode()
         createViewPager()
@@ -153,12 +149,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
 
     private fun setDarkMode(){
 
-        if(SavedPrefrence.is_DARKMODE){
-            mySwitch.isChecked=true
-
-        }else{
-            mySwitch.isChecked=false
-        }
+        mySwitch.isChecked = SavedPrefrence.is_DARKMODE
         mySwitch.setOnCheckedChangeListener { _, isChecked ->
 
             // if the button is checked, i.e., towards the right or enabled
@@ -238,7 +229,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
 
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        item.isChecked = true;
+        item.isChecked = true
         when (item.itemId) {
             R.id.nav_font_size -> {
                 binding.drawerLayout.closeDrawers()
@@ -247,14 +238,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
                 binding.drawerLayout.closeDrawers()
             }
             R.id.nav_dark_mode -> {
-
-                if(isDarkMode){
-                    mySwitch.isChecked=false
-                }else{
-                    mySwitch.isChecked=true
-                }
-
-
+                mySwitch.isChecked = !isDarkMode
                // binding.drawerLayout.closeDrawers()
             }
             R.id.nav_about_us -> {
@@ -307,7 +291,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
         } else {
             val count = supportFragmentManager.backStackEntryCount
             if (count > 1) {
-                supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 enableViews(true)
                 mDrawerToggle.syncState()
                 super.onBackPressed()

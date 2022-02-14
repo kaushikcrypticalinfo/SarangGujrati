@@ -42,10 +42,9 @@ class AllBlogViewPagerAdapter constructor(private var blogList: ArrayList<BlogDa
 
         val imageView: ImageView = (itemView).findViewById(R.id.iv_news_image)
         val ivBack: ImageView = (itemView).findViewById(R.id.ic_back)
-        val ivShare: ImageView = (itemView).findViewById(R.id.ic_share)
+        val ivShare: ImageView = (itemView).findViewById(R.id.txtReadMore)
         val tvNewsHighlight: TextView = (itemView).findViewById(R.id.tvNewsHighLight)
         val tvNewsDetail: TextView = (itemView).findViewById(R.id.tvNewsDetail)
-        val tvFullStory: TextView = (itemView).findViewById(R.id.tvFullStory)
         val tvPaperName: TextView = (itemView).findViewById(R.id.tvNewsPaperName)
         adView = (itemView).findViewById(R.id.adView)
 
@@ -67,14 +66,9 @@ class AllBlogViewPagerAdapter constructor(private var blogList: ArrayList<BlogDa
             adapterListener?.onClick(ivBack, position)
         }
 
-        tvFullStory.setOnClickListener {
-            adapterListener?.onClick(tvFullStory, position)
-        }
-
         ivShare.setOnClickListener {
             adapterListener?.onClick(ivShare, position)
         }
-
 
         container.addView(itemView)
         return itemView

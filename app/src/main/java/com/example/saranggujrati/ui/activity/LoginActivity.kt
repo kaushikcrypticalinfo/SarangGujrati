@@ -1,9 +1,7 @@
 package com.example.saranggujrati.ui.activity
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.text.Layout
 import android.util.Log
 import android.util.Patterns
 import android.view.View
@@ -11,9 +9,7 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import com.example.saranggujrati.R
 import com.example.saranggujrati.databinding.ActivityLoginBinding
@@ -21,11 +17,6 @@ import com.example.saranggujrati.ui.startNewActivity
 import com.example.saranggujrati.ui.viewModel.LoginViewModel
 import com.example.saranggujrati.webservice.Resource
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import com.example.retrofitcoroutineexample.data.api.RetrofitBuilder
-import com.example.saranggujrati.model.LoginResponse
-import com.example.saranggujrati.model.SignUpResponse
-import com.example.saranggujrati.model.SocialLoginResponse
 import com.example.saranggujrati.ui.SavedPrefrence
 import com.example.saranggujrati.ui.isOnline
 import com.example.saranggujrati.ui.visible
@@ -42,14 +33,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
 import kotlinx.coroutines.launch
 import org.json.JSONException
-import org.json.JSONObject
-import retrofit2.Response
 import timber.log.Timber
-import java.net.URI
 import java.net.URL
 import java.util.*
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 
 class LoginActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener {
@@ -525,10 +511,8 @@ class LoginActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener {
 
 
     private fun clickOnGuest() {
-
-        SavedPrefrence.iS_LOGIN = false
+        SavedPrefrence.is_LOGIN = true
         SavedPrefrence.is_Guest = true
-
         startNewActivity(MainActivity::class.java)
     }
 
@@ -549,7 +533,7 @@ class LoginActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener {
                     if (it.value.status) {
                         binding.progressbar.visible(false)
                         lifecycleScope.launch {
-                            SavedPrefrence.iS_LOGIN = true
+                            SavedPrefrence.is_LOGIN = true
                             SavedPrefrence.is_Guest = false
 
                             SavedPrefrence.setUser(it.value.data, applicationContext)
@@ -621,7 +605,7 @@ class LoginActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener {
                         progressBar.visible(false)
                         lifecycleScope.launch {
 
-                            SavedPrefrence.iS_LOGIN = true
+                            SavedPrefrence.is_LOGIN = true
                             SavedPrefrence.is_Guest = false
 
                             SavedPrefrence.setUser(it.value.data, applicationContext)
@@ -809,7 +793,7 @@ class LoginActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener {
                         lifecycleScope.launch {
 
 
-                            SavedPrefrence.iS_LOGIN=true
+                            SavedPrefrence.is_LOGIN=true
                             SavedPrefrence.is_Guest = false
 
 

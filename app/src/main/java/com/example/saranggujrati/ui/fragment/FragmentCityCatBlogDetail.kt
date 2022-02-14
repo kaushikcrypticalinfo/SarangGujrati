@@ -1,5 +1,6 @@
 package com.example.saranggujrati.ui.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -12,8 +13,11 @@ import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.BuildConfig
 import com.example.saranggujrati.R
 import com.example.saranggujrati.adapter.*
+import com.example.saranggujrati.databinding.ActivityCitCatBlogBinding
+import com.example.saranggujrati.databinding.ActivityLoginBinding
 import com.example.saranggujrati.databinding.FragmentAllNewsBlogBinding
 import com.example.saranggujrati.model.*
+import com.example.saranggujrati.ui.activity.BaseActicvity
 import com.example.saranggujrati.ui.activity.MainActivity
 import com.example.saranggujrati.ui.activity.WebViewActivity
 import com.example.saranggujrati.ui.isOnline
@@ -25,8 +29,10 @@ import com.performly.ext.obtainViewModel
 import timber.log.Timber
 
 
-class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailViewModel>(),
+class FragmentCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
     View.OnClickListener {
+
+    private var id: String = ""
 
     private lateinit var liveFeedlist: ArrayList<CategoryDataModel>
     private lateinit var dummyFeedlist: ArrayList<CategoryDataModel>
@@ -36,14 +42,26 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
 
     private var blogList = ArrayList<BlogData>()
 
-    lateinit var binding: FragmentAllNewsBlogBinding
+    lateinit var binding: ActivityCitCatBlogBinding
 
     var callCount = 0
 
-    override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
-        binding = FragmentAllNewsBlogBinding.inflate(inflater, container, false)
-        return binding.root
+    companion object {
+        const val REQ_CODE_CITY_CAT_BLOG = 1001
+        private const val EXTRA_ID = "EXTRA_ID"
+        fun startActivity(activity: Activity) {
+            val intent = Intent(activity, FragmentCityCatBlogDetail::class.java)
+            activity.startActivityForResult(intent, REQ_CODE_CITY_CAT_BLOG)
+        }
+
+        fun startActivity(activity: Activity, id: String) {
+            val intent = Intent(activity, FragmentCityCatBlogDetail::class.java)
+            intent.putExtra(EXTRA_ID, id)
+            activity.startActivityForResult(intent, REQ_CODE_CITY_CAT_BLOG)
+        }
+
     }
+
 
     override fun initializeViewModel(): CityCatBlogDetailViewModel {
         return obtainViewModel(CityCatBlogDetailViewModel::class.java)
@@ -62,22 +80,22 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
                         mActivity.supportActionBar?.show()
                         mActivity.onBackPressed()
                     }
-                    R.id.tvFullStory -> {
-                        val i = Intent(requireContext(), WebViewActivity::class.java)
+                    R.id.txtReadMore -> {
+                        val i = Intent(this@FragmentCityCatBlogDetail, WebViewActivity::class.java)
                         i.putExtra("url", blogList[position].url)
                         i.putExtra("title", blogList[position].title)
                         startActivity(i)
                     }
-                    R.id.ic_share -> {
-                        val sendIntent = Intent()
-                        sendIntent.action = Intent.ACTION_SEND
-                        sendIntent.putExtra(
-                            Intent.EXTRA_TEXT,
-                            "Hey check out this link:" + getString(R.string.empty) + blogList[position].url + BuildConfig.APPLICATION_ID
-                        )
-                        sendIntent.type = "text/plain"
-                        startActivity(sendIntent)
-                    }
+                    /*R.id.txtReadMore -> {
+                         val sendIntent = Intent()
+                         sendIntent.action = Intent.ACTION_SEND
+                         sendIntent.putExtra(
+                             Intent.EXTRA_TEXT,
+                             "Hey check out this link:" + getString(R.string.empty) + blogList[position].url + BuildConfig.APPLICATION_ID
+                         )
+                         sendIntent.type = "text/plain"
+                         startActivity(sendIntent)
+                     }*/
                 }
 
             }
@@ -90,53 +108,23 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
             adapter = feedListAdapter
         }
 
+        readIntent()
 
-        val bundle = b
-        val id = bundle.getString("id")
-        Timber.e(id.toString())
-        mActivity = (activity as MainActivity)
-        mActivity.enableViews(true)
-        mActivity.supportActionBar?.hide()
-        if (id != null) {
+        if (id.isNotEmpty()) {
             getAllBlogList(id)
         }
     }
 
-
-    override fun onPause() {
-        super.onPause()
+    private fun readIntent() {
+        id = intent.getStringExtra(EXTRA_ID).toString()
+        Timber.e(id)
     }
-
-    override fun onResume() {
-        super.onResume()
-
-        requireView().isFocusableInTouchMode = true
-        requireView().requestFocus()
-
-        requireView().setOnKeyListener(object : View.OnKeyListener {
-            override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
-                if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
-                    Timber.i("onKey Back listener is working!!!")
-                    mActivity.supportActionBar?.show()
-                    mActivity.onBackPressed()
-                    return true
-                }
-                return false
-            }
-        })
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
 
     private fun getAllBlogList(id: String) {
         setupObservers(id)
         viewModel.getCityCatBlogDetail(id)
         viewModel.getRssfeedList(id)
     }
-
 
     //setup observer
     private fun setupObservers(id: String) {
@@ -276,7 +264,6 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
         if (response.data.isEmpty()) {
             binding.tvNoData.visibility = View.VISIBLE
             binding.appBarLayout.visibility = View.VISIBLE
-            binding.verticalViewPager.visibility = View.GONE
 
             binding.tvTitle.text = getString(R.string.app_name)
             binding.icBack.setOnClickListener {
@@ -299,7 +286,11 @@ class FragmentCityCatBlogDetail(val b: Bundle) : BaseFragment<CityCatBlogDetailV
 
 
     override fun onClick(p0: View?) {
-        TODO("Not yet implemented")
+    }
+
+    override fun getBaseLayoutView(): View? {
+        binding = ActivityCitCatBlogBinding.inflate(layoutInflater)
+        return binding.root
     }
 
 }
