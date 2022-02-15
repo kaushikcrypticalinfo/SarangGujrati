@@ -1,8 +1,9 @@
-package com.example.saranggujrati.ui.fragment
+package com.example.saranggujrati.ui.activity
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -10,26 +11,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.example.saranggujrati.AppClass
-import com.example.saranggujrati.BuildConfig
 import com.example.saranggujrati.R
 import com.example.saranggujrati.adapter.*
 import com.example.saranggujrati.databinding.ActivityCitCatBlogBinding
-import com.example.saranggujrati.databinding.ActivityLoginBinding
-import com.example.saranggujrati.databinding.FragmentAllNewsBlogBinding
 import com.example.saranggujrati.model.*
-import com.example.saranggujrati.ui.activity.BaseActicvity
-import com.example.saranggujrati.ui.activity.MainActivity
-import com.example.saranggujrati.ui.activity.WebViewActivity
 import com.example.saranggujrati.ui.isOnline
 import com.example.saranggujrati.ui.viewModel.CityCatBlogDetailViewModel
 import com.example.saranggujrati.ui.visible
+import com.example.saranggujrati.utils.RSS_FEED_DATE_FORMAT
 import com.example.saranggujrati.webservice.Resource
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
-class FragmentCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
+class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
     View.OnClickListener {
 
     private var id: String = ""
@@ -50,24 +49,30 @@ class FragmentCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
         const val REQ_CODE_CITY_CAT_BLOG = 1001
         private const val EXTRA_ID = "EXTRA_ID"
         fun startActivity(activity: Activity) {
-            val intent = Intent(activity, FragmentCityCatBlogDetail::class.java)
+            val intent = Intent(activity, ActivityCityCatBlogDetail::class.java)
             activity.startActivityForResult(intent, REQ_CODE_CITY_CAT_BLOG)
         }
 
         fun startActivity(activity: Activity, id: String) {
-            val intent = Intent(activity, FragmentCityCatBlogDetail::class.java)
+            val intent = Intent(activity, ActivityCityCatBlogDetail::class.java)
             intent.putExtra(EXTRA_ID, id)
             activity.startActivityForResult(intent, REQ_CODE_CITY_CAT_BLOG)
         }
 
     }
 
-
     override fun initializeViewModel(): CityCatBlogDetailViewModel {
         return obtainViewModel(CityCatBlogDetailViewModel::class.java)
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
+
+        binding.icBack.setOnClickListener { finish() }
+
+        binding.imgRefresh.setOnClickListener {
+            viewModel.getRssfeedList(id)
+        }
+
         liveFeedlist = ArrayList()
         dummyFeedlist = ArrayList()
 
@@ -81,21 +86,11 @@ class FragmentCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
                         mActivity.onBackPressed()
                     }
                     R.id.txtReadMore -> {
-                        val i = Intent(this@FragmentCityCatBlogDetail, WebViewActivity::class.java)
+                        val i = Intent(this@ActivityCityCatBlogDetail, WebViewActivity::class.java)
                         i.putExtra("url", blogList[position].url)
                         i.putExtra("title", blogList[position].title)
                         startActivity(i)
                     }
-                    /*R.id.txtReadMore -> {
-                         val sendIntent = Intent()
-                         sendIntent.action = Intent.ACTION_SEND
-                         sendIntent.putExtra(
-                             Intent.EXTRA_TEXT,
-                             "Hey check out this link:" + getString(R.string.empty) + blogList[position].url + BuildConfig.APPLICATION_ID
-                         )
-                         sendIntent.type = "text/plain"
-                         startActivity(sendIntent)
-                     }*/
                 }
 
             }
@@ -122,50 +117,11 @@ class FragmentCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
 
     private fun getAllBlogList(id: String) {
         setupObservers(id)
-        viewModel.getCityCatBlogDetail(id)
         viewModel.getRssfeedList(id)
     }
 
     //setup observer
     private fun setupObservers(id: String) {
-        viewModel.cityCatBlogDetailResponse.observe(this, Observer { it ->
-            when (it) {
-                is Resource.Loading -> {
-                    binding.progressbar.isVisible = true
-                }
-
-                is Resource.Success -> {
-                    if (it.value.status) {
-                        blogList.clear()
-                        if (it.value.status) {
-                            binding.progressbar.visible(false)
-                            getAllBlogList(it.value, id)
-                        }
-                    } else {
-                        Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
-                    }
-                }
-                is Resource.Failure -> {
-                    binding.progressbar.isVisible = false
-                    when {
-                        it.isNetworkError -> {
-                            if (!isOnline(AppClass.appContext)) {
-                                Snackbar.make(
-                                    binding.layout,
-                                    resources.getString(R.string.check_internet),
-                                    Snackbar.LENGTH_LONG
-                                ).show()
-                            }
-                        }
-                        else -> {
-                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
-                                .show()
-                        }
-                    }
-                }
-            }
-        })
-
         viewModel.feedList.observe(this, Observer { it ->
             when (it) {
 
@@ -174,6 +130,8 @@ class FragmentCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
                 }
 
                 is Resource.Success -> {
+                    //when refresh data clear old data
+                    blogList.clear()
                     if (it.value.status) {
                         if (it.value.status) {
                             binding.progressbar.visible(false)
@@ -187,6 +145,16 @@ class FragmentCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
 
                             if (dummyFeedlist.isNotEmpty())
                                 callLiveFeesListApi(dummyFeedlist, callCount)
+                            else {
+                                binding.tvNoData.visibility = View.VISIBLE
+                                binding.rvNewsFeed.visibility = View.GONE
+                            }
+
+                            binding.tvNoData.visibility =
+                                if (dummyFeedlist.isNotEmpty()) View.GONE else View.VISIBLE
+
+                            binding.rvNewsFeed.visibility =
+                                if (dummyFeedlist.isNotEmpty()) View.VISIBLE else View.GONE
                         }
                     } else {
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
@@ -227,14 +195,23 @@ class FragmentCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
                         blogData.description = rssItem.description
                         blogData.category_name = liveFeedlist[callCount].rssName
                         blogData.image = rssItem.thumbnail?.thumbnailUrl.toString()
+                        blogData.time = rssItem.pubDate
+                        blogData.url = rssItem.link
                         blogList.add(blogData)
                     }
 
-                    feedListAdapter.notifyDataSetChanged()
+//                    Sorting all list data recent new first show
+                    blogList.sortByDescending {
+                        SimpleDateFormat(
+                            RSS_FEED_DATE_FORMAT, Locale.getDefault()
+                        ).parse(it.time)
+                    }
 
                     callCount += 1
                     if (callCount < dummyFeedlist.size - 1) {
                         callLiveFeesListApi(dummyFeedlist, callCount)
+                    } else {
+                        feedListAdapter.notifyDataSetChanged()
                     }
 
                 }
@@ -259,31 +236,6 @@ class FragmentCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
     private fun callLiveFeesListApi(data: List<CategoryDataModel>, callCount: Int) {
         viewModel.getLiveData(data[callCount].rssUrl)
     }
-
-    private fun getAllBlogList(response: CityCategoryBlogDetailResponse, id: String) {
-        if (response.data.isEmpty()) {
-            binding.tvNoData.visibility = View.VISIBLE
-            binding.appBarLayout.visibility = View.VISIBLE
-
-            binding.tvTitle.text = getString(R.string.app_name)
-            binding.icBack.setOnClickListener {
-                mActivity.onBackPressed()
-            }
-
-            binding.toolbar.setOnClickListener {
-                mActivity.onBackPressed()
-            }
-        } else {
-            for (i in response.data.indices) {
-                blogList.addAll(response.data[i].blog)
-            }
-
-            feedListAdapter.notifyDataSetChanged()
-        }
-
-
-    }
-
 
     override fun onClick(p0: View?) {
     }

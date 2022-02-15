@@ -1,25 +1,14 @@
 package com.example.saranggujrati.ui.fragment
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.view.View.inflate
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.R
 import com.example.saranggujrati.adapter.TopCitiesAdapter
-import com.example.saranggujrati.databinding.ActivityBaseBinding
-import com.example.saranggujrati.databinding.ActivityBaseBinding.inflate
-import com.example.saranggujrati.databinding.ActivityLoginBinding
 import com.example.saranggujrati.databinding.FragmentHomeBinding
 import com.example.saranggujrati.ui.activity.MainActivity
 import com.example.saranggujrati.ui.isOnline
@@ -29,16 +18,11 @@ import com.example.saranggujrati.webservice.Resource
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.saranggujrati.adapter.AllNewsChannelAdapter
 import com.example.saranggujrati.ui.SavedPrefrence
-import com.example.saranggujrati.ui.activity.YouTubeActivity
-import com.performly.ext.addFragmentInActivity
-import com.performly.ext.addFragmentToActivity
-import com.performly.ext.replaceFragmentInActivity
-import android.widget.Toast
 import com.example.saranggujrati.adapter.CategoryListAdapter
 import com.example.saranggujrati.adapter.FeaturedListAdapter
 import com.example.saranggujrati.model.*
+import com.example.saranggujrati.ui.activity.ActivityCityCatBlogDetail
 
 
 class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
@@ -118,7 +102,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         categoryAdapter.adapterListener = object : CategoryListAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
                 if (view.id == R.id.llMain) {
-                    FragmentCityCatBlogDetail.startActivity(
+                    ActivityCityCatBlogDetail.startActivity(
                         activity!!,
                         categoryList.get(position).id.toString()
                     )
@@ -142,7 +126,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         adapter.adapterListener = object : TopCitiesAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
                 if (view.id == R.id.llCity) {
-                    FragmentCityCatBlogDetail.startActivity(
+                    ActivityCityCatBlogDetail.startActivity(
                         activity!!,
                         topCitiesList.get(position).id.toString()
                     )

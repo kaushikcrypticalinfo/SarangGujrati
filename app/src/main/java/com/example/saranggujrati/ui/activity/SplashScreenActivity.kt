@@ -35,7 +35,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 SavedPrefrence.getUserId(AppClass.appContext) != "" -> {
                     Intent(this, MainActivity::class.java)
                 }
-                SavedPrefrence.is_Guest -> {
+                SavedPrefrence.getIsGuest(this) == true -> {
                     Intent(this, MainActivity::class.java)
                 }
                 else -> {

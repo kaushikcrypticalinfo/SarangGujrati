@@ -90,26 +90,19 @@ class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
     private fun setAdapter() {
 
         newsPaperAdapter = AllNewsPaperAdapter(newPaperlList)
-        newsPaperAdapter.notifyDataSetChanged()
-        binding.rvAllNewsChannel.recyclerview.adapter = newsPaperAdapter
-
         newsPaperAdapter.adapterListener = object : AllNewsPaperAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
                 if (view.id == R.id.llMain) {
-               // mActivity.pushFragment(YouTubeFragment(newsChannelList[position]?.url))
-                   val i = Intent(requireContext(), WebViewActivity::class.java)
+                    val i = Intent(requireContext(), WebViewActivity::class.java)
                     i.putExtra("url",newPaperlList[position]?.url)
                     i.putExtra("title",newPaperlList[position]?.title)
                     startActivity(i)
-
                 }
-
             }
-
         }
-
-
+        binding.rvAllNewsChannel.recyclerview.adapter = newsPaperAdapter
     }
+
     private fun setRVLayoutManager() {
         mLayoutManager = LinearLayoutManager((AppClass.appContext))
         binding.rvAllNewsChannel.recyclerview.layoutManager = mLayoutManager
@@ -117,16 +110,12 @@ class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
         binding.rvAllNewsChannel.recyclerview.layoutManager = GridLayoutManager(AppClass.appContext, 2)
 
         (mLayoutManager as LinearLayoutManager).orientation = RecyclerView.VERTICAL
-
-
     }
 
 
     private fun setRVScrollListener() {
-
         endlessScrollListener =
             object : EndlessScrollListener(mLayoutManager as LinearLayoutManager, 1) {
-
                 override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
                     if (nextPageUrl != null) {
                         getNewsPaperChannel(page)
@@ -136,7 +125,6 @@ class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
                 }
             }
         binding.rvAllNewsChannel.recyclerview.addOnScrollListener(endlessScrollListener)
-
     }
     private fun fetchInitialNews(page: Int) {
         newPaperlList.clear()
@@ -148,14 +136,11 @@ class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
         }
         endlessScrollListener.resetState()
         getNewsPaperChannel(1)
-
     }
-
 
     private fun getNewsPaperChannel(page: Int){
         viewModel.getAllNewsPaper(page.toString())
     }
-
 
     //setup observer
     private fun setupObservers() {
@@ -167,8 +152,6 @@ class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
 
                 is Resource.Success -> {
                     if (it.value.status) {
-
-
                         newsPaperResponse = it.value
                         binding.rvAllNewsChannel.progressbar.isVisible=false
                         binding.swipeContainer.isRefreshing = false
@@ -177,9 +160,8 @@ class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
 
                         addNewsPaperData(it.value)
                     }
-
-
                 }
+
                 is Resource.Failure -> {
                     binding.rvAllNewsChannel.progressbar.isVisible=false
                     binding.swipeContainer.isRefreshing = false

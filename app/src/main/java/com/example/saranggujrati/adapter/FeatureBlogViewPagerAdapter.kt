@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
+import androidx.appcompat.widget.AppCompatTextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.saranggujrati.AppClass
@@ -42,7 +43,7 @@ class FeatureBlogViewPagerAdapter constructor(private var blogList: ArrayList<Fe
 
         val imageView: ImageView = (itemView).findViewById(R.id.iv_news_image)
         val ivBack: ImageView = (itemView).findViewById(R.id.ic_back)
-        val txtReadMore: ImageView = (itemView).findViewById(R.id.txtReadMore)
+        val txtReadMore: AppCompatTextView = (itemView).findViewById(R.id.txtReadMore)
         val tvNewsHighlight: TextView = (itemView).findViewById(R.id.tvNewsHighLight)
         val tvNewsDetail: TextView = (itemView).findViewById(R.id.tvNewsDetail)
 

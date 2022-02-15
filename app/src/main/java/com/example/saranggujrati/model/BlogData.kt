@@ -38,17 +38,19 @@ data class BlogData(
     val status: String,
     val tags: String,
     val thumb_image: String,
-    val time: String,
+    var time: String,
     var title: String,
     val trimed_description: String,
     val tweet_published: String,
     val updated_at: String,
-    val url: String,
+    var url: String,
     val video_url: String,
     val view_count: Int,
     val voice: String,
     val yes_percent: Int
 ) {
+
+
     constructor() : this(
         "", "", "", emptyList(), "", "",
         "", "", "", "", "", "", "",
@@ -58,4 +60,5 @@ data class BlogData(
         "", "", "", "", "", "", "",
         "", 0, "", 0
     )
+
 }

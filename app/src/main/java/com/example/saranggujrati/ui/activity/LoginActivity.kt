@@ -512,7 +512,7 @@ class LoginActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener {
 
     private fun clickOnGuest() {
         SavedPrefrence.is_LOGIN = true
-        SavedPrefrence.is_Guest = true
+        SavedPrefrence.setGuest(this,true)
         startNewActivity(MainActivity::class.java)
     }
 

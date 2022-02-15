@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?appBackground"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_news_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/placeholder"
+        ads:layout_constraintDimensionRatio="16:9"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintStart_toStartOf="parent"
+        ads:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvNewsPaperName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerInParent="true"
+        android:layout_marginHorizontal="15dp"
+        android:background="@drawable/shape_bg_blue"
+        android:fontFamily="@font/montserrat_regular"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="10dp"
+        android:text="Divy Bhaskar"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        ads:layout_constraintBottom_toBottomOf="@+id/iv_news_image"
+        ads:layout_constraintEnd_toStartOf="@+id/txtReadMore"
+        ads:layout_constraintHorizontal_bias="0.5"
+        ads:layout_constraintHorizontal_chainStyle="spread_inside"
+        ads:layout_constraintStart_toStartOf="parent"
+        ads:layout_constraintTop_toBottomOf="@+id/iv_news_image" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtReadMore"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
+        android:layout_marginHorizontal="15dp"
+        android:background="@drawable/shape_bg_light_orange"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="10dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_share_white"
+        android:text="Read More"
+        android:textColor="@color/white"
+        ads:layout_constraintBottom_toBottomOf="@+id/iv_news_image"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintHorizontal_bias="0.5"
+        ads:layout_constraintStart_toEndOf="@+id/tvNewsPaperName"
+        ads:layout_constraintTop_toBottomOf="@+id/iv_news_image" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvNewsHighLight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_horizontal"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="start"
+        android:inputType="textMultiLine|textNoSuggestions"
+        android:maxLines="2"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="8dp"
+        android:textColor="?textColor"
+        android:textSize="16dp"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintStart_toStartOf="parent"
+        ads:layout_constraintTop_toBottomOf="@+id/tvNewsPaperName" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvNewsDetail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_horizontal"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="start"
+        android:inputType="textMultiLine|textNoSuggestions"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="8dp"
+        android:textColor="?textColor"
+        android:textSize="12sp"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintHeight_default="wrap"
+        ads:layout_constraintStart_toStartOf="parent"
+        ads:layout_constraintTop_toBottomOf="@+id/tvNewsHighLight"
+        ads:layout_constraintVertical_weight="1" />
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id"
+        ads:layout_constraintBottom_toBottomOf="parent"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

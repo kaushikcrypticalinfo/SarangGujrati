@@ -1,9 +1,7 @@
 package com.example.saranggujrati.ui.fragment
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.*
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -54,7 +52,7 @@ class FragmentLiveTempleDarshanChannelList:BaseFragment<NewsChannelViewModel> ()
     override fun setUpChildUI(savedInstanceState: Bundle?) {
 
         mActivity=(activity as MainActivity)
-        mActivity.toolbar.title=getString(R.string.live_mandir_darshan)
+        mActivity.toolbar.title=getString(R.string.str_live_darshan_temple)
         mActivity.enableViews(true)
         setAdapter()
         setRVLayoutManager()

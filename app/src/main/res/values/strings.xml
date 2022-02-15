@@ -44,7 +44,7 @@
     <string name="latest_gujrati_news">Latest \nGujrati News</string>
     <string name="live_news_channels">Live News \nChannels</string>
     <string name="all_guj_news_papers">All Gujrati \nNewsPapers</string>
-    <string name="live_mandir_darshan">Live Temple Darshan</string>
+    <string name="str_live_darshan_temple">Live Temple Darshan</string>
     <string name="Featured_stories">Featured Stories</string>
     <string name="my_news_feed">My News Feed</string>
     <string name="no_task_available">No Data Found!</string>

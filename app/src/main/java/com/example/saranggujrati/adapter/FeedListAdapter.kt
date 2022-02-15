@@ -4,6 +4,7 @@ import android.os.Build
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
@@ -13,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.R
-import com.example.saranggujrati.databinding.ItemNewsDetailBinding
+import com.example.saranggujrati.databinding.RRssFeedItemBinding
 import com.example.saranggujrati.extensions.formatHtmlText
 import com.example.saranggujrati.model.BlogData
 import com.google.android.gms.ads.AdListener
@@ -24,7 +25,7 @@ class FeedListAdapter constructor(private var categoryList: ArrayList<BlogData>)
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var adapterListener: AdapterListener? = null
-    lateinit var binding: ItemNewsDetailBinding
+    lateinit var binding: RRssFeedItemBinding
 
     interface AdapterListener {
         fun onClick(view: View, position: Int)
@@ -32,7 +33,7 @@ class FeedListAdapter constructor(private var categoryList: ArrayList<BlogData>)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        binding = ItemNewsDetailBinding.inflate(inflater, parent, false)
+        binding = RRssFeedItemBinding.inflate(inflater, parent, false)
         return CategoryViewHolder(binding)
     }
 
@@ -48,7 +49,7 @@ class FeedListAdapter constructor(private var categoryList: ArrayList<BlogData>)
         return categoryList.size
     }
 
-    inner class CategoryViewHolder(private var binding: ItemNewsDetailBinding) :
+    inner class CategoryViewHolder(private var binding: RRssFeedItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @RequiresApi(Build.VERSION_CODES.N)
         fun bind(data: BlogData) {
@@ -72,9 +73,6 @@ class FeedListAdapter constructor(private var categoryList: ArrayList<BlogData>)
 
             loadBannerAd(binding)
 
-            binding.icBack.setOnClickListener {
-                adapterListener?.onClick(it, adapterPosition)
-            }
 
             binding.txtReadMore.setOnClickListener {
                 adapterListener?.onClick(it, adapterPosition)
@@ -84,7 +82,7 @@ class FeedListAdapter constructor(private var categoryList: ArrayList<BlogData>)
     }
 
 
-    private fun loadBannerAd(binding: ItemNewsDetailBinding) {
+    private fun loadBannerAd(binding: RRssFeedItemBinding) {
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
         binding.adView.adListener = object : AdListener() {

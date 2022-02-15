@@ -94,7 +94,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.fragment.FragmentCityCatBlogDetail" />
+        <activity android:name=".ui.activity.ActivityCityCatBlogDetail" />
     </application>
 
 </manifest>

@@ -12,12 +12,16 @@ import java.io.Serializable
 data class RssItems(
     @field:Element(name = TITLE)
     var title: String = "",
+
     @field:Element(name = DESCRIPTION, required = false)
     var description: String = "",
+
     @field:Element(name = LINK)
     var link: String = "",
+
     @field:Element(name = PUB_DATE, required = false)
     var pubDate: String = "",
+
     @field:Element(name = ENCLOSURE, required = false)
     var enclosure: Enclosure? = null,
 

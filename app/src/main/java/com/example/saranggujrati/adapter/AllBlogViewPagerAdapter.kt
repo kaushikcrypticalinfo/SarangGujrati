@@ -9,6 +9,7 @@ import com.example.saranggujrati.model.BlogData
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
+import androidx.appcompat.widget.AppCompatTextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.saranggujrati.AppClass
@@ -42,7 +43,7 @@ class AllBlogViewPagerAdapter constructor(private var blogList: ArrayList<BlogDa
 
         val imageView: ImageView = (itemView).findViewById(R.id.iv_news_image)
         val ivBack: ImageView = (itemView).findViewById(R.id.ic_back)
-        val ivShare: ImageView = (itemView).findViewById(R.id.txtReadMore)
+        val ivShare: AppCompatTextView = (itemView).findViewById(R.id.txtReadMore)
         val tvNewsHighlight: TextView = (itemView).findViewById(R.id.tvNewsHighLight)
         val tvNewsDetail: TextView = (itemView).findViewById(R.id.tvNewsDetail)
         val tvPaperName: TextView = (itemView).findViewById(R.id.tvNewsPaperName)

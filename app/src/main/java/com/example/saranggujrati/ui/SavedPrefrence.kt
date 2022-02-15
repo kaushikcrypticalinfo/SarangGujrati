@@ -29,20 +29,14 @@ object SavedPrefrence {
 
     var is_LOGIN: Boolean = false
     var is_DARKMODE: Boolean = false
-    var is_Guest: Boolean
-        get() = false
-        set(value) = TODO()
+    var is_Guest: Boolean = false
 
     fun getIsGuest(context: Context) = getSharedPreference(
         context
     )?.getBoolean(is_guest, false)
 
     fun setGuest(context: Context, type: Boolean) {
-        editor(
-            context,
-            is_guest,
-            type
-        )
+        editor(context, is_guest, type)
     }
 
     private fun getSharedPreference(ctx: Context?): SharedPreferences? {
