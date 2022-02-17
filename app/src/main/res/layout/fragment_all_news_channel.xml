@@ -13,30 +13,22 @@
         android:background="@drawable/ic_background"
         android:orientation="vertical">
 
-
-
-        <RelativeLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeContainer"
             android:layout_width="match_parent"
-            android:layout_margin="10dp"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swipeContainer"
+            <include
+                android:id="@+id/rv_all_news_channel"
+                layout="@layout/layout_recylerview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <include
-                    android:id="@+id/rv_all_news_channel"
-                    layout="@layout/layout_recylerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:clipToPadding="false"
-                    android:paddingBottom="50dp" />
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:clipToPadding="false"
+                android:paddingBottom="50dp" />
 
 
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-        </RelativeLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

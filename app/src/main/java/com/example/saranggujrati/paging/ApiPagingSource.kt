@@ -23,10 +23,10 @@ class ApiPagingSource(val apiService: ApiService) :
                 page = pageIndex.toString()
             )
             val movies = response.data.data.toMutableList()
-            val nextKey =
+
             // By default, initial load size = 3 * NETWORK PAGE SIZE
-                // ensure we're not requesting duplicating items at the 2nd request
-                if (movies.isEmpty()) null else pageIndex + 1
+            // ensure we're not requesting duplicating items at the 2nd request
+            val nextKey = if (movies.isEmpty()) null else pageIndex + 1
 
             LoadResult.Page(
                 data = movies,

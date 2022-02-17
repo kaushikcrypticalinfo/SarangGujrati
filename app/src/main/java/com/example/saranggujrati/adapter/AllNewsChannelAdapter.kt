@@ -25,12 +25,12 @@ class AllNewsChannelAdapter constructor (private var itemList: ArrayList<NewsDat
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
-        if (viewType == LoadMoreConstant. VIEW_TYPE_ITEM) {
-                val binding = ItemNewsChannelBinding.inflate(inflater, parent, false)
-                return ItemViewHolder(binding)
-            }else{
-               val binding = RLoadingBinding.inflate(inflater, parent, false)
-                return LoadingViewHolder(binding)
+        return if (viewType == LoadMoreConstant. VIEW_TYPE_ITEM) {
+            val binding = ItemNewsChannelBinding.inflate(inflater, parent, false)
+            ItemViewHolder(binding)
+        }else{
+            val binding = RLoadingBinding.inflate(inflater, parent, false)
+            LoadingViewHolder(binding)
         }
     }
 

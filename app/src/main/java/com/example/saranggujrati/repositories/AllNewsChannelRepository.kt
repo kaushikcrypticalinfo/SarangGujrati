@@ -16,6 +16,7 @@ class AllNewsChannelRepository(private val api: ApiService) : BaseRepository() {
     suspend fun getNewsChannel(page: String) =
         safeApiCall { api.getLiveNewsChannelList(page) }
 
+
     fun getNewChannelPaging(): Flow<PagingData<NewsData>> {
         return Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = NETWORK_PAGE_SIZE),

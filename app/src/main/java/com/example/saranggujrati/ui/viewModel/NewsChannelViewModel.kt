@@ -32,4 +32,5 @@ class NewsChannelViewModel(private val repository: AllNewsChannelRepository) :
         return repository.getNewChannelPaging()
             .cachedIn(viewModelScope)
     }
+
 }

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.*
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper

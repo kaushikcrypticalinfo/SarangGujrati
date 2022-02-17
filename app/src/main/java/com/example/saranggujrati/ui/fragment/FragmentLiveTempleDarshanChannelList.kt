@@ -3,41 +3,35 @@ package com.example.saranggujrati.ui.fragment
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
-import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.R
-import com.example.saranggujrati.adapter.AllNewsChannelAdapter
+import com.example.saranggujrati.adapter.PagingDemoAdapter
+import com.example.saranggujrati.adapter.PlayersLoadingStateAdapter
 import com.example.saranggujrati.databinding.FragmentAllNewsChannelBinding
-import com.example.saranggujrati.loadmore.EndlessScrollListener
 import com.example.saranggujrati.model.NewsChannelListRespnse
 import com.example.saranggujrati.model.NewsData
 import com.example.saranggujrati.ui.activity.MainActivity
 import com.example.saranggujrati.ui.activity.YouTubeActivity
-import com.example.saranggujrati.ui.isOnline
 import com.example.saranggujrati.ui.viewModel.NewsChannelViewModel
-import com.example.saranggujrati.webservice.Resource
-import com.google.android.material.snackbar.Snackbar
+import com.example.saranggujrati.ui.visible
 import com.performly.ext.obtainViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import kotlin.collections.ArrayList
 
-class FragmentLiveTempleDarshanChannelList:BaseFragment<NewsChannelViewModel> (){
+class FragmentLiveTempleDarshanChannelList : BaseFragment<NewsChannelViewModel>() {
 
     private lateinit var mActivity: MainActivity
-    lateinit var newsChannelAdapter: AllNewsChannelAdapter
     private var newsChannelList = ArrayList<NewsData?>()
     lateinit var binding: FragmentAllNewsChannelBinding
     lateinit var mLayoutManager: RecyclerView.LayoutManager
-    lateinit var endlessScrollListener: EndlessScrollListener
-    var nextPageUrl: String? = null
-    lateinit var newsChannelResponse: NewsChannelListRespnse
 
-    lateinit var swipeContainer: SwipeRefreshLayout
-
+    lateinit var pagingDemoAdapter: PagingDemoAdapter
 
 
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
@@ -50,174 +44,126 @@ class FragmentLiveTempleDarshanChannelList:BaseFragment<NewsChannelViewModel> ()
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
-
-        mActivity=(activity as MainActivity)
-        mActivity.toolbar.title=getString(R.string.str_live_darshan_temple)
+        mActivity = (activity as MainActivity)
+        mActivity.toolbar.title = getString(R.string.str_live_darshan_temple)
         mActivity.enableViews(true)
-        setAdapter()
+
+        binding.rvAllNewsChannel.progressbar.visible(true)
+
         setRVLayoutManager()
-        setRVScrollListener()
-        fetchInitialNews(1)
+
+        setAdapter()
+
+        fetchInitialNews()
+
         setHasOptionsMenu(true)
 
         binding.swipeContainer.setOnRefreshListener {
-            endlessScrollListener.resetState()
-            fetchInitialNews(1)
+            pagingDemoAdapter.refresh()
         }
 
         setupObservers()
-
     }
 
-
     override fun onPrepareOptionsMenu(menu: Menu) {
-
-        if( menu.findItem(R.id.logo)!=null){
+        if (menu.findItem(R.id.logo) != null) {
             menu.findItem(R.id.logo).isVisible = false
         }
         super.onPrepareOptionsMenu(menu)
-
     }
-
 
     private fun setAdapter() {
+        pagingDemoAdapter = PagingDemoAdapter()
 
-        newsChannelAdapter = AllNewsChannelAdapter(newsChannelList)
-        newsChannelAdapter.notifyDataSetChanged()
-        binding.rvAllNewsChannel.recyclerview.adapter = newsChannelAdapter
+        pagingDemoAdapter.withLoadStateFooter(PlayersLoadingStateAdapter { retry() })
 
-        newsChannelAdapter.adapterListener = object : AllNewsChannelAdapter.AdapterListener {
-            override fun onClick(view: View, position: Int) {
-                if (view.id == R.id.llMain) {
-               // mActivity.pushFragment(YouTubeFragment(newsChannelList[position]?.url))
+        pagingDemoAdapter.addLoadStateListener { loadState ->
 
-                    val i = Intent(requireContext(), YouTubeActivity::class.java)
-                    i.putExtra("url",newsChannelList[position]?.url)
-                    startActivity(i)
-
+            if (loadState.mediator?.refresh is LoadState.Loading) {
+                if (pagingDemoAdapter.snapshot().isEmpty()) {
+                    binding.rvAllNewsChannel.progressbar.visible(true)
                 }
+                binding.rvAllNewsChannel.tvNoData.visible(false)
 
+            } else {
+                binding.rvAllNewsChannel.progressbar.visible(false)
+                binding.swipeContainer.isRefreshing = false
+
+                val error = when {
+                    loadState.mediator?.prepend is LoadState.Error -> loadState.mediator?.prepend as LoadState.Error
+                    loadState.mediator?.append is LoadState.Error -> loadState.mediator?.append as LoadState.Error
+                    loadState.mediator?.refresh is LoadState.Error -> loadState.mediator?.refresh as LoadState.Error
+                    else -> null
+                }
+                error?.let {
+                    if (pagingDemoAdapter.snapshot().isEmpty()) {
+                        binding.rvAllNewsChannel.tvNoData.visible(true)
+                        binding.rvAllNewsChannel.tvNoData.text = it.error.localizedMessage
+                    }
+                }
             }
-
         }
 
+        pagingDemoAdapter.adapterListener = object : PagingDemoAdapter.AdapterListener {
+            override fun onClick(view: View, position: Int) {
+                if (view.id == R.id.llMain) {
+                    val i = Intent(requireContext(), YouTubeActivity::class.java)
+                    i.putExtra("url", pagingDemoAdapter.snapshot()[position]?.url)
+                    startActivity(i)
+                }
+            }
+        }
 
+        binding.rvAllNewsChannel.recyclerview.adapter = pagingDemoAdapter
     }
+
+    private fun retry() {
+        pagingDemoAdapter.retry()
+    }
+
     private fun setRVLayoutManager() {
         mLayoutManager = LinearLayoutManager((AppClass.appContext))
         binding.rvAllNewsChannel.recyclerview.layoutManager = mLayoutManager
         binding.rvAllNewsChannel.recyclerview.setHasFixedSize(true)
-        binding.rvAllNewsChannel.recyclerview.layoutManager = GridLayoutManager(AppClass.appContext, 2)
+        binding.rvAllNewsChannel.recyclerview.layoutManager =
+            GridLayoutManager(AppClass.appContext, 2)
 
         (mLayoutManager as LinearLayoutManager).orientation = RecyclerView.VERTICAL
-
-
     }
 
 
     private fun setRVScrollListener() {
+    }
 
-        endlessScrollListener =
-            object : EndlessScrollListener(mLayoutManager as LinearLayoutManager, 1) {
+    private fun fetchInitialNews() {
+        getNewsChannel()
+    }
 
-                override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-                    if (nextPageUrl != null) {
-                        getNewsChannel(page)
-                    } else {
-                        endlessScrollListener.isLastPage()
-                    }
-                }
+    private fun getNewsChannel() {
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.getPagingData().collectLatest {
+                pagingDemoAdapter.submitData(lifecycle, it)
             }
-        binding.rvAllNewsChannel.recyclerview.addOnScrollListener(endlessScrollListener)
-
-    }
-
-    private fun fetchInitialNews(page: Int) {
-        newsChannelList.clear()
-
-        val insertSize: Int = newsChannelList.size
-        val insertPos: Int = newsChannelList.size - insertSize
-        binding.rvAllNewsChannel.recyclerview.post {
-            newsChannelAdapter.notifyItemRangeInserted(insertPos, insertSize)
         }
-        endlessScrollListener.resetState()
-        getNewsChannel(1)
-
     }
-
-    private fun getNewsChannel(page: Int){
-
-        viewModel.getAllNewsChannel(page.toString())
-
-    }
-
 
     //setup observer
     private fun setupObservers() {
-        viewModel.newsChannelResponse.observe(this, Observer {
-            when (it) {
-                is Resource.Loading -> {
-                    binding.rvAllNewsChannel.progressbar.isVisible=true
-                }
-
-                is Resource.Success -> {
-                    if (it.value.status) {
-
-
-                        newsChannelResponse = it.value
-                        binding.rvAllNewsChannel.progressbar.isVisible=false
-                        binding.swipeContainer.isRefreshing = false
-                        nextPageUrl = newsChannelResponse.data.next_page_url
-
-                        addNewsData(it.value)
-                    }
-
-
-                }
-                is Resource.Failure -> {
-                    binding.rvAllNewsChannel.progressbar.isVisible=false
-                    binding.swipeContainer.isRefreshing = false
-
-                    when {
-                        it.isNetworkError -> {
-                            if (!isOnline(AppClass.appContext)) {
-                                Snackbar.make(binding.layout,
-                                    resources.getString(R.string.check_internet),
-                                    Snackbar.LENGTH_LONG).show()
-                            }
-                        }
-                        else -> {
-                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
-
-                        }
-
-
-                    }
-
-                }
-
-            }
-        })
     }
+
     private fun addNewsData(response: NewsChannelListRespnse) {
-
-
-        if(response.data.data.isEmpty() ){
-            binding.rvAllNewsChannel.tvNoData.visibility=View.VISIBLE
-            binding.rvAllNewsChannel.recyclerview.visibility=View.GONE
-        }else{
-            for(i in response.data.data.indices){
-                if(response.data.data[i].category=="1"){
+        if (response.data.data.isEmpty()) {
+            binding.rvAllNewsChannel.tvNoData.visibility = View.VISIBLE
+            binding.rvAllNewsChannel.recyclerview.visibility = View.GONE
+        } else {
+            for (i in response.data.data.indices) {
+                if (response.data.data[i].category == "1") {
                     newsChannelList.add(response.data.data[i])
 
                 }
             }
-            newsChannelAdapter.notifyDataSetChanged()
         }
-        }
-
-
-
-
+    }
 
 }

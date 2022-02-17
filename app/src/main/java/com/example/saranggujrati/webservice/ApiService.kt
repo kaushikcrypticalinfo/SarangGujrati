@@ -38,7 +38,6 @@ interface ApiService {
         @Field("email") email: String,
     ): ForgotPasswordResponse
 
-
     //Reset Password Api
     @FormUrlEncoded
     @POST("reset-password")
@@ -50,7 +49,6 @@ interface ApiService {
         @Field("cpassword") changePass: String,
         @Field("password") password: String,
     ): ResetPasswordResponse
-
 
     //Social Login Api
     @FormUrlEncoded
@@ -74,7 +72,6 @@ interface ApiService {
     @GET("blog-category-list/{id}")
     @Json
     suspend fun getCitiesCategoriesDetailBlog(@Path("id") id: String): CityCategoryBlogDetailResponse
-
 
     //Featured List
     @GET("blog-list")

@@ -10,19 +10,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.R
-import com.example.saranggujrati.adapter.AllNewsChannelAdapter
 import com.example.saranggujrati.adapter.PagingDemoAdapter
+import com.example.saranggujrati.adapter.PlayersLoadingStateAdapter
 import com.example.saranggujrati.databinding.FragmentAllNewsChannelBinding
-import com.example.saranggujrati.loadmore.EndlessScrollListener
 import com.example.saranggujrati.model.NewsChannelListRespnse
-import com.example.saranggujrati.model.NewsData
 import com.example.saranggujrati.ui.activity.MainActivity
 import com.example.saranggujrati.ui.activity.YouTubeActivity
 import com.example.saranggujrati.ui.viewModel.NewsChannelViewModel
+import com.example.saranggujrati.ui.visible
 import com.performly.ext.obtainViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlin.collections.ArrayList
 
 class FragmentAllNewsChannel : BaseFragment<NewsChannelViewModel>() {
 
@@ -44,10 +42,11 @@ class FragmentAllNewsChannel : BaseFragment<NewsChannelViewModel>() {
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
-
         mActivity = (activity as MainActivity)
         mActivity.toolbar.title = getString(R.string.all_channels)
         mActivity.enableViews(true)
+
+        binding.rvAllNewsChannel.progressbar.visible(true)
 
         setRVLayoutManager()
 
@@ -69,37 +68,39 @@ class FragmentAllNewsChannel : BaseFragment<NewsChannelViewModel>() {
         super.onPrepareOptionsMenu(menu)
     }
 
+    private fun retry() {
+        pagingDemoAdapter.retry()
+    }
+
     private fun setAdapter() {
 
         pagingDemoAdapter = PagingDemoAdapter()
-        binding.rvAllNewsChannel.recyclerview.adapter = pagingDemoAdapter
+
+        pagingDemoAdapter.withLoadStateFooter(PlayersLoadingStateAdapter { retry() })
+
         pagingDemoAdapter.addLoadStateListener { loadState ->
 
             if (loadState.mediator?.refresh is LoadState.Loading) {
                 if (pagingDemoAdapter.snapshot().isEmpty()) {
-//                    binding.progress.isVisible = true
+                    binding.rvAllNewsChannel.progressbar.visible(true)
                 }
-//                binding.errorTxt.isVisible = false
-
+                binding.rvAllNewsChannel.tvNoData.visible(false)
             } else {
-//                binding.progress.isVisible = false
+                binding.rvAllNewsChannel.progressbar.visible(false)
                 binding.swipeContainer.isRefreshing = false
 
                 val error = when {
                     loadState.mediator?.prepend is LoadState.Error -> loadState.mediator?.prepend as LoadState.Error
                     loadState.mediator?.append is LoadState.Error -> loadState.mediator?.append as LoadState.Error
                     loadState.mediator?.refresh is LoadState.Error -> loadState.mediator?.refresh as LoadState.Error
-
                     else -> null
                 }
                 error?.let {
                     if (pagingDemoAdapter.snapshot().isEmpty()) {
-//                        binding.errorTxt.isVisible = true
-//                        binding.errorTxt.text = it.error.localizedMessage
+                        binding.rvAllNewsChannel.tvNoData.visible(true)
+                        binding.rvAllNewsChannel.tvNoData.text = it.error.localizedMessage
                     }
-
                 }
-
             }
         }
 
@@ -112,6 +113,8 @@ class FragmentAllNewsChannel : BaseFragment<NewsChannelViewModel>() {
                 }
             }
         }
+
+        binding.rvAllNewsChannel.recyclerview.adapter = pagingDemoAdapter
     }
 
     private fun setRVLayoutManager() {
