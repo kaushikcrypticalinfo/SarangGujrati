@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
-
     <queries>
         <package android:name="com.example.saranggujrati" />
         <intent>
@@ -20,6 +19,7 @@
         </intent>
         <provider android:authorities="list" />
     </queries>
+
     <application
         android:name="com.example.saranggujrati.AppClass"
         android:allowBackup="true"
@@ -47,7 +47,6 @@
             android:name=".ui.activity.MainActivity"
             android:theme="@style/Theme.SarangGujrati.NoActionBar" />
 
-
         <activity
             android:name=".ui.activity.YouTubeActivity"
             android:theme="@style/Theme.SarangGujrati.NoActionBar"/>
@@ -56,22 +55,16 @@
             android:name=".ui.activity.WebViewActivity"
             android:theme="@style/Theme.SarangGujrati.NoActionBar"/>
 
-
         <!--  Banner Add metadata -->
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
 
         <meta-data
             android:name="com.google.android.gms.ads.AD_MANAGER_APP"
             android:value="true"/>
 
-
-
         <!--  facebook metadata -->
-
         <meta-data
             tools:replace="android:value"
             android:name="com.facebook.sdk.ApplicationId"

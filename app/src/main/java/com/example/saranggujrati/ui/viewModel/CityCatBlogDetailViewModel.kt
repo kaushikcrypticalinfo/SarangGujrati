@@ -25,7 +25,7 @@ class CityCatBlogDetailViewModel(private val repository: CityCategoryBlogDetailR
     val feedList: LiveData<Resource<FeedResponse>>
         get() = _feedList
 
- private val _feedLiveData: MutableLiveData<Resource<RssFeed>> =
+    private val _feedLiveData: MutableLiveData<Resource<RssFeed>> =
         MutableLiveData()
     val feedLiveData: LiveData<Resource<RssFeed>>
         get() = _feedLiveData

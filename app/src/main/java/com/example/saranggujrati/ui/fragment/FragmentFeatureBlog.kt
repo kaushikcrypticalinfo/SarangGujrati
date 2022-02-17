@@ -10,7 +10,7 @@ import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.BuildConfig
 import com.example.saranggujrati.R
 import com.example.saranggujrati.adapter.*
-import com.example.saranggujrati.databinding.FragmentAllNewsBlogBinding
+import com.example.saranggujrati.databinding.FragmentFeatureBlogBinding
 import com.example.saranggujrati.model.*
 import com.example.saranggujrati.ui.activity.MainActivity
 import com.example.saranggujrati.ui.activity.WebViewActivity
@@ -28,11 +28,11 @@ class FragmentFeatureBlog(val b:Bundle):BaseFragment<FeatureBlogListViewModel> (
     private lateinit var mActivity: MainActivity
     lateinit var allBlogAdapter: FeatureBlogViewPagerAdapter
     private var bloglList = ArrayList<FeatureData>()
-    lateinit var binding: FragmentAllNewsBlogBinding
+    lateinit var binding: FragmentFeatureBlogBinding
 
 
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
-        binding = FragmentAllNewsBlogBinding.inflate(inflater, container, false)
+        binding = FragmentFeatureBlogBinding.inflate(inflater, container, false)
         return binding.root
     }
 

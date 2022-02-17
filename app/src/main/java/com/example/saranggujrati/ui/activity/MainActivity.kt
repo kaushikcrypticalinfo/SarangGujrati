@@ -290,35 +290,35 @@ class MainActivity : BaseActicvity<MainViewModel>(),
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             val count = supportFragmentManager.backStackEntryCount
-            if (count > 1) {
-                supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                enableViews(true)
-                mDrawerToggle.syncState()
-                super.onBackPressed()
-                return
+            when {
+                count > 1 -> {
+                    supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    enableViews(true)
+                    mDrawerToggle.syncState()
+                    super.onBackPressed()
+                    return
+                }
+                count == 0 -> {
+                    if (doubleBackToExitPressedOnce) {
+                        enableViews(false)
+                        mDrawerToggle.syncState()
+                        super.onBackPressed()
+                        return
+                    }
+                    this.doubleBackToExitPressedOnce = true
+                    Toast.makeText(this, getString(R.string.back_again_text), Toast.LENGTH_SHORT).show()
 
-            } else if (count == 0) {
-                if (doubleBackToExitPressedOnce) {
+                    Handler(Looper.getMainLooper()).postDelayed(Runnable {
+                        doubleBackToExitPressedOnce = false
+                    }, 2000)
+                }
+                else -> {
                     enableViews(false)
                     mDrawerToggle.syncState()
                     super.onBackPressed()
                     return
                 }
-
-                this.doubleBackToExitPressedOnce = true
-                Toast.makeText(this, getString(R.string.back_again_text), Toast.LENGTH_SHORT).show()
-
-                Handler(Looper.getMainLooper()).postDelayed(Runnable {
-                    doubleBackToExitPressedOnce = false
-                }, 2000)
-            } else {
-                enableViews(false)
-                mDrawerToggle.syncState()
-                super.onBackPressed()
-                return
-
             }
-
         }
     }
     fun checkAndRequestPermissions(context: Activity?): Boolean {

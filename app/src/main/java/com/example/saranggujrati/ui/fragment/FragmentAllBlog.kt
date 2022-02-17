@@ -2,14 +2,15 @@ package com.example.saranggujrati.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.SnapHelper
 import com.example.saranggujrati.AppClass
-import com.example.saranggujrati.BuildConfig
 import com.example.saranggujrati.R
-import com.example.saranggujrati.adapter.AllBlogViewPagerAdapter
+import com.example.saranggujrati.adapter.FeedListAdapter
 import com.example.saranggujrati.databinding.FragmentAllNewsBlogBinding
 import com.example.saranggujrati.model.*
 import com.example.saranggujrati.ui.activity.MainActivity
@@ -17,20 +18,26 @@ import com.example.saranggujrati.ui.activity.WebViewActivity
 import com.example.saranggujrati.ui.isOnline
 import com.example.saranggujrati.ui.viewModel.AllBlogListViewModel
 import com.example.saranggujrati.ui.visible
+import com.example.saranggujrati.utils.RSS_FEED_DATE_FORMAT
 import com.example.saranggujrati.webservice.Resource
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.collections.ArrayList
 
-class FragmentAllBlog:BaseFragment<AllBlogListViewModel> (),View.OnClickListener{
+class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListener {
 
     private lateinit var mActivity: MainActivity
-    lateinit var allBlogAdapter: AllBlogViewPagerAdapter
-    private var bloglList = ArrayList<BlogData>()
     lateinit var binding: FragmentAllNewsBlogBinding
 
+    lateinit var allBogAdapter: FeedListAdapter
 
+    private var blogList = ArrayList<BlogData>()
+    private lateinit var liveFeedlist: ArrayList<CategoryDataModel>
+    private lateinit var dummyFeedlist: ArrayList<CategoryDataModel>
 
+    var callCount = 0
 
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
         binding = FragmentAllNewsBlogBinding.inflate(inflater, container, false)
@@ -42,50 +49,63 @@ class FragmentAllBlog:BaseFragment<AllBlogListViewModel> (),View.OnClickListener
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
-        allBlogAdapter = AllBlogViewPagerAdapter(bloglList)
+        binding.icBack.setOnClickListener {
+            mActivity.supportActionBar?.show()
+            mActivity.onBackPressed()
+        }
 
-        mActivity=(activity as MainActivity)
+        binding.imgRefresh.setOnClickListener {
+            viewModel.getRssfeedList("7")
+        }
+
+        liveFeedlist = ArrayList()
+        dummyFeedlist = ArrayList()
+
+        allBogAdapter = FeedListAdapter(blogList)
+
+        allBogAdapter.adapterListener = object : FeedListAdapter.AdapterListener {
+            override fun onClick(view: View, position: Int) {
+                when (view.id) {
+                    R.id.ic_back -> {
+                        mActivity.supportActionBar?.show()
+                        mActivity.onBackPressed()
+                    }
+                    R.id.txtReadMore -> {
+                        val i = Intent(requireContext(), WebViewActivity::class.java)
+                        i.putExtra("url", blogList[position].url)
+                        i.putExtra("title", blogList[position].title)
+                        startActivity(i)
+                    }
+                }
+
+            }
+        }
+        val snapHelper: SnapHelper = PagerSnapHelper()
+        with(binding.rvNewsFeed)
+        {
+            layoutManager = LinearLayoutManager(context)
+            snapHelper.attachToRecyclerView(this)
+            adapter = allBogAdapter
+        }
+
+        mActivity = (activity as MainActivity)
         mActivity.enableViews(true)
         mActivity.supportActionBar?.hide()
         getAllBlogList()
-
-/*
-        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                mActivity.supportActionBar?.show()
-                mActivity.onBackPressed()
-            }
-        })
-*/
     }
 
-
-    override fun onPause() {
-        if (allBlogAdapter.adView!=null) {
-            allBlogAdapter.adView!!.pause();
-        }
-        super.onPause()
-    }
 
     override fun onResume() {
         super.onResume()
-        if (allBlogAdapter.adView != null) {
-            allBlogAdapter.adView!!.resume();
-        }
-
 
         requireView().isFocusableInTouchMode = true
         requireView().requestFocus()
 
-        requireView().setOnKeyListener(object : View.OnKeyListener{
+        requireView().setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
-                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                    Log.i(tag, "onKey Back listener is working!!!");
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
                     mActivity.supportActionBar?.show()
                     mActivity.onBackPressed()
-/*
-                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-*/
                     return true;
                 }
                 return false
@@ -94,76 +114,142 @@ class FragmentAllBlog:BaseFragment<AllBlogListViewModel> (),View.OnClickListener
     }
 
     override fun onDestroy() {
-        if (allBlogAdapter.adView != null) {
-            allBlogAdapter.adView!!.destroy();
-        }
         super.onDestroy();
     }
 
     private fun attachListeners() {
-       // binding.llLiveNews.setOnClickListener(this)
-
-
+        // binding.llLiveNews.setOnClickListener(this)
     }
 
-
-    private fun getAllBlogList(){
-        viewModel.getAllBlogList()
+    private fun getAllBlogList() {
         setupObservers()
-
+        viewModel.getRssfeedList("7")
     }
-
 
     //setup observer
     private fun setupObservers() {
-        viewModel.allBlogListResponse.observe(this, Observer {
+        viewModel.feedList.observe(this, Observer { it ->
             when (it) {
+
                 is Resource.Loading -> {
-                    binding.progressbar.isVisible=true
+                    binding.progressbar.isVisible = true
                 }
 
                 is Resource.Success -> {
+                    //when refresh data clear old data
+                    blogList.clear()
                     if (it.value.status) {
-                        bloglList.clear()
                         if (it.value.status) {
                             binding.progressbar.visible(false)
-                            getAllBlogList(it.value)
+                            val data = it.value.data
+
+                            data.forEach {
+                                liveFeedlist.add(it)
+                            }
+
+                            dummyFeedlist.addAll(data)
+
+                            if (dummyFeedlist.isNotEmpty())
+                                callLiveFeesListApi(dummyFeedlist, callCount)
+                            else {
+                                binding.tvNoData.visibility = View.VISIBLE
+                                binding.rvNewsFeed.visibility = View.GONE
+                            }
+
+                            binding.tvNoData.visibility =
+                                if (dummyFeedlist.isNotEmpty()) View.GONE else View.VISIBLE
+
+                            binding.rvNewsFeed.visibility =
+                                if (dummyFeedlist.isNotEmpty()) View.VISIBLE else View.GONE
                         }
-
+                    } else {
+                        Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
                     }
-
-
                 }
                 is Resource.Failure -> {
-                    binding.progressbar.isVisible=false
+                    binding.progressbar.isVisible = false
                     when {
                         it.isNetworkError -> {
                             if (!isOnline(AppClass.appContext)) {
-                                Snackbar.make(binding.layout,
+                                Snackbar.make(
+                                    binding.layout,
                                     resources.getString(R.string.check_internet),
-                                    Snackbar.LENGTH_LONG).show()
+                                    Snackbar.LENGTH_LONG
+                                ).show()
                             }
                         }
                         else -> {
-                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
-
+                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
+                                .show()
                         }
+                    }
+                }
+            }
+        })
 
+        viewModel.feedLiveData.observe(this, Observer { it ->
+            when (it) {
+                is Resource.Loading -> {
+                    binding.progressbar.isVisible = true
+                }
 
+                is Resource.Success -> {
+                    binding.progressbar.isVisible = false
+                    it.value.newsChannel?.newsItems?.forEach { rssItem ->
+                        val blogData = BlogData()
+                        blogData.title = rssItem.title
+                        blogData.description = rssItem.description
+                        blogData.category_name = liveFeedlist[callCount].rssName
+                        blogData.image = rssItem.thumbnail?.thumbnailUrl.toString()
+                        blogData.time = rssItem.pubDate
+                        blogData.url = rssItem.link
+                        blogList.add(blogData)
+                    }
+
+//                    Sorting all list data recent new first show
+                    blogList.sortByDescending {
+                        SimpleDateFormat(
+                            RSS_FEED_DATE_FORMAT, Locale.getDefault()
+                        ).parse(it.time)
+                    }
+
+                    callCount += 1
+                    if (callCount < dummyFeedlist.size - 1) {
+                        callLiveFeesListApi(dummyFeedlist, callCount)
+                    } else {
+                        getAllBlogList(blogList)
                     }
 
                 }
-
+                is Resource.Failure -> {
+                    binding.progressbar.isVisible = false
+                    when {
+                        it.isNetworkError -> {
+                            if (!isOnline(AppClass.appContext)) {
+                                Snackbar.make(
+                                    binding.layout,
+                                    resources.getString(R.string.check_internet),
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    }
+                }
             }
         })
     }
-    private fun getAllBlogList(response: AllBlogListResponse) {
-        if(response.data.isEmpty() ){
-            binding.tvNoData.visibility=View.VISIBLE
-            binding.verticalViewPager.visibility=View.GONE
-            binding.appBarLayout.visibility=View.VISIBLE
 
-            binding.tvTitle.text=getString(R.string.app_name)
+    private fun callLiveFeesListApi(data: List<CategoryDataModel>, callCount: Int) {
+        viewModel.getLiveData(data[callCount].rssUrl)
+    }
+
+    private fun getAllBlogList(response: ArrayList<BlogData>) {
+        if (response.isEmpty()) {
+            binding.tvNoData.visibility = View.VISIBLE
+            binding.rvNewsFeed.visibility = View.GONE
+            binding.appBarLayout.visibility = View.VISIBLE
+
+            binding.tvTitle.text = getString(R.string.app_name)
             binding.icBack.setOnClickListener {
                 mActivity.onBackPressed()
             }
@@ -171,49 +257,10 @@ class FragmentAllBlog:BaseFragment<AllBlogListViewModel> (),View.OnClickListener
             binding.toolbar.setOnClickListener {
                 mActivity.onBackPressed()
             }
-        }else{
-            bloglList.addAll(response.data)
-            binding.verticalViewPager.adapter = allBlogAdapter
-            allBlogAdapter.notifyDataSetChanged()
-
-
-            allBlogAdapter.adapterListener = object : AllBlogViewPagerAdapter.AdapterListener{
-                override fun onClick(view: View, position: Int) {
-                    if (view.id == R.id.ic_back) {
-                        mActivity.supportActionBar?.show()
-                        mActivity.onBackPressed()
-                    }
-
-                    if (view.id == R.id.txtReadMore) {
-                        val i = Intent(requireContext(), WebViewActivity::class.java)
-                        i.putExtra("url", bloglList[position].url)
-                        i.putExtra("title", bloglList[position].title)
-                        startActivity(i)
-
-                    }
-                    /*if (view.id == R.id.txtReadMore) {
-                        val sendIntent = Intent()
-                        sendIntent.action = Intent.ACTION_SEND
-                        sendIntent.putExtra(Intent.EXTRA_TEXT,
-                            "Hey check out this link:"+getString(R.string.empty)+ bloglList[position].url + BuildConfig.APPLICATION_ID)
-                        sendIntent.type = "text/plain"
-                        startActivity(sendIntent)
-                    }*/
-
-                }
-
-            }
-
+        } else {
+            allBogAdapter.notifyDataSetChanged()
         }
-
-
-
-
-
-
-}
-
-
+    }
 
     override fun onClick(p0: View?) {
         TODO("Not yet implemented")

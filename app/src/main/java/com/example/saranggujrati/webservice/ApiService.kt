@@ -86,6 +86,10 @@ interface ApiService {
     @Json
     suspend fun getLiveNewsChannelList(@Query("page") page: String): NewsChannelListRespnse
 
+    @GET("live-news-list")
+    @Json
+    suspend fun getLiveWithPaging(@Query("page") page: String): NewsChannelListRespnse
+
 
     //news paper list
     @GET("news-paper-list")

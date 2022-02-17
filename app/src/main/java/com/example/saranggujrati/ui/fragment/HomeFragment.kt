@@ -33,13 +33,12 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     lateinit var adapter: TopCitiesAdapter
     private var topCitiesList = ArrayList<CityCatageoryChild>()
 
-
     lateinit var featureAdapter: FeaturedListAdapter
+    lateinit var liveTempleAdapter: FeaturedListAdapter
     private var featureList = ArrayList<FeatureData>()
 
     lateinit var categoryAdapter: CategoryListAdapter
     private var categoryList = ArrayList<CityCatageoryChild>()
-
 
     lateinit var mLayoutManager: RecyclerView.LayoutManager
     lateinit var mLayoutManagerHorizontal: RecyclerView.LayoutManager
@@ -59,19 +58,21 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         mActivity.toolbar.title = getString(R.string.app_name)
         mActivity.enableViews(false)
         setAdapter()
+
         attachListeners()
+
         setRVLayoutManager()
 
         getFeaturedListData()
+
         getCity()
+
         getCategory()
 
         if (SavedPrefrence.is_Guest) {
             setHasOptionsMenu(false)
-
         } else {
             setHasOptionsMenu(true)
-
         }
 
     }
@@ -85,19 +86,16 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
 
     private fun setAdapter() {
         adapter = TopCitiesAdapter(topCitiesList)
-        adapter.notifyDataSetChanged()
         binding.rvTopCities.recyclerview.adapter = adapter
 
-
         featureAdapter = FeaturedListAdapter(featureList)
-        featureAdapter.notifyDataSetChanged()
         binding.rvFeaturedStories.recyclerview.adapter = featureAdapter
 
+        liveTempleAdapter = FeaturedListAdapter(featureList)
+        binding.rvLiveTempe.recyclerview.adapter = liveTempleAdapter
 
         categoryAdapter = CategoryListAdapter(categoryList)
-        categoryAdapter.notifyDataSetChanged()
         binding.rvTopCategory.recyclerview.adapter = categoryAdapter
-
 
         categoryAdapter.adapterListener = object : CategoryListAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
@@ -150,6 +148,12 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         binding.rvFeaturedStories.recyclerview.layoutManager =
             LinearLayoutManager(AppClass.appContext, LinearLayoutManager.HORIZONTAL, false)
 
+//        Live temple
+        binding.rvLiveTempe.recyclerview.layoutManager = mLayoutManagerHorizontal
+        binding.rvLiveTempe.recyclerview.setHasFixedSize(true)
+        binding.rvLiveTempe.recyclerview.layoutManager =
+            LinearLayoutManager(AppClass.appContext, LinearLayoutManager.HORIZONTAL, false)
+
 
         binding.rvTopCategory.recyclerview.layoutManager = mLayoutManager
         binding.rvTopCategory.recyclerview.setHasFixedSize(true)
@@ -166,8 +170,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         binding.llallGujNews.setOnClickListener(this)
         binding.llLatestNews.setOnClickListener(this)
         binding.tvLiveTempleDarshan.setOnClickListener(this)
-
-
     }
 
     private fun getCity() {
@@ -295,7 +297,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         } else {
             featureList.addAll(response.data)
             featureAdapter.notifyDataSetChanged()
-
+            liveTempleAdapter.notifyDataSetChanged()
         }
 
     }
@@ -322,9 +324,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                     } else {
                         binding.rvTopCategory.progressbar.visible(false)
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
-
                     }
-
                 }
                 is Resource.Failure -> {
                     binding.rvTopCategory.progressbar.visible(false)
@@ -341,16 +341,10 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                         else -> {
                             Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
                                 .show()
-
                         }
-
-
                     }
-
-
                 }
             }
-
         })
     }
 
@@ -364,13 +358,9 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                     categoryList.addAll(response.data[i].child)
                     categoryAdapter.notifyDataSetChanged()
                 }
-
             }
-
         }
-
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {

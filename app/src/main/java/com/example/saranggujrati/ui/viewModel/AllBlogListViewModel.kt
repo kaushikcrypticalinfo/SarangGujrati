@@ -5,23 +5,35 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.model.*
+import com.example.saranggujrati.model.rssFeed.RssFeed
 import com.example.saranggujrati.repositories.AllBlogListRepository
 import com.example.saranggujrati.repositories.AllNewsChannelRepository
 import com.example.saranggujrati.webservice.Resource
 import kotlinx.coroutines.launch
 
-class AllBlogListViewModel(private val repository: AllBlogListRepository):BaseViewModel(AppClass.instance) {
+class AllBlogListViewModel(private val repository: AllBlogListRepository) :
+    BaseViewModel(AppClass.instance) {
 
-    //TopCities
-    private val _allBlogListResponse: MutableLiveData<Resource<AllBlogListResponse>> = MutableLiveData()
-    val allBlogListResponse: LiveData<Resource<AllBlogListResponse>>
-        get() = _allBlogListResponse
+    private val _feedList: MutableLiveData<Resource<FeedResponse>> =
+        MutableLiveData()
+    val feedList: LiveData<Resource<FeedResponse>>
+        get() = _feedList
 
+    private val _feedLiveData: MutableLiveData<Resource<RssFeed>> =
+        MutableLiveData()
+    val feedLiveData: LiveData<Resource<RssFeed>>
+        get() = _feedLiveData
 
-
-
-    fun getAllBlogList() =
+    fun getRssfeedList(id: String) =
         viewModelScope.launch {
-            _allBlogListResponse.value=  Resource.Loading
-            _allBlogListResponse.value = repository.getAllBlogList()}
+            _feedList.value = Resource.Loading
+            _feedList.value = repository.getRssfeedList(id)
+        }
+
+    fun getLiveData(url: String) =
+        viewModelScope.launch {
+            _feedLiveData.value = Resource.Loading
+            _feedLiveData.value = repository.getFeedLiveData(url)
+        }
+
 }
