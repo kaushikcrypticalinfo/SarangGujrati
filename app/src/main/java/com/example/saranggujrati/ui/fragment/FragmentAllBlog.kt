@@ -2,6 +2,7 @@ package com.example.saranggujrati.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -18,13 +19,13 @@ import com.example.saranggujrati.ui.activity.WebViewActivity
 import com.example.saranggujrati.ui.isOnline
 import com.example.saranggujrati.ui.viewModel.AllBlogListViewModel
 import com.example.saranggujrati.ui.visible
-import com.example.saranggujrati.utils.RSS_FEED_DATE_FORMAT
+import com.example.saranggujrati.utils.*
 import com.example.saranggujrati.webservice.Resource
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListener {
 
@@ -55,7 +56,7 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
         }
 
         binding.imgRefresh.setOnClickListener {
-            viewModel.getRssfeedList("7")
+            viewModel.getRssfeedList("0")
         }
 
         liveFeedlist = ArrayList()
@@ -123,11 +124,13 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
 
     private fun getAllBlogList() {
         setupObservers()
-        viewModel.getRssfeedList("7")
+        viewModel.getRssfeedList("0")
+
     }
 
     //setup observer
     private fun setupObservers() {
+
         viewModel.feedList.observe(this, Observer { it ->
             when (it) {
 
@@ -206,13 +209,6 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
                         blogList.add(blogData)
                     }
 
-//                    Sorting all list data recent new first show
-                    blogList.sortByDescending {
-                        SimpleDateFormat(
-                            RSS_FEED_DATE_FORMAT, Locale.getDefault()
-                        ).parse(it.time)
-                    }
-
                     callCount += 1
                     if (callCount < dummyFeedlist.size - 1) {
                         callLiveFeesListApi(dummyFeedlist, callCount)
@@ -220,6 +216,55 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
                         getAllBlogList(blogList)
                     }
 
+                }
+                is Resource.Failure -> {
+                    binding.progressbar.isVisible = false
+                    getAllBlogList(blogList)
+                    when {
+                        it.isNetworkError -> {
+                            if (!isOnline(AppClass.appContext)) {
+                                Snackbar.make(
+                                    binding.layout,
+                                    resources.getString(R.string.check_internet),
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
+//        Get Card list data
+        viewModel.cardLiveData.observe(this, Observer { it ->
+            when (it) {
+                is Resource.Loading -> {
+                    binding.progressbar.isVisible = true
+                }
+
+                is Resource.Success -> {
+                    binding.progressbar.isVisible = false
+                    if (it.value.status) {
+                        if (it.value.status) {
+                            binding.progressbar.visible(false)
+                            val data = it.value.data
+
+                            var tempIndex = 0
+                            data.data.forEachIndexed { index, cardData ->
+                                val blogData = BlogData()
+                                blogData.isBanner = true
+                                blogData.image = cardData.image
+                                if (tempIndex < blogList.size - 1)
+                                    blogList[tempIndex] = blogData
+
+                                tempIndex += 5
+                            }
+
+                            allBogAdapter.notifyDataSetChanged()
+                        }
+                    } else {
+                        Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
+                    }
                 }
                 is Resource.Failure -> {
                     binding.progressbar.isVisible = false
@@ -258,6 +303,14 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
                 mActivity.onBackPressed()
             }
         } else {
+            // Sorting all list data recent new first show
+            blogList.sortByDescending {
+                parseDate(it.time)
+            }
+
+            //get Fill screen card data
+            viewModel.fullScreenCardList()
+
             allBogAdapter.notifyDataSetChanged()
         }
     }
@@ -266,4 +319,23 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
         TODO("Not yet implemented")
     }
 
+    @Throws(Exception::class)
+    fun parseDate(strDate: String?): Date? {
+        if (strDate != null && !strDate.isEmpty()) {
+            val formats = arrayOf(
+                SimpleDateFormat(RSS_FEED_DATE_FORMAT),
+                SimpleDateFormat(RSS_FEED_DATE_FORMAT_GMT)
+            )
+            var parsedDate: Date? = null
+            for (i in formats.indices) {
+                return try {
+                    parsedDate = formats[i].parse(strDate)
+                    parsedDate
+                } catch (e: ParseException) {
+                    continue
+                }
+            }
+        }
+        throw Exception("Unknown date format: '$strDate'")
+    }
 }

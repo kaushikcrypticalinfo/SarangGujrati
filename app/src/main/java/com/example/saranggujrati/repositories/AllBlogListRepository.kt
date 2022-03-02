@@ -2,9 +2,9 @@ package com.example.saranggujrati.repositories
 
 import com.example.saranggujrati.webservice.ApiService
 
-class AllBlogListRepository(private val api:ApiService):BaseRepository() {
+class AllBlogListRepository(private val api: ApiService) : BaseRepository() {
 
-    suspend fun getAllBlogList()=
+    suspend fun getAllBlogList() =
         safeApiCall { api.getAllBlogList() }
 
     suspend fun getFeedLiveData(url: String) =
@@ -12,5 +12,8 @@ class AllBlogListRepository(private val api:ApiService):BaseRepository() {
 
     suspend fun getRssfeedList(id: String) =
         safeApiCall { api.getRssfeedList(id) }
+
+    suspend fun fullScreenCardList() =
+        safeApiCall { api.fullScreenCardList() }
 
 }

@@ -18,6 +18,7 @@ const val THUMBNAIL = "thumbnail"
 const val PUB_DATE = "pubDate"
 const val PAGE_PARAM = "page="
 const val RSS_FEED_DATE_FORMAT = "EEE, d MMM yyyy HH:mm:ss Z"
+const val RSS_FEED_DATE_FORMAT_GMT = "EEE, d MMM yyyy HH:mm:ss zzz"
 
 
 const val STARTING_PAGE_INDEX = 1

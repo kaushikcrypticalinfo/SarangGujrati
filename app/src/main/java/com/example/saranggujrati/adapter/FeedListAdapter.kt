@@ -5,6 +5,7 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
@@ -54,6 +55,18 @@ class FeedListAdapter constructor(private var categoryList: ArrayList<BlogData>)
         @RequiresApi(Build.VERSION_CODES.N)
         fun bind(data: BlogData) {
 
+            binding.groupNews.visibility = if (data.isBanner) GONE else VISIBLE
+            binding.imgBanner.visibility = if (data.isBanner) VISIBLE else GONE
+
+            if (data.isBanner)
+                Glide.with(AppClass.appContext)
+                    .load(data.image)
+                    .apply(
+                        RequestOptions.placeholderOf(R.drawable.placeholder)
+                            .error(R.drawable.placeholder)
+                    ).into(binding.imgBanner)
+
+
             binding.tvNewsHighLight.text = data.title
 
             binding.tvNewsPaperName.text = data.category_name
@@ -80,7 +93,6 @@ class FeedListAdapter constructor(private var categoryList: ArrayList<BlogData>)
 
         }
     }
-
 
     private fun loadBannerAd(binding: RRssFeedItemBinding) {
         val adRequest = AdRequest.Builder().build()

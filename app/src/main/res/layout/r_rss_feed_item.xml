@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?appBackground"
     android:orientation="vertical">
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgBanner"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/placeholder"
+        ads:layout_constraintBottom_toBottomOf="parent"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintStart_toStartOf="parent"
+        ads:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_news_image"
@@ -13,7 +26,7 @@
         android:layout_height="0dp"
         android:scaleType="centerCrop"
         android:src="@drawable/placeholder"
-        ads:layout_constraintDimensionRatio="16:9"
+        ads:layout_constraintDimensionRatio="16:14"
         ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintStart_toStartOf="parent"
         ads:layout_constraintTop_toTopOf="parent" />
@@ -69,18 +82,20 @@
         android:gravity="start"
         android:inputType="textMultiLine|textNoSuggestions"
         android:maxLines="2"
+
         android:paddingHorizontal="10dp"
         android:paddingVertical="8dp"
         android:textColor="?textColor"
         android:textSize="16dp"
         ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintStart_toStartOf="parent"
-        ads:layout_constraintTop_toBottomOf="@+id/tvNewsPaperName" />
+        ads:layout_constraintTop_toBottomOf="@+id/tvNewsPaperName"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvNewsDetail"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_gravity="start|center_horizontal"
         android:ellipsize="end"
         android:fontFamily="@font/montserrat_regular"
@@ -88,13 +103,14 @@
         android:inputType="textMultiLine|textNoSuggestions"
         android:paddingHorizontal="10dp"
         android:paddingVertical="8dp"
+        android:maxLength="800"
         android:textColor="?textColor"
         android:textSize="12sp"
+        ads:layout_constraintBottom_toTopOf="@+id/adView"
         ads:layout_constraintEnd_toEndOf="parent"
-        ads:layout_constraintHeight_default="wrap"
         ads:layout_constraintStart_toStartOf="parent"
         ads:layout_constraintTop_toBottomOf="@+id/tvNewsHighLight"
-        ads:layout_constraintVertical_weight="1" />
+         />
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
@@ -106,5 +122,11 @@
         ads:layout_constraintBottom_toBottomOf="parent"
         ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupNews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:constraint_referenced_ids="iv_news_image,tvNewsPaperName,txtReadMore,tvNewsHighLight,tvNewsDetail,adView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

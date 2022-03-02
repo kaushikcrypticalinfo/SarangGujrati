@@ -47,7 +47,8 @@ data class BlogData(
     val video_url: String,
     val view_count: Int,
     val voice: String,
-    val yes_percent: Int
+    val yes_percent: Int,
+    var isBanner:Boolean
 ) {
 
 
@@ -58,7 +59,7 @@ data class BlogData(
         0, "", "", 0, "", "", "", "",
         "", "", "", "", "", "", "", "",
         "", "", "", "", "", "", "",
-        "", 0, "", 0
+        "", 0, "", 0,false
     )
 
 }

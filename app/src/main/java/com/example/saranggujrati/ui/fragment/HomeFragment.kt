@@ -23,6 +23,8 @@ import com.example.saranggujrati.adapter.CategoryListAdapter
 import com.example.saranggujrati.adapter.FeaturedListAdapter
 import com.example.saranggujrati.model.*
 import com.example.saranggujrati.ui.activity.ActivityCityCatBlogDetail
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {

@@ -155,10 +155,15 @@ interface ApiService {
         @Path("id") id: String,
     ): FeedResponse
 
+    @GET("full-screen-card-list")
+    @Json
+    suspend fun fullScreenCardList(): CardListRes
+
 
     @GET("{fullUrl}")
     @Xml
     suspend fun getFeedLiveData(
         @Path("fullUrl", encoded = true) fullUrl: String
     ): RssFeed
+
 }
