@@ -9,15 +9,15 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.R
 import com.example.saranggujrati.databinding.ItemFeaturedStoriesBinding
-import com.example.saranggujrati.model.FeatureData
+import com.example.saranggujrati.databinding.ItemOnDemandBinding
+import com.example.saranggujrati.model.onDemand.OnDemandData
 
 
-class FeaturedListAdapter constructor(private var featureList: ArrayList<FeatureData>) :
+class OnDemandListAdapter(private var featureList: ArrayList<OnDemandData>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-
     var adapterListener: AdapterListener? = null
-    lateinit var binding: ItemFeaturedStoriesBinding
+    lateinit var binding: ItemOnDemandBinding
 
     interface AdapterListener {
         fun onClick(view: View, position: Int)
@@ -25,21 +25,18 @@ class FeaturedListAdapter constructor(private var featureList: ArrayList<Feature
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        binding = ItemFeaturedStoriesBinding.inflate(inflater, parent, false)
+        binding = ItemOnDemandBinding.inflate(inflater, parent, false)
         return FeatureListViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is FeatureListViewHolder) {
-            val response: FeatureData = featureList[position]
+            val response: OnDemandData = featureList[position]
             holder.bind(response)
-
 
             binding.llMain.setOnClickListener {
                 adapterListener?.onClick(binding.llMain, position)
             }
-
-
         }
     }
 
@@ -47,27 +44,17 @@ class FeaturedListAdapter constructor(private var featureList: ArrayList<Feature
         return featureList.size
     }
 
-
-    inner class FeatureListViewHolder constructor(private var binding: ItemFeaturedStoriesBinding) :
+    inner class FeatureListViewHolder constructor(private var binding: ItemOnDemandBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: FeatureData) {
-
+        fun bind(data: OnDemandData) {
             binding.tvName.text = data.title
-            binding.tvCount.text = data.view_count.toString()
-
-            data.banner_image?.let {
-                if (it.isNotEmpty()) {
-                    Glide.with(AppClass.appContext)
-                        .load(data.banner_image[0])
-                        .apply(
-                            RequestOptions.placeholderOf(R.drawable.placeholder)
-                                .error(R.drawable.placeholder)
-                        ).into(binding.ivImage)
-                }
-            }
-
+            Glide.with(AppClass.appContext)
+                .load(data.image)
+                .apply(
+                    RequestOptions.placeholderOf(R.drawable.placeholder)
+                        .error(R.drawable.placeholder)
+                ).into(binding.ivImage)
         }
     }
-
 
 }

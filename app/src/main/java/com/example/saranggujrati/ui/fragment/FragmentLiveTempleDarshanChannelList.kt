@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.paging.filter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -142,8 +143,8 @@ class FragmentLiveTempleDarshanChannelList : BaseFragment<NewsChannelViewModel>(
     private fun getNewsChannel() {
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getPagingData().collectLatest {
-                pagingDemoAdapter.submitData(lifecycle, it)
+            viewModel.getPagingData().collectLatest { it ->
+                pagingDemoAdapter.submitData(lifecycle, it.filter { it.category == "1" })
             }
         }
     }
@@ -160,7 +161,6 @@ class FragmentLiveTempleDarshanChannelList : BaseFragment<NewsChannelViewModel>(
             for (i in response.data.data.indices) {
                 if (response.data.data[i].category == "1") {
                     newsChannelList.add(response.data.data[i])
-
                 }
             }
         }

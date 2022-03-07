@@ -19,7 +19,7 @@ class ApiPagingSource(val apiService: ApiService) :
         val pageIndex = params.key ?: STARTING_PAGE_INDEX
 
         return try {
-            val response = apiService.getLiveWithPaging(
+            val response = apiService.getLiveChannelWithPaging(
                 page = pageIndex.toString()
             )
             val movies = response.data.data.toMutableList()

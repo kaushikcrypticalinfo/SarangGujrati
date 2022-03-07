@@ -1,6 +1,8 @@
 package com.example.saranggujrati.webservice
 
 import com.example.saranggujrati.model.*
+import com.example.saranggujrati.model.onDemand.OnDemandDataMain
+import com.example.saranggujrati.model.onDemand.OnDemandRes
 import com.example.saranggujrati.model.rssFeed.RssFeed
 import com.test.pausernew.api.annot.Json
 import com.test.pausernew.api.annot.Xml
@@ -78,6 +80,10 @@ interface ApiService {
     @Json
     suspend fun getFeatureList(): BlogFeatureList
 
+    @GET("on-demand-list")
+    @Json
+    suspend fun getOnDemandList(): OnDemandRes
+
     //news channel list
     @GET("live-news-list")
     @Json
@@ -85,7 +91,7 @@ interface ApiService {
 
     @GET("live-news-list")
     @Json
-    suspend fun getLiveWithPaging(@Query("page") page: String): NewsChannelListRespnse
+    suspend fun getLiveChannelWithPaging(@Query("page") page: String): NewsChannelListRespnse
 
 
     //news paper list

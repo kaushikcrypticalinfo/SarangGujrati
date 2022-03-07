@@ -8,7 +8,6 @@
     android:background="?appBackground"
     android:orientation="vertical">
 
-
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imgBanner"
         android:layout_width="0dp"

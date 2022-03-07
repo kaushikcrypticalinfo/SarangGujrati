@@ -16,6 +16,7 @@
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
+        android:background="@color/light_orange"
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -40,7 +41,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:paddingHorizontal="5dp"
-                        android:src="@drawable/ic_back" />
+                        android:src="@drawable/ic_back"
+                        app:tint="@color/white" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tvTitle"
@@ -63,7 +65,8 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
                         android:paddingHorizontal="5dp"
-                        app:srcCompat="@drawable/ic_baseline_refresh_24" />
+                        app:srcCompat="@drawable/ic_baseline_refresh_24"
+                        app:tint="@color/white" />
                 </RelativeLayout>
 
             </androidx.appcompat.widget.Toolbar>

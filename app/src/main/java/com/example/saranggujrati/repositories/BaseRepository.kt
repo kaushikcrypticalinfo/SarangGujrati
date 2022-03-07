@@ -53,8 +53,6 @@ abstract class BaseRepository {
                     }
                 }
             } as Resource<T>
-
-
         }
     }
 }

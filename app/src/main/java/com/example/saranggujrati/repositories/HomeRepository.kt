@@ -11,4 +11,7 @@ class HomeRepository(private val api:ApiService):BaseRepository() {
     suspend fun getfeatureList()=
         safeApiCall { api.getFeatureList() }
 
+  suspend fun getOnDemandList()=
+        safeApiCall { api.getOnDemandList() }
+
 }

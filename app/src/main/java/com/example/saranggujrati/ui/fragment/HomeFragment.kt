@@ -1,11 +1,11 @@
 package com.example.saranggujrati.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.R
 import com.example.saranggujrati.adapter.TopCitiesAdapter
@@ -17,13 +17,14 @@ import com.example.saranggujrati.ui.visible
 import com.example.saranggujrati.webservice.Resource
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
-import androidx.recyclerview.widget.GridLayoutManager
 import com.example.saranggujrati.ui.SavedPrefrence
 import com.example.saranggujrati.adapter.CategoryListAdapter
 import com.example.saranggujrati.adapter.FeaturedListAdapter
+import com.example.saranggujrati.adapter.OnDemandListAdapter
 import com.example.saranggujrati.model.*
+import com.example.saranggujrati.model.onDemand.OnDemandData
 import com.example.saranggujrati.ui.activity.ActivityCityCatBlogDetail
-import java.util.*
+import com.example.saranggujrati.ui.activity.WebViewActivity
 import kotlin.collections.ArrayList
 
 
@@ -36,8 +37,9 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     private var topCitiesList = ArrayList<CityCatageoryChild>()
 
     lateinit var featureAdapter: FeaturedListAdapter
-    lateinit var liveTempleAdapter: FeaturedListAdapter
+    lateinit var onDemandAdapter: OnDemandListAdapter
     private var featureList = ArrayList<FeatureData>()
+    private var onDemandList = ArrayList<OnDemandData>()
 
     lateinit var categoryAdapter: CategoryListAdapter
     private var categoryList = ArrayList<CityCatageoryChild>()
@@ -93,8 +95,18 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         featureAdapter = FeaturedListAdapter(featureList)
         binding.rvFeaturedStories.recyclerview.adapter = featureAdapter
 
-        liveTempleAdapter = FeaturedListAdapter(featureList)
-        binding.rvLiveTempe.recyclerview.adapter = liveTempleAdapter
+        onDemandAdapter = OnDemandListAdapter(onDemandList)
+        val snapHelper: SnapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(binding.rvOnDemand.recyclerview)
+        onDemandAdapter.adapterListener=object :OnDemandListAdapter.AdapterListener{
+            override fun onClick(view: View, position: Int) {
+                val i = Intent(requireContext(), WebViewActivity::class.java)
+                i.putExtra("url", onDemandList[position].url)
+                i.putExtra("title", onDemandList[position].title)
+                startActivity(i)
+            }
+        }
+        binding.rvOnDemand.recyclerview.adapter = onDemandAdapter
 
         categoryAdapter = CategoryListAdapter(categoryList)
         binding.rvTopCategory.recyclerview.adapter = categoryAdapter
@@ -115,9 +127,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                 if (view.id == R.id.llMain) {
                     val b = Bundle()
                     b.putInt("position", position)
-                    /*val fragobj = FragmentFeatureBlog()
-                    fragobj.arguments=b*/
-                    Log.e("pos1", position.toString())
                     mActivity.pushFragment(FragmentFeatureBlog(b))
                 }
             }
@@ -135,7 +144,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         }
     }
 
-
     private fun setRVLayoutManager() {
         mLayoutManager = LinearLayoutManager(AppClass.appContext)
         mLayoutManagerHorizontal = LinearLayoutManager(AppClass.appContext)
@@ -144,18 +152,16 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         binding.rvTopCities.recyclerview.setHasFixedSize(true)
         binding.rvTopCities.recyclerview.layoutManager = GridLayoutManager(AppClass.appContext, 3)
 
-
         binding.rvFeaturedStories.recyclerview.layoutManager = mLayoutManagerHorizontal
         binding.rvFeaturedStories.recyclerview.setHasFixedSize(true)
         binding.rvFeaturedStories.recyclerview.layoutManager =
             LinearLayoutManager(AppClass.appContext, LinearLayoutManager.HORIZONTAL, false)
 
 //        Live temple
-        binding.rvLiveTempe.recyclerview.layoutManager = mLayoutManagerHorizontal
-        binding.rvLiveTempe.recyclerview.setHasFixedSize(true)
-        binding.rvLiveTempe.recyclerview.layoutManager =
+        binding.rvOnDemand.recyclerview.layoutManager = mLayoutManagerHorizontal
+        binding.rvOnDemand.recyclerview.setHasFixedSize(true)
+        binding.rvOnDemand.recyclerview.layoutManager =
             LinearLayoutManager(AppClass.appContext, LinearLayoutManager.HORIZONTAL, false)
-
 
         binding.rvTopCategory.recyclerview.layoutManager = mLayoutManager
         binding.rvTopCategory.recyclerview.setHasFixedSize(true)
@@ -163,8 +169,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
 
         (mLayoutManager as LinearLayoutManager).orientation = RecyclerView.VERTICAL
         (mLayoutManagerHorizontal as LinearLayoutManager).orientation = RecyclerView.HORIZONTAL
-
-
     }
 
     private fun attachListeners() {
@@ -242,8 +246,10 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     //Feature List
 
     private fun getFeaturedListData() {
-        viewModel.gettFeatureList()
         setupObserversFeatureList()
+
+        viewModel.gettFeatureList()
+        viewModel.getOnDemandList()
     }
 
     private fun setupObserversFeatureList() {
@@ -290,6 +296,51 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
             }
 
         })
+
+        viewModel.onDemandList.observe(this, Observer {
+            when (it) {
+                is Resource.Loading -> {
+                    binding.rvFeaturedStories.progressbar.visible(true)
+                }
+
+                is Resource.Success -> {
+                    featureList.clear()
+                    if (it.value.status) {
+                        binding.rvFeaturedStories.progressbar.visible(false)
+                        it.value.data.data?.let { it1 -> onDemandList.addAll(it1) }
+                        onDemandAdapter.notifyDataSetChanged()
+                    } else {
+                        binding.rvFeaturedStories.progressbar.visible(false)
+                        Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
+                    }
+                }
+
+                is Resource.Failure -> {
+                    binding.rvFeaturedStories.progressbar.visible(false)
+                    when {
+                        it.isNetworkError -> {
+                            if (!isOnline(AppClass.appContext)) {
+                                Snackbar.make(
+                                    binding.layout,
+                                    resources.getString(R.string.check_internet),
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                        else -> {
+                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
+                                .show()
+
+                        }
+
+
+                    }
+
+
+                }
+            }
+
+        })
     }
 
     private fun getFeatureList(response: BlogFeatureList) {
@@ -299,9 +350,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         } else {
             featureList.addAll(response.data)
             featureAdapter.notifyDataSetChanged()
-            liveTempleAdapter.notifyDataSetChanged()
         }
-
     }
 
     private fun getCategory() {
@@ -310,7 +359,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     }
 
     //Top Category
-
     private fun setupObserversTopCategory() {
         viewModel.topCategoryResponse.observe(this, Observer {
             when (it) {

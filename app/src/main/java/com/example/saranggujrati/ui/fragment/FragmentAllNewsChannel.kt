@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
+import androidx.paging.filter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -129,8 +130,10 @@ class FragmentAllNewsChannel : BaseFragment<NewsChannelViewModel>() {
 
     private fun getNewsChannel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getPagingData().collectLatest {
-                pagingDemoAdapter.submitData(lifecycle, it)
+            viewModel.getPagingData().collectLatest { it ->
+                //if category is equals to '0' so it's a channel data
+                pagingDemoAdapter.submitData(lifecycle, it.filter { it.category == "0" })
+
             }
         }
     }

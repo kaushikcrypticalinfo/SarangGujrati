@@ -2,15 +2,12 @@ package com.example.saranggujrati.ui.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.example.retrofitcoroutineexample.data.api.RetrofitBuilder
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.model.*
+import com.example.saranggujrati.model.onDemand.OnDemandRes
 import com.example.saranggujrati.repositories.HomeRepository
-import com.example.saranggujrati.repositories.LoginRepository
 import com.example.saranggujrati.webservice.Resource
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repository: HomeRepository):BaseViewModel(AppClass.instance) {
@@ -30,7 +27,9 @@ class HomeViewModel(private val repository: HomeRepository):BaseViewModel(AppCla
     val featureListResponse: LiveData<Resource<BlogFeatureList>>
         get() = _featureListResponse
 
-
+    private val _onDemandList: MutableLiveData<Resource<OnDemandRes>> = MutableLiveData()
+    val onDemandList: LiveData<Resource<OnDemandRes>>
+        get() = _onDemandList
 
 
     fun gettTopCitiesCategories() =
@@ -48,4 +47,9 @@ class HomeViewModel(private val repository: HomeRepository):BaseViewModel(AppCla
         viewModelScope.launch {
             _featureListResponse.value=  Resource.Loading
             _featureListResponse.value = repository.getfeatureList()}
+
+    fun getOnDemandList() =
+        viewModelScope.launch {
+            _onDemandList.value=  Resource.Loading
+            _onDemandList.value = repository.getOnDemandList()}
 }
