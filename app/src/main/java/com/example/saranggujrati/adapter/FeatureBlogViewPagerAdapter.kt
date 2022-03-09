@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.R
 import com.example.saranggujrati.model.FeatureData
+import com.example.saranggujrati.ui.visible
 import com.google.android.gms.ads.*
 import java.util.*
 
@@ -23,7 +24,7 @@ class FeatureBlogViewPagerAdapter constructor(private var blogList: ArrayList<Fe
 
     private var mLayoutInflater: LayoutInflater? = null
     var adapterListener: AdapterListener? = null
-    var adView: AdView? = null
+
     override fun getCount(): Int {
         return blogList.size
     }
@@ -42,30 +43,27 @@ class FeatureBlogViewPagerAdapter constructor(private var blogList: ArrayList<Fe
         val data = blogList[position]
 
         val imageView: ImageView = (itemView).findViewById(R.id.iv_news_image)
-        val ivBack: ImageView = (itemView).findViewById(R.id.ic_back)
         val txtReadMore: AppCompatTextView = (itemView).findViewById(R.id.txtReadMore)
         val tvNewsHighlight: TextView = (itemView).findViewById(R.id.tvNewsHighLight)
         val tvNewsDetail: TextView = (itemView).findViewById(R.id.tvNewsDetail)
 
+        txtReadMore.visible(false)
+
         val tvPaperName: TextView = (itemView).findViewById(R.id.tvNewsPaperName)
-        adView = (itemView).findViewById(R.id.adView)
-
-        loadBannerAd()
-
-
+        tvPaperName.visible(false)
 
         tvNewsHighlight.text = data.title
         tvNewsDetail.text = data.description
         tvPaperName.text = data.category_name
 
-        Glide.with(AppClass.appContext)
-            .load(data.image)
-            .apply(
-                RequestOptions.placeholderOf(R.drawable.placeholder).error(R.drawable.placeholder)
-            )
-            .into(imageView)
-        ivBack.setOnClickListener {
-            adapterListener?.onClick(ivBack, position)
+        data.banner_image?.let {
+            Glide.with(AppClass.appContext)
+                .load(it[0])
+                .apply(
+                    RequestOptions.placeholderOf(R.drawable.placeholder)
+                        .error(R.drawable.placeholder)
+                )
+                .into(imageView)
         }
 
         txtReadMore.setOnClickListener {
@@ -77,21 +75,6 @@ class FeatureBlogViewPagerAdapter constructor(private var blogList: ArrayList<Fe
         return itemView
 
     }
-
-
-    private fun loadBannerAd() {
-        val adRequest = AdRequest.Builder().build()
-        adView!!.loadAd(adRequest)
-
-        adView!!.adListener = object : AdListener() {
-            override fun onAdFailedToLoad(@NonNull p0: LoadAdError) {
-                super.onAdFailedToLoad(p0)
-            }
-        }
-
-
-    }
-
 
     interface AdapterListener {
         fun onClick(view: View, position: Int)

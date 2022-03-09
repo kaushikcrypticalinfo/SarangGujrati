@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SarangGujrati</string>
+    <string name="app_name">Sarang Gujrati</string>
     <string name="api_key">AIzaSyDbCHpHjoiWINRI3bgLeXfCNBwGXv28FSo</string>
 
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
@@ -33,7 +33,7 @@
     <string name="dark_mode">Dark Mode</string>
     <string name="about_us">About Us</string>
     <string name="join_us">Join Us</string>
-    <string name="advertise">Advertise</string>
+    <string name="advertise">Advertise with us</string>
     <string name="contact_us">Contact Us</string>
     <string name="policy_terms"><![CDATA[Policy & Terms]]></string>
     <string name="login">Login</string>

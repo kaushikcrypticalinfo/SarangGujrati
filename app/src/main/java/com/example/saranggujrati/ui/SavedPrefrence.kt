@@ -3,6 +3,7 @@ package com.example.saranggujrati.ui
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import com.example.saranggujrati.model.CardDataMain
 import com.google.gson.Gson
 
 object SavedPrefrence {
@@ -25,6 +26,7 @@ object SavedPrefrence {
     const val API_TOKEN = "api_token"
     const val OTP = "otp"
     const val USER = "user"
+    const val ADS_CARD = "ads_card"
     const val is_guest = "is_guest"
 
     var is_LOGIN: Boolean = false
@@ -281,6 +283,22 @@ object SavedPrefrence {
         val gson = Gson()
         val json: String = preferences?.getString(USER, "").toString()
         val obj: Any = gson.fromJson(json, Any::class.java)
+        return obj
+    }
+
+    fun setAdsCard(user: Any, context: Context?) {
+        val editor = getSharedPreference(context)?.edit()
+        val gson = Gson()
+        val userData = gson.toJson(user)
+        editor?.putString(ADS_CARD, userData)
+        editor?.apply()
+    }
+
+    fun getAdsCard(context: Context?): CardDataMain? {
+        val preferences = getSharedPreference(context)
+        val gson = Gson()
+        val json: String = preferences?.getString(ADS_CARD, "").toString()
+        val obj = gson.fromJson(json, CardDataMain::class.java)
         return obj
     }
 

@@ -26,16 +26,6 @@
                 android:src="@drawable/placeholder" />
 
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ic_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="false"
-                android:layout_marginStart="10dp"
-                android:padding="15dp"
-                android:src="@drawable/ic_back" />
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -88,12 +78,12 @@
             android:layout_gravity="start|center_horizontal"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
-            android:maxLines="2"
-            android:ellipsize="end"
             android:layout_marginEnd="20dp"
+            android:ellipsize="end"
             android:fontFamily="@font/montserrat_bold"
             android:gravity="start"
             android:inputType="textMultiLine|textNoSuggestions"
+            android:maxLines="2"
             android:textColor="?textColor"
             android:textSize="16dp" />
 
@@ -106,32 +96,13 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
-            android:maxLines="5"
-            android:ellipsize="end"
-            android:maxLength="2000"
             android:fontFamily="@font/montserrat_regular"
             android:gravity="start"
             android:inputType="textMultiLine|textNoSuggestions"
+            android:isScrollContainer="true"
             android:textColor="?textColor"
             android:textSize="12sp" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <!-- view for AdMob Banner Ad -->
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id" />
     </LinearLayout>
 
 

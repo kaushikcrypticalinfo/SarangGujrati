@@ -2,29 +2,30 @@ package com.example.saranggujrati.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import android.view.*
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.*
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.R
+import com.example.saranggujrati.adapter.CategoryListAdapter
+import com.example.saranggujrati.adapter.FeaturedListAdapter
+import com.example.saranggujrati.adapter.OnDemandListAdapter
 import com.example.saranggujrati.adapter.TopCitiesAdapter
 import com.example.saranggujrati.databinding.FragmentHomeBinding
+import com.example.saranggujrati.model.*
+import com.example.saranggujrati.model.onDemand.OnDemandData
+import com.example.saranggujrati.ui.SavedPrefrence
+import com.example.saranggujrati.ui.activity.ActivityCityCatBlogDetail
 import com.example.saranggujrati.ui.activity.MainActivity
+import com.example.saranggujrati.ui.activity.YouTubeActivity
 import com.example.saranggujrati.ui.isOnline
 import com.example.saranggujrati.ui.viewModel.HomeViewModel
 import com.example.saranggujrati.ui.visible
 import com.example.saranggujrati.webservice.Resource
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
-import com.example.saranggujrati.ui.SavedPrefrence
-import com.example.saranggujrati.adapter.CategoryListAdapter
-import com.example.saranggujrati.adapter.FeaturedListAdapter
-import com.example.saranggujrati.adapter.OnDemandListAdapter
-import com.example.saranggujrati.model.*
-import com.example.saranggujrati.model.onDemand.OnDemandData
-import com.example.saranggujrati.ui.activity.ActivityCityCatBlogDetail
-import com.example.saranggujrati.ui.activity.WebViewActivity
 import kotlin.collections.ArrayList
 
 
@@ -33,7 +34,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     private lateinit var mActivity: MainActivity
     private lateinit var binding: FragmentHomeBinding
 
-    lateinit var adapter: TopCitiesAdapter
+    lateinit var topCitiesAdapter: TopCitiesAdapter
     private var topCitiesList = ArrayList<CityCatageoryChild>()
 
     lateinit var featureAdapter: FeaturedListAdapter
@@ -52,7 +53,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         return binding.root
     }
 
-
     override fun initializeViewModel(): HomeViewModel {
         return obtainViewModel(HomeViewModel::class.java)
     }
@@ -67,30 +67,23 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
 
         setRVLayoutManager()
 
-        getFeaturedListData()
-
-        getCity()
-
-        getCategory()
+        callApi()
 
         if (SavedPrefrence.is_Guest) {
             setHasOptionsMenu(false)
         } else {
             setHasOptionsMenu(true)
         }
-
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_menu, menu);
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-
     private fun setAdapter() {
-        adapter = TopCitiesAdapter(topCitiesList)
-        binding.rvTopCities.recyclerview.adapter = adapter
+        topCitiesAdapter = TopCitiesAdapter(topCitiesList)
+        binding.rvTopCities.recyclerview.adapter = topCitiesAdapter
 
         featureAdapter = FeaturedListAdapter(featureList)
         binding.rvFeaturedStories.recyclerview.adapter = featureAdapter
@@ -98,14 +91,25 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         onDemandAdapter = OnDemandListAdapter(onDemandList)
         val snapHelper: SnapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(binding.rvOnDemand.recyclerview)
-        onDemandAdapter.adapterListener=object :OnDemandListAdapter.AdapterListener{
+        onDemandAdapter.adapterListener = object : OnDemandListAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
-                val i = Intent(requireContext(), WebViewActivity::class.java)
+                val i = Intent(requireContext(), YouTubeActivity::class.java)
                 i.putExtra("url", onDemandList[position].url)
-                i.putExtra("title", onDemandList[position].title)
                 startActivity(i)
             }
         }
+        val speedScroll = 3000L
+        val handler = Handler(Looper.getMainLooper())
+        val runnable: Runnable = object : Runnable {
+            var count = 0
+            override fun run() {
+                if (count < onDemandList.size) count += 1 else count = 0
+                binding.rvOnDemand.recyclerview.smoothScrollToPosition(count)
+                handler.postDelayed(this, speedScroll)
+            }
+        }
+        handler.postDelayed(runnable, speedScroll)
+
         binding.rvOnDemand.recyclerview.adapter = onDemandAdapter
 
         categoryAdapter = CategoryListAdapter(categoryList)
@@ -114,9 +118,9 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         categoryAdapter.adapterListener = object : CategoryListAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
                 if (view.id == R.id.llMain) {
+                    val data = categoryList[position]
                     ActivityCityCatBlogDetail.startActivity(
-                        activity!!,
-                        categoryList.get(position).id.toString()
+                        activity!!, data.parent_id, data.id.toString(), data.name
                     )
                 }
             }
@@ -132,12 +136,12 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
             }
         }
 
-        adapter.adapterListener = object : TopCitiesAdapter.AdapterListener {
+        topCitiesAdapter.adapterListener = object : TopCitiesAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
-                if (view.id == R.id.llCity) {
+                if (view.id == R.id.tvCity) {
+                    val data = topCitiesList[position]
                     ActivityCityCatBlogDetail.startActivity(
-                        activity!!,
-                        topCitiesList.get(position).id.toString()
+                        activity!!, data.parent_id, data.id.toString(), data.name
                     )
                 }
             }
@@ -176,6 +180,19 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         binding.llallGujNews.setOnClickListener(this)
         binding.llLatestNews.setOnClickListener(this)
         binding.tvLiveTempleDarshan.setOnClickListener(this)
+
+        binding.swipeRefresh.setOnRefreshListener {
+            callApi()
+        }
+    }
+
+    private fun callApi() {
+        getFeaturedListData()
+
+        getCity()
+
+        getCategory()
+
     }
 
     private fun getCity() {
@@ -193,6 +210,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
 
                 is Resource.Success -> {
                     topCitiesList.clear()
+                    binding.swipeRefresh.isRefreshing = false
                     if (it.value.status) {
                         binding.rvTopCities.progressbar.visible(false)
                         getTopCitiesList(it.value)
@@ -230,17 +248,17 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
             binding.rvTopCities.tvNoData.visibility = View.VISIBLE
             binding.rvTopCities.recyclerview.visibility = View.GONE
         } else {
-
-            for (i in response.data.indices) {
-                if (response.data[i].index == 1) {
-                    topCitiesList.addAll(response.data[i].child)
-                    adapter.notifyDataSetChanged()
+            response?.let { res ->
+                res.data?.let { data ->
+                    data.find { it.id == 18 }?.let { cateData ->
+                        cateData.child?.let {
+                            topCitiesList.addAll(it)
+                            topCitiesAdapter.notifyDataSetChanged()
+                        }
+                    }
                 }
-
             }
-
         }
-
     }
 
     //Feature List
@@ -261,6 +279,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
 
                 is Resource.Success -> {
                     featureList.clear()
+                    binding.swipeRefresh.isRefreshing = false
                     if (it.value.status) {
                         binding.rvFeaturedStories.progressbar.visible(false)
                         getFeatureList(it.value)
@@ -268,7 +287,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                         binding.rvFeaturedStories.progressbar.visible(false)
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
                     }
-
                 }
                 is Resource.Failure -> {
                     binding.rvFeaturedStories.progressbar.visible(false)
@@ -300,23 +318,25 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         viewModel.onDemandList.observe(this, Observer {
             when (it) {
                 is Resource.Loading -> {
-                    binding.rvFeaturedStories.progressbar.visible(true)
+                    binding.rvOnDemand.progressbar.visible(true)
                 }
 
                 is Resource.Success -> {
-                    featureList.clear()
+                    onDemandList.clear()
+                    binding.swipeRefresh.isRefreshing = false
                     if (it.value.status) {
-                        binding.rvFeaturedStories.progressbar.visible(false)
+                        binding.rvOnDemand.progressbar.visible(false)
                         it.value.data.data?.let { it1 -> onDemandList.addAll(it1) }
+
                         onDemandAdapter.notifyDataSetChanged()
                     } else {
-                        binding.rvFeaturedStories.progressbar.visible(false)
+                        binding.rvOnDemand.progressbar.visible(false)
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
                     }
                 }
 
                 is Resource.Failure -> {
-                    binding.rvFeaturedStories.progressbar.visible(false)
+                    binding.rvOnDemand.progressbar.visible(false)
                     when {
                         it.isNetworkError -> {
                             if (!isOnline(AppClass.appContext)) {
@@ -354,8 +374,8 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     }
 
     private fun getCategory() {
-        viewModel.gettTopCategories()
         setupObserversTopCategory()
+        viewModel.gettTopCategories()
     }
 
     //Top Category
@@ -368,6 +388,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
 
                 is Resource.Success -> {
                     categoryList.clear()
+                    binding.swipeRefresh.isRefreshing = false
                     if (it.value.status) {
                         binding.rvTopCategory.progressbar.visible(false)
                         getTopCategoryList(it.value)
@@ -403,10 +424,14 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
             binding.rvTopCategory.tvNoData.visibility = View.VISIBLE
             binding.rvTopCategory.recyclerview.visibility = View.GONE
         } else {
-            for (i in response.data.indices) {
-                if (response.data[i].index == 0) {
-                    categoryList.addAll(response.data[i].child)
-                    categoryAdapter.notifyDataSetChanged()
+            response?.let { res ->
+                res.data?.let { data ->
+                    data.find { it.id == 21 }?.let { cateData ->
+                        cateData.child?.let {
+                            categoryList.addAll(it)
+                            categoryAdapter.notifyDataSetChanged()
+                        }
+                    }
                 }
             }
         }

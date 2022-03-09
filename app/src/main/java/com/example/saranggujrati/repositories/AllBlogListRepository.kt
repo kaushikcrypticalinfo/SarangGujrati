@@ -13,7 +13,4 @@ class AllBlogListRepository(private val api: ApiService) : BaseRepository() {
     suspend fun getRssfeedList(id: String) =
         safeApiCall { api.getRssfeedList(id) }
 
-    suspend fun fullScreenCardList() =
-        safeApiCall { api.fullScreenCardList() }
-
 }

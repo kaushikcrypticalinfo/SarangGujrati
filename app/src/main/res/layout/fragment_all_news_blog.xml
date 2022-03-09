@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?appBackground"
     android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvNewsFeed"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_anchor="@+id/relativeLayout" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvNoData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="5dp"
+        android:text="@string/no_task_available"
+        android:textColor="#232323"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/light_orange"
-        android:layout_height="wrap_content">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -73,23 +89,26 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvNoData"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:fontFamily="@font/montserrat_bold"
-            android:gravity="center"
-            android:padding="5dp"
-            android:text="@string/no_task_available"
-            android:textColor="#232323"
-            android:textSize="14sp"
-            android:visibility="gone" />
-
     </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvNewsFeed"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_anchor="@+id/relativeLayout"
+        app:layout_constraintBottom_toTopOf="@+id/adView"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id"
+        ads:layout_constraintBottom_toBottomOf="parent"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintStart_toStartOf="parent" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/progressbar"
@@ -98,9 +117,11 @@
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:src="@drawable/progress"
-        android:visibility="gone"
+android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:layout_width="match_parent"
@@ -108,7 +129,9 @@
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

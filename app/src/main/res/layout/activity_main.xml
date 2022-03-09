@@ -8,12 +8,9 @@
     android:background="?appBackground"
     android:fitsSystemWindows="true">
 
-        <include
-            android:id="@+id/appBarToolbar"
-            layout="@layout/app_bar_main" />
-
-
-
+    <include
+        android:id="@+id/appBarToolbar"
+        layout="@layout/app_bar_main" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"

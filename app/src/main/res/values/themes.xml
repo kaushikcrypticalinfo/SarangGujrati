@@ -51,14 +51,6 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
-    <!--
-        <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
-            &lt;!&ndash; Customize your theme here. &ndash;&gt;
-            <item name="colorPrimary">@color/black_op</item>
-            <item name="colorPrimaryDark">@color/black_op</item>
-            <item name="colorAccent">@color/app_black</item>
-        </style>
-    -->
-
+   
 
 </resources>

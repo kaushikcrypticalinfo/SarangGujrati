@@ -53,6 +53,15 @@ import android.graphics.drawable.BitmapDrawable
 
 import android.graphics.drawable.Drawable
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import com.example.saranggujrati.model.BlogData
+import com.example.saranggujrati.ui.fragment.AdvertiseWithUsFragment
+import com.example.saranggujrati.ui.fragment.ContactUsFragment
+import com.example.saranggujrati.ui.isOnline
+import com.example.saranggujrati.ui.visible
+import com.example.saranggujrati.webservice.Resource
+import com.google.android.material.snackbar.Snackbar
 
 
 class MainActivity : BaseActicvity<MainViewModel>(),
@@ -64,12 +73,12 @@ class MainActivity : BaseActicvity<MainViewModel>(),
     private lateinit var mDrawerToggle: ActionBarDrawerToggle
     lateinit var toolbar: Toolbar
     var doubleBackToExitPressedOnce = false
-    private lateinit var mySwitch:SwitchCompat
-    private lateinit var icAdd:ImageView
-    private lateinit var icMinus:ImageView
-    private lateinit var tvValue:TextView
+    private lateinit var mySwitch: SwitchCompat
+    private lateinit var icAdd: ImageView
+    private lateinit var icMinus: ImageView
+    private lateinit var tvValue: TextView
     var minteger = 0
-    var isDarkMode=false
+    var isDarkMode = false
 
     val REQUEST_ID_MULTIPLE_PERMISSIONS = 101
 
@@ -87,6 +96,12 @@ class MainActivity : BaseActicvity<MainViewModel>(),
     }
 
     private fun setupUI() {
+
+        setupObservers()
+
+        //Get Ads Card data list
+        viewModel.fullScreenCardList()
+
         toolbar = binding.appBarToolbar.toolbar
         setSupportActionBar(toolbar)
 
@@ -106,9 +121,9 @@ class MainActivity : BaseActicvity<MainViewModel>(),
         val login = menu.findItem(R.id.nav_Login)
         val logout = menu.findItem(R.id.nav_Logout)
 
-       mySwitch= menu.findItem(R.id.nav_dark_mode).actionView as SwitchCompat
+        mySwitch = menu.findItem(R.id.nav_dark_mode).actionView as SwitchCompat
 
-        if (SavedPrefrence.getUserId(AppClass.appContext)== "" ) {
+        if (SavedPrefrence.getUserId(AppClass.appContext) == "") {
             login.isVisible = true
             logout.isVisible = false
             enableViews(false)
@@ -118,12 +133,9 @@ class MainActivity : BaseActicvity<MainViewModel>(),
             logout.isVisible = true
             enableViews(false)
         }
-
         setDarkMode()
         createViewPager()
         binding.navView.setNavigationItemSelectedListener(this)
-
-
     }
 
     private fun showAlertDialogForLogout() {
@@ -143,11 +155,9 @@ class MainActivity : BaseActicvity<MainViewModel>(),
         val alert: AlertDialog = alertDialog.create()
         alert.setCanceledOnTouchOutside(false)
         alert.show()
-
     }
 
-
-    private fun setDarkMode(){
+    private fun setDarkMode() {
 
         mySwitch.isChecked = SavedPrefrence.is_DARKMODE
         mySwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -157,20 +167,19 @@ class MainActivity : BaseActicvity<MainViewModel>(),
             // else keep the switch text to enable dark mode
             if (mySwitch.isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                SavedPrefrence.is_DARKMODE=true
-                isDarkMode=true
+                SavedPrefrence.is_DARKMODE = true
+                isDarkMode = true
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                SavedPrefrence.is_DARKMODE=false
-                isDarkMode=false
+                SavedPrefrence.is_DARKMODE = false
+                isDarkMode = false
             }
         }
     }
 
 
-
-    private fun displayValue(number:Int){
-        tvValue.text= number.toString()
+    private fun displayValue(number: Int) {
+        tvValue.text = number.toString()
     }
 
     fun enableViews(enable: Boolean) {
@@ -202,7 +211,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
         } else {
             //You must regain the power of swipe for the drawer.
             binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-            binding.appBarToolbar.toolbar.title=getString(R.string.app_name)
+            binding.appBarToolbar.toolbar.title = getString(R.string.app_name)
 
             val drawable = resources.getDrawable(R.drawable.ic_menu)
             val bitmap = drawable.toBitmap()
@@ -231,50 +240,54 @@ class MainActivity : BaseActicvity<MainViewModel>(),
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         item.isChecked = true
         when (item.itemId) {
+            R.id.nav_home -> {
+                binding.appBarToolbar.viewPager.currentItem = 0
+            }
+
             R.id.nav_font_size -> {
-                binding.drawerLayout.closeDrawers()
             }
+
             R.id.nav_select_language -> {
-                binding.drawerLayout.closeDrawers()
             }
+
             R.id.nav_dark_mode -> {
                 mySwitch.isChecked = !isDarkMode
-               // binding.drawerLayout.closeDrawers()
             }
+
             R.id.nav_about_us -> {
-                binding.drawerLayout.closeDrawers()
             }
+
             R.id.nav_join_us -> {
-                binding.drawerLayout.closeDrawers()
             }
+
             R.id.nav_advertise -> {
-                binding.drawerLayout.closeDrawers()
+                binding.appBarToolbar.viewPager.currentItem = 2
             }
 
             R.id.nav_contact_us -> {
-                binding.drawerLayout.closeDrawers()
+                binding.appBarToolbar.viewPager.currentItem = 1
             }
 
             R.id.nav_policy_terms -> {
-                binding.drawerLayout.closeDrawers()
             }
 
             R.id.nav_Login -> {
                 startNewActivity(LoginActivity::class.java)
-                binding.drawerLayout.closeDrawers()
             }
             R.id.nav_Logout -> {
                 showAlertDialogForLogout()
             }
         }
+        binding.drawerLayout.closeDrawers()
         return true
     }
 
     private fun createViewPager() {
         val adapter = ViewPagerAdapter(supportFragmentManager)
         adapter.addFrag(HomeFragment())
+        adapter.addFrag(ContactUsFragment())
+        adapter.addFrag(AdvertiseWithUsFragment())
         binding.appBarToolbar.viewPager.adapter = adapter
-
     }
 
     fun pushFragment(fragment: Fragment) {
@@ -285,6 +298,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
         transaction.addToBackStack(null)
         transaction.commit()
     }
+
     override fun onBackPressed() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
@@ -292,7 +306,10 @@ class MainActivity : BaseActicvity<MainViewModel>(),
             val count = supportFragmentManager.backStackEntryCount
             when {
                 count > 1 -> {
-                    supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    supportFragmentManager.popBackStack(
+                        null,
+                        FragmentManager.POP_BACK_STACK_INCLUSIVE
+                    )
                     enableViews(true)
                     mDrawerToggle.syncState()
                     super.onBackPressed()
@@ -306,7 +323,8 @@ class MainActivity : BaseActicvity<MainViewModel>(),
                         return
                     }
                     this.doubleBackToExitPressedOnce = true
-                    Toast.makeText(this, getString(R.string.back_again_text), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.back_again_text), Toast.LENGTH_SHORT)
+                        .show()
 
                     Handler(Looper.getMainLooper()).postDelayed(Runnable {
                         doubleBackToExitPressedOnce = false
@@ -321,11 +339,16 @@ class MainActivity : BaseActicvity<MainViewModel>(),
             }
         }
     }
+
     fun checkAndRequestPermissions(context: Activity?): Boolean {
-        val WExtstorePermission = ContextCompat.checkSelfPermission(context!!,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        val cameraPermission = ContextCompat.checkSelfPermission(context,
-            Manifest.permission.CAMERA)
+        val WExtstorePermission = ContextCompat.checkSelfPermission(
+            context!!,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+        val cameraPermission = ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.CAMERA
+        )
         val listPermissionsNeeded: MutableList<String> = ArrayList()
         if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.CAMERA)
@@ -335,12 +358,34 @@ class MainActivity : BaseActicvity<MainViewModel>(),
                 .add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
         if (!listPermissionsNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(context, listPermissionsNeeded
-                .toTypedArray(),
-                REQUEST_ID_MULTIPLE_PERMISSIONS)
+            ActivityCompat.requestPermissions(
+                context, listPermissionsNeeded
+                    .toTypedArray(),
+                REQUEST_ID_MULTIPLE_PERMISSIONS
+            )
             return false
         }
         return true
+    }
+
+    //setup observer
+    private fun setupObservers() {
+        viewModel.cardLiveData.observe(this, Observer { it ->
+            when (it) {
+                is Resource.Loading -> {
+                }
+
+                is Resource.Success -> {
+                    if (it.value.status) {
+                        if (it.value.status) {
+                            SavedPrefrence.setAdsCard(it.value.data, this)
+                        }
+                    }
+                }
+                is Resource.Failure -> {
+                }
+            }
+        })
     }
 
 

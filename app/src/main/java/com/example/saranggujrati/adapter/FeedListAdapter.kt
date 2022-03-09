@@ -75,7 +75,6 @@ class FeedListAdapter constructor(private var categoryList: ArrayList<BlogData>)
                 Html.fromHtml(data.description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
             )
 
-            loadBannerAd(binding)
 
             Glide.with(AppClass.appContext)
                 .load(data.image)
@@ -84,9 +83,6 @@ class FeedListAdapter constructor(private var categoryList: ArrayList<BlogData>)
                         .error(R.drawable.placeholder)
                 ).into(binding.ivNewsImage)
 
-            loadBannerAd(binding)
-
-
             binding.txtReadMore.setOnClickListener {
                 adapterListener?.onClick(it, adapterPosition)
             }
@@ -94,15 +90,6 @@ class FeedListAdapter constructor(private var categoryList: ArrayList<BlogData>)
         }
     }
 
-    private fun loadBannerAd(binding: RRssFeedItemBinding) {
-        val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
-        binding.adView.adListener = object : AdListener() {
-            override fun onAdFailedToLoad(@NonNull p0: LoadAdError) {
-                super.onAdFailedToLoad(p0)
-            }
-        }
-    }
 
 
 }

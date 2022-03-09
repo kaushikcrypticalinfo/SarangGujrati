@@ -3,24 +3,28 @@ package com.example.saranggujrati.ui.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import androidx.annotation.NonNull
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.R
 import com.example.saranggujrati.adapter.*
 import com.example.saranggujrati.databinding.ActivityCitCatBlogBinding
 import com.example.saranggujrati.model.*
+import com.example.saranggujrati.ui.SavedPrefrence
 import com.example.saranggujrati.ui.isOnline
 import com.example.saranggujrati.ui.viewModel.CityCatBlogDetailViewModel
 import com.example.saranggujrati.ui.visible
 import com.example.saranggujrati.utils.RSS_FEED_DATE_FORMAT
 import com.example.saranggujrati.webservice.Resource
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
 import timber.log.Timber
@@ -33,6 +37,8 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
     View.OnClickListener {
 
     private var id: String = ""
+    private var parentId: String = ""
+    private var name: String = ""
 
     private lateinit var liveFeedlist: ArrayList<CategoryDataModel>
     private lateinit var dummyFeedlist: ArrayList<CategoryDataModel>
@@ -49,14 +55,18 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
     companion object {
         const val REQ_CODE_CITY_CAT_BLOG = 1001
         private const val EXTRA_ID = "EXTRA_ID"
+        private const val EXTRA_PARENT_ID = "EXTRA_PARENT_ID"
+        private const val EXTRA_NAME = "EXTRA_NAME"
         fun startActivity(activity: Activity) {
             val intent = Intent(activity, ActivityCityCatBlogDetail::class.java)
             activity.startActivityForResult(intent, REQ_CODE_CITY_CAT_BLOG)
         }
 
-        fun startActivity(activity: Activity, id: String) {
+        fun startActivity(activity: Activity, parentId: String,id: String, name: String) {
             val intent = Intent(activity, ActivityCityCatBlogDetail::class.java)
             intent.putExtra(EXTRA_ID, id)
+            intent.putExtra(EXTRA_PARENT_ID, parentId)
+            intent.putExtra(EXTRA_NAME, name)
             activity.startActivityForResult(intent, REQ_CODE_CITY_CAT_BLOG)
         }
 
@@ -66,12 +76,22 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
         return obtainViewModel(CityCatBlogDetailViewModel::class.java)
     }
 
-    override fun setUpChildUI(savedInstanceState: Bundle?) {
+    private fun loadBannerAd() {
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+        binding.adView.adListener = object : AdListener() {
+            override fun onAdFailedToLoad(@NonNull p0: LoadAdError) {
+                super.onAdFailedToLoad(p0)
+            }
+        }
+    }
 
+    override fun setUpChildUI(savedInstanceState: Bundle?) {
+        loadBannerAd()
         binding.icBack.setOnClickListener { finish() }
 
         binding.imgRefresh.setOnClickListener {
-            viewModel.getRssfeedList(id)
+            viewModel.getRssfeedList(parentId,id)
         }
 
         liveFeedlist = ArrayList()
@@ -93,36 +113,53 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
                         startActivity(i)
                     }
                 }
-
             }
         }
+
         val snapHelper: SnapHelper = PagerSnapHelper()
+        val linearLayoutManager = LinearLayoutManager(this)
         with(binding.rvNewsFeed)
         {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = linearLayoutManager
             snapHelper.attachToRecyclerView(this)
             adapter = feedListAdapter
         }
 
+        binding.rvNewsFeed.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val pos = linearLayoutManager.findLastCompletelyVisibleItemPosition()
+                if (pos >= 0) {
+                    val banner = blogList[pos].isBanner
+                    binding.relativeLayout.visible(!banner)
+                    binding.adView.visible(!banner)
+                }
+            }
+        })
+
         readIntent()
 
+        binding.tvTitle.text = name
+
         if (id.isNotEmpty()) {
-            getAllBlogList(id)
+            getAllBlogList(parentId,id)
         }
     }
 
     private fun readIntent() {
         id = intent.getStringExtra(EXTRA_ID).toString()
+        parentId = intent.getStringExtra(EXTRA_PARENT_ID).toString()
+        name = intent.getStringExtra(EXTRA_NAME).toString()
         Timber.e(id)
     }
 
-    private fun getAllBlogList(id: String) {
-        setupObservers(id)
-        viewModel.getRssfeedList(id)
+    private fun getAllBlogList(parentId: String, id: String) {
+        setupObservers()
+        viewModel.getRssfeedList(parentId, id)
     }
 
     //setup observer
-    private fun setupObservers(id: String) {
+    private fun setupObservers() {
         viewModel.feedList.observe(this, Observer { it ->
             when (it) {
 
@@ -212,6 +249,16 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
                     if (callCount < dummyFeedlist.size - 1) {
                         callLiveFeesListApi(dummyFeedlist, callCount)
                     } else {
+                        var tempIndex = 2
+                        SavedPrefrence.getAdsCard(this)?.data?.forEachIndexed { index, cardData ->
+                            val blogData = BlogData()
+                            blogData.isBanner = true
+                            blogData.image = cardData.image
+                            if (tempIndex < blogList.size - 1) {
+                                blogList[tempIndex] = blogData
+                                tempIndex += 6
+                            }
+                        }
                         feedListAdapter.notifyDataSetChanged()
                     }
 

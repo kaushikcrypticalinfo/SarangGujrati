@@ -2,18 +2,23 @@ package com.example.saranggujrati.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.SharedMemory
 import android.util.Log
 import android.view.*
+import androidx.annotation.NonNull
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.R
 import com.example.saranggujrati.adapter.FeedListAdapter
 import com.example.saranggujrati.databinding.FragmentAllNewsBlogBinding
+import com.example.saranggujrati.databinding.RRssFeedItemBinding
 import com.example.saranggujrati.model.*
+import com.example.saranggujrati.ui.SavedPrefrence
 import com.example.saranggujrati.ui.activity.MainActivity
 import com.example.saranggujrati.ui.activity.WebViewActivity
 import com.example.saranggujrati.ui.isOnline
@@ -21,11 +26,16 @@ import com.example.saranggujrati.ui.viewModel.AllBlogListViewModel
 import com.example.saranggujrati.ui.visible
 import com.example.saranggujrati.utils.*
 import com.example.saranggujrati.webservice.Resource
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
+import timber.log.Timber
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListener {
 
@@ -50,6 +60,9 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
+
+        loadBannerAd()
+
         binding.icBack.setOnClickListener {
             mActivity.supportActionBar?.show()
             mActivity.onBackPressed()
@@ -58,6 +71,8 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
         binding.imgRefresh.setOnClickListener {
             viewModel.getRssfeedList("0")
         }
+
+        binding.tvTitle.text = getString(R.string.latest_gujrati_news)
 
         liveFeedlist = ArrayList()
         dummyFeedlist = ArrayList()
@@ -78,16 +93,28 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
                         startActivity(i)
                     }
                 }
-
             }
         }
         val snapHelper: SnapHelper = PagerSnapHelper()
+        val linearLayoutManager = LinearLayoutManager(context)
         with(binding.rvNewsFeed)
         {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = linearLayoutManager
             snapHelper.attachToRecyclerView(this)
             adapter = allBogAdapter
         }
+
+        binding.rvNewsFeed.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val pos = linearLayoutManager.findLastCompletelyVisibleItemPosition()
+                if (pos >= 0) {
+                    val banner = blogList[pos].isBanner
+                    binding.relativeLayout.visible(!banner)
+                    binding.adView.visible(!banner)
+                }
+            }
+        })
 
         mActivity = (activity as MainActivity)
         mActivity.enableViews(true)
@@ -118,8 +145,14 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
         super.onDestroy();
     }
 
-    private fun attachListeners() {
-        // binding.llLiveNews.setOnClickListener(this)
+    private fun loadBannerAd() {
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+        binding.adView.adListener = object : AdListener() {
+            override fun onAdFailedToLoad(@NonNull p0: LoadAdError) {
+                super.onAdFailedToLoad(p0)
+            }
+        }
     }
 
     private fun getAllBlogList() {
@@ -234,54 +267,6 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
                 }
             }
         })
-
-//        Get Card list data
-        viewModel.cardLiveData.observe(this, Observer { it ->
-            when (it) {
-                is Resource.Loading -> {
-                    binding.progressbar.isVisible = true
-                }
-
-                is Resource.Success -> {
-                    binding.progressbar.isVisible = false
-                    if (it.value.status) {
-                        if (it.value.status) {
-                            binding.progressbar.visible(false)
-                            val data = it.value.data
-
-                            var tempIndex = 0
-                            data.data.forEachIndexed { index, cardData ->
-                                val blogData = BlogData()
-                                blogData.isBanner = true
-                                blogData.image = cardData.image
-                                if (tempIndex < blogList.size - 1)
-                                    blogList[tempIndex] = blogData
-
-                                tempIndex += 5
-                            }
-
-                            allBogAdapter.notifyDataSetChanged()
-                        }
-                    } else {
-                        Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
-                    }
-                }
-                is Resource.Failure -> {
-                    binding.progressbar.isVisible = false
-                    when {
-                        it.isNetworkError -> {
-                            if (!isOnline(AppClass.appContext)) {
-                                Snackbar.make(
-                                    binding.layout,
-                                    resources.getString(R.string.check_internet),
-                                    Snackbar.LENGTH_LONG
-                                ).show()
-                            }
-                        }
-                    }
-                }
-            }
-        })
     }
 
     private fun callLiveFeesListApi(data: List<CategoryDataModel>, callCount: Int) {
@@ -293,23 +278,22 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
             binding.tvNoData.visibility = View.VISIBLE
             binding.rvNewsFeed.visibility = View.GONE
             binding.appBarLayout.visibility = View.VISIBLE
-
-            binding.tvTitle.text = getString(R.string.app_name)
-            binding.icBack.setOnClickListener {
-                mActivity.onBackPressed()
-            }
-
-            binding.toolbar.setOnClickListener {
-                mActivity.onBackPressed()
-            }
         } else {
             // Sorting all list data recent new first show
             blogList.sortByDescending {
                 parseDate(it.time)
             }
 
-            //get Fill screen card data
-            viewModel.fullScreenCardList()
+            var tempIndex = 2
+            SavedPrefrence.getAdsCard(requireContext())?.data?.forEachIndexed { index, cardData ->
+                val blogData = BlogData()
+                blogData.isBanner = true
+                blogData.image = cardData.image
+                if (tempIndex < blogList.size - 1) {
+                    blogList[tempIndex] = blogData
+                    tempIndex += 6
+                }
+            }
 
             allBogAdapter.notifyDataSetChanged()
         }

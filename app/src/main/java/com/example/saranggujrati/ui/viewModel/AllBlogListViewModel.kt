@@ -23,11 +23,6 @@ class AllBlogListViewModel(private val repository: AllBlogListRepository) :
     val feedLiveData: LiveData<Resource<RssFeed>>
         get() = _feedLiveData
 
-   private val _cardData: MutableLiveData<Resource<CardListRes>> =
-        MutableLiveData()
-    val cardLiveData: LiveData<Resource<CardListRes>>
-        get() = _cardData
-
     fun getRssfeedList(id: String) =
         viewModelScope.launch {
             _feedList.value = Resource.Loading
@@ -38,12 +33,6 @@ class AllBlogListViewModel(private val repository: AllBlogListRepository) :
         viewModelScope.launch {
             _feedLiveData.value = Resource.Loading
             _feedLiveData.value = repository.getFeedLiveData(url)
-        }
-
-  fun fullScreenCardList() =
-        viewModelScope.launch {
-            _cardData.value = Resource.Loading
-            _cardData.value = repository.fullScreenCardList()
         }
 
 }

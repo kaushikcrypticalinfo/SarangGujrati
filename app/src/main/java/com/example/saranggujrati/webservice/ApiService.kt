@@ -161,6 +161,13 @@ interface ApiService {
         @Path("id") id: String,
     ): FeedResponse
 
+    @GET("rss-feed-list/{parentId}/{id}")
+    @Json
+    suspend fun getRssfeedList(
+        @Path("parentId") parentId: String,
+        @Path("id") id: String,
+    ): FeedResponse
+
     @GET("full-screen-card-list")
     @Json
     suspend fun fullScreenCardList(): CardListRes

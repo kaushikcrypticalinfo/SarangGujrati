@@ -4,7 +4,9 @@ plugins {
     id  'kotlin-kapt'
     id 'com.google.gms.google-services'
 }
-
+static def getDate() {
+    new Date().format('dd_MMM_yyyy')
+}
 android {
     compileSdk 31
 
@@ -14,7 +16,7 @@ android {
         targetSdk 30
         versionCode 1
         versionName "1.0"
-
+        setProperty("archivesBaseName","SarangGujarati-"+ getDate() + "-V" + versionName)
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
@@ -33,6 +35,12 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+}
+
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -54,7 +62,7 @@ dependencies {
     implementation 'com.facebook.android:facebook-android-sdk:5.0.0'
     implementation 'com.google.android.gms:play-services-auth:20.1.0'
     implementation "androidx.preference:preference-ktx:1.2.0"
-    implementation 'com.google.android.material:material:1.5.0'
+
     //google login
     implementation 'com.google.android.gms:play-services-auth:20.1.0'
     // Import the BoM for the Firebase platform

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.annotation.NonNull
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.saranggujrati.AppClass
@@ -18,12 +19,16 @@ import com.example.saranggujrati.ui.isOnline
 import com.example.saranggujrati.ui.viewModel.FeatureBlogListViewModel
 import com.example.saranggujrati.ui.visible
 import com.example.saranggujrati.webservice.Resource
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
 import kotlin.collections.ArrayList
 
 
-class FragmentFeatureBlog(val b:Bundle):BaseFragment<FeatureBlogListViewModel> (),View.OnClickListener{
+class FragmentFeatureBlog(val b: Bundle) : BaseFragment<FeatureBlogListViewModel>(),
+    View.OnClickListener {
 
     private lateinit var mActivity: MainActivity
     lateinit var allBlogAdapter: FeatureBlogViewPagerAdapter
@@ -42,61 +47,53 @@ class FragmentFeatureBlog(val b:Bundle):BaseFragment<FeatureBlogListViewModel> (
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
         allBlogAdapter = FeatureBlogViewPagerAdapter(bloglList)
-        val bundle=b
-        val pos= bundle.getInt("position")
+        binding.tvTitle.text = "Featured Stories"
+        val bundle = b
+        val pos = bundle.getInt("position")
         Log.e("pos2", pos.toString())
-        mActivity=(activity as MainActivity)
+        mActivity = (activity as MainActivity)
         mActivity.enableViews(true)
         mActivity.supportActionBar?.hide()
+        loadBannerAd()
         if (pos != null) {
             getAllBlogList(pos)
         }
-    }
 
-
-    override fun onPause() {
-        if (allBlogAdapter.adView!=null) {
-            allBlogAdapter.adView!!.pause();
+        binding.icBack.setOnClickListener {
+            mActivity.supportActionBar?.show()
+            mActivity.onBackPressed()
         }
-        super.onPause()
+
+        binding.imgRefresh.setOnClickListener {
+            if (pos != null) {
+                getAllBlogList(pos)
+            }
+        }
     }
+
 
     override fun onResume() {
         super.onResume()
-        if (allBlogAdapter.adView != null) {
-            allBlogAdapter.adView!!.resume();
-        }
 
 
         requireView().isFocusableInTouchMode = true
         requireView().requestFocus()
 
-        requireView().setOnKeyListener(object : View.OnKeyListener{
+        requireView().setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
-                if( keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-                    Log.i(tag, "onKey Back listener is working!!!");
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
+                    Log.i(tag, "onKey Back listener is working!!!")
                     mActivity.supportActionBar?.show()
                     mActivity.onBackPressed()
-/*
-                    getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-*/
-                    return true;
+                    return true
                 }
                 return false
             }
         })
     }
 
-    override fun onDestroy() {
-        if (allBlogAdapter.adView != null) {
-            allBlogAdapter.adView!!.destroy();
-        }
-        super.onDestroy();
-    }
 
-
-
-    private fun getAllBlogList(pos:Int){
+    private fun getAllBlogList(pos: Int) {
         viewModel.getFeatureBlogList()
         setupObservers(pos)
 
@@ -104,11 +101,11 @@ class FragmentFeatureBlog(val b:Bundle):BaseFragment<FeatureBlogListViewModel> (
 
 
     //setup observer
-    private fun setupObservers(pos:Int) {
+    private fun setupObservers(pos: Int) {
         viewModel.featureBlogListResponse.observe(this, Observer {
             when (it) {
                 is Resource.Loading -> {
-                    binding.progressbar.isVisible=true
+                    binding.progressbar.isVisible = true
                 }
 
                 is Resource.Success -> {
@@ -117,11 +114,11 @@ class FragmentFeatureBlog(val b:Bundle):BaseFragment<FeatureBlogListViewModel> (
                         if (it.value.status) {
                             binding.progressbar.visible(false)
 
-                            getAllBlogList(it.value,pos)
+                            getAllBlogList(it.value, pos)
 
                         }
 
-                    }else{
+                    } else {
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
 
                     }
@@ -129,17 +126,20 @@ class FragmentFeatureBlog(val b:Bundle):BaseFragment<FeatureBlogListViewModel> (
 
                 }
                 is Resource.Failure -> {
-                    binding.progressbar.isVisible=false
+                    binding.progressbar.isVisible = false
                     when {
                         it.isNetworkError -> {
                             if (!isOnline(AppClass.appContext)) {
-                                Snackbar.make(binding.layout,
+                                Snackbar.make(
+                                    binding.layout,
                                     resources.getString(R.string.check_internet),
-                                    Snackbar.LENGTH_LONG).show()
+                                    Snackbar.LENGTH_LONG
+                                ).show()
                             }
                         }
                         else -> {
-                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
+                                .show()
 
                         }
 
@@ -151,13 +151,25 @@ class FragmentFeatureBlog(val b:Bundle):BaseFragment<FeatureBlogListViewModel> (
             }
         })
     }
-    private fun getAllBlogList(response: BlogFeatureList,pos:Int) {
-        if(response.data.isEmpty() ){
-            binding.tvNoData.visibility=View.VISIBLE
-            binding.verticalViewPager.visibility=View.GONE
-            binding.appBarLayout.visibility=View.VISIBLE
 
-            binding.tvTitle.text=getString(R.string.app_name)
+    private fun loadBannerAd() {
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+        binding.adView.adListener = object : AdListener() {
+            override fun onAdFailedToLoad(@NonNull p0: LoadAdError) {
+                super.onAdFailedToLoad(p0)
+            }
+        }
+    }
+
+
+    private fun getAllBlogList(response: BlogFeatureList, pos: Int) {
+        if (response.data.isEmpty()) {
+            binding.tvNoData.visibility = View.VISIBLE
+            binding.verticalViewPager.visibility = View.GONE
+            binding.appBarLayout.visibility = View.VISIBLE
+
+            binding.tvTitle.text = getString(R.string.app_name)
             binding.icBack.setOnClickListener {
                 mActivity.onBackPressed()
             }
@@ -165,17 +177,13 @@ class FragmentFeatureBlog(val b:Bundle):BaseFragment<FeatureBlogListViewModel> (
             binding.toolbar.setOnClickListener {
                 mActivity.onBackPressed()
             }
-        }else{
+        } else {
             bloglList.addAll(response.data)
             binding.verticalViewPager.adapter = allBlogAdapter
-            binding.verticalViewPager.currentItem=pos
+            binding.verticalViewPager.currentItem = pos
             allBlogAdapter.notifyDataSetChanged()
 
-
-
-
-
-            allBlogAdapter.adapterListener = object : FeatureBlogViewPagerAdapter.AdapterListener{
+            allBlogAdapter.adapterListener = object : FeatureBlogViewPagerAdapter.AdapterListener {
                 override fun onClick(view: View, position: Int) {
                     if (view.id == R.id.ic_back) {
                         mActivity.supportActionBar?.show()
@@ -205,12 +213,7 @@ class FragmentFeatureBlog(val b:Bundle):BaseFragment<FeatureBlogListViewModel> (
         }
 
 
-
-
-
-
-}
-
+    }
 
 
     override fun onClick(p0: View?) {

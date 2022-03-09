@@ -2,35 +2,41 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:checkableBehavior="single">
-    <item
-        android:id="@+id/nav_font_size"
-        android:icon="@drawable/ic_font_size"
-        app:actionLayout="@layout/item_fontsize"
-        android:visible="false"
-        android:title="@string/font_size" />
+        <item
+            android:id="@+id/nav_font_size"
+            android:icon="@drawable/ic_font_size"
+            android:title="@string/font_size"
+            android:visible="false"
+            app:actionLayout="@layout/item_fontsize" />
 
         <item
             android:id="@+id/nav_select_language"
             android:icon="@drawable/ic_select_language"
-            android:title="@string/select_language" />
+            android:title="@string/select_language"
+            android:visible="false" />
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_round_home_24"
+            android:title="Home" />
 
         <item
             android:id="@+id/nav_dark_mode"
             android:icon="@drawable/ic_dark_mode"
             android:title="@string/dark_mode"
-            app:actionViewClass="androidx.appcompat.widget.SwitchCompat"/>
-         <!--   app:actionLayout="@menu/menu_switch"/>-->
+            app:actionViewClass="androidx.appcompat.widget.SwitchCompat" />
 
         <item
             android:id="@+id/nav_about_us"
             android:icon="@drawable/ic_about_us"
-            android:title="@string/about_us" />
+            android:title="@string/about_us"
+            android:visible="false" />
 
         <item
             android:id="@+id/nav_join_us"
             android:icon="@drawable/ic_join_us"
-            android:title="@string/join_us" />
-
+            android:title="@string/join_us"
+            android:visible="false" />
 
         <item
             android:id="@+id/nav_advertise"
@@ -47,17 +53,16 @@
             android:icon="@drawable/ic_privacy_policy"
             android:title="@string/policy_terms" />
 
-
         <item
             android:id="@+id/nav_Login"
             android:icon="@drawable/ic_login"
-            android:visible="true"
-            android:title="@string/login" />
+            android:title="@string/login"
+            android:visible="true" />
 
         <item
             android:id="@+id/nav_Logout"
             android:icon="@drawable/ic_login"
-            android:visible="true"
-            android:title="@string/logout" />
+            android:title="@string/logout"
+            android:visible="true" />
     </group>
 </menu>

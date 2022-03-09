@@ -20,6 +20,13 @@
         <provider android:authorities="list" />
     </queries>
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SENDTO"/>
+            <data android:mimeType="*/*" />
+        </intent>
+    </queries>
+
     <application
         android:name="com.example.saranggujrati.AppClass"
         android:allowBackup="true"
