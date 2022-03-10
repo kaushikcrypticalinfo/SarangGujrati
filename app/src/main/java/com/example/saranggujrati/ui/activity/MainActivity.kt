@@ -58,6 +58,7 @@ import androidx.lifecycle.Observer
 import com.example.saranggujrati.model.BlogData
 import com.example.saranggujrati.ui.fragment.AdvertiseWithUsFragment
 import com.example.saranggujrati.ui.fragment.ContactUsFragment
+import com.example.saranggujrati.ui.fragment.FragmentAllBlog
 import com.example.saranggujrati.ui.isOnline
 import com.example.saranggujrati.ui.visible
 import com.example.saranggujrati.webservice.Resource
@@ -261,11 +262,11 @@ class MainActivity : BaseActicvity<MainViewModel>(),
             }
 
             R.id.nav_advertise -> {
-                binding.appBarToolbar.viewPager.currentItem = 2
+                pushFragment(AdvertiseWithUsFragment())
             }
 
             R.id.nav_contact_us -> {
-                binding.appBarToolbar.viewPager.currentItem = 1
+                pushFragment(ContactUsFragment())
             }
 
             R.id.nav_policy_terms -> {
@@ -285,8 +286,8 @@ class MainActivity : BaseActicvity<MainViewModel>(),
     private fun createViewPager() {
         val adapter = ViewPagerAdapter(supportFragmentManager)
         adapter.addFrag(HomeFragment())
-        adapter.addFrag(ContactUsFragment())
-        adapter.addFrag(AdvertiseWithUsFragment())
+//        adapter.addFrag(ContactUsFragment())
+//        adapter.addFrag(AdvertiseWithUsFragment())
         binding.appBarToolbar.viewPager.adapter = adapter
     }
 

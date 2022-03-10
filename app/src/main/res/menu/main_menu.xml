@@ -9,4 +9,12 @@
         android:layout_gravity="center"
         android:title="" />
 
+    <item
+        android:id="@+id/menu_refresh"
+        app:showAsAction="ifRoom"
+        android:visible="false"
+        android:icon="@drawable/ic_baseline_refresh_24"
+        android:layout_gravity="center"
+        android:title="" />
+
 </menu>

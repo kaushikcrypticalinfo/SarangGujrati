@@ -14,10 +14,11 @@ import com.example.saranggujrati.model.BlogData
 import com.example.saranggujrati.model.TopCitiesData
 
 
-class AllBlogListAdapter constructor (private var blogList: ArrayList<BlogData>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AllBlogListAdapter constructor(private var blogList: ArrayList<BlogData>) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var adapterListener: AdapterListener? = null
-    lateinit var binding :ItemNewsDetailBinding
+    lateinit var binding: ItemNewsDetailBinding
 
     interface AdapterListener {
         fun onClick(view: View, position: Int)
@@ -25,39 +26,40 @@ class AllBlogListAdapter constructor (private var blogList: ArrayList<BlogData>)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-         binding = ItemNewsDetailBinding.inflate(inflater, parent, false)
+        binding = ItemNewsDetailBinding.inflate(inflater, parent, false)
         return AllBlogListViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is AllBlogListViewHolder) {
-            val response: BlogData =blogList[position]
+            val response: BlogData = blogList[position]
             holder.bind(response)
         }
     }
+
     override fun getItemCount(): Int {
         return blogList.size
-}
+    }
 
 
-      inner class AllBlogListViewHolder constructor (private var binding: ItemNewsDetailBinding) :
+    inner class AllBlogListViewHolder constructor(private var binding: ItemNewsDetailBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: BlogData) {
 
-            binding.tvNewsHighLight.text=data.title
-            binding.tvNewsDetail.text=data.description
-            binding.tvNewsPaperName.text=data.category_name
+            binding.tvNewsHighLight.text = data.title
+            binding.tvNewsDetail.text = data.description
+            binding.tvNewsPaperName.text = data.category_name
 
             Glide.with(AppClass.appContext)
                 .load(data?.image)
-                .apply(RequestOptions.placeholderOf(R.drawable.placeholder).error(R.drawable.placeholder))
+                .apply(
+                    RequestOptions.placeholderOf(R.drawable.placeholder)
+                        .error(R.drawable.placeholder)
+                )
                 .into(binding.ivNewsImage)
 
         }
-          }
-
-
-
+    }
 
 
 }

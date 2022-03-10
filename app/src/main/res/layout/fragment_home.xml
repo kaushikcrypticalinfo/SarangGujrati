@@ -236,42 +236,20 @@
                     android:orientation="vertical"
                     android:padding="10dp">
 
-                    <LinearLayout
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvTopCities"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="horizontal">
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/tvTopCities"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/montserrat_bold"
-                            android:text="@string/top_cities"
-                            android:textColor="@color/app_grey"
-                            android:textSize="12sp" />
-
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserrat_bold"
-                            android:text="@string/top_cities"
-                            android:textColor="@color/app_grey"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
-
-                    <!-- <include layout="@layout/item_top_cities"/>-->
-
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="@string/top_cities"
+                        android:textColor="@color/app_grey"
+                        android:textSize="12sp" />
 
                     <include
                         android:id="@+id/rv_top_cities"
                         layout="@layout/layout_recylerview"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp" />
+                        android:layout_height="wrap_content" />
 
 
                 </LinearLayout>
@@ -283,39 +261,24 @@
                     android:orientation="vertical"
                     android:padding="10dp">
 
-                    <LinearLayout
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvTopCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:orientation="horizontal">
+                        android:layout_weight="1"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="@string/top_category"
+                        android:textColor="@color/app_grey"
+                        android:textSize="12sp" />
 
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/tvTopCategory"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/montserrat_bold"
-                            android:text="@string/top_category"
-                            android:textColor="@color/app_grey"
-                            android:textSize="12sp" />
-
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/montserrat_bold"
-                            android:text="@string/top_category"
-                            android:textColor="@color/app_grey"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
 
                     <include
                         android:id="@+id/rv_top_category"
                         layout="@layout/layout_recylerview"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp" />
+     />
 
                 </LinearLayout>
 

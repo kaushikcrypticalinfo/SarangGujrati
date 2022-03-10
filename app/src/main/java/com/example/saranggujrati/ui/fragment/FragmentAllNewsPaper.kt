@@ -32,7 +32,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
 import kotlin.collections.ArrayList
 
-class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
+class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {
 
     private lateinit var mActivity: MainActivity
     lateinit var newsPaperAdapter: AllNewsPaperAdapter
@@ -43,7 +43,6 @@ class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
     var nextPageUrl: String? = null
     lateinit var newsPaperResponse: NewsPaperListResponse
     lateinit var swipeContainer: SwipeRefreshLayout
-
 
 
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
@@ -57,8 +56,8 @@ class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
 
-        mActivity=(activity as MainActivity)
-        mActivity.toolbar.title=getString(R.string.all_news_paper)
+        mActivity = (activity as MainActivity)
+        mActivity.toolbar.title = getString(R.string.all_news_paper)
         mActivity.enableViews(true)
         setAdapter()
         setRVLayoutManager()
@@ -78,13 +77,12 @@ class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
 
     override fun onPrepareOptionsMenu(menu: Menu) {
 
-        if( menu.findItem(R.id.logo)!=null){
+        if (menu.findItem(R.id.logo) != null) {
             menu.findItem(R.id.logo).isVisible = false
         }
         super.onPrepareOptionsMenu(menu)
 
     }
-
 
 
     private fun setAdapter() {
@@ -94,8 +92,8 @@ class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
             override fun onClick(view: View, position: Int) {
                 if (view.id == R.id.llMain) {
                     val i = Intent(requireContext(), WebViewActivity::class.java)
-                    i.putExtra("url",newPaperlList[position]?.url)
-                    i.putExtra("title",newPaperlList[position]?.title)
+                    i.putExtra("url", newPaperlList[position]?.url)
+                    i.putExtra("title", newPaperlList[position]?.title)
                     startActivity(i)
                 }
             }
@@ -107,7 +105,8 @@ class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
         mLayoutManager = LinearLayoutManager((AppClass.appContext))
         binding.rvAllNewsChannel.recyclerview.layoutManager = mLayoutManager
         binding.rvAllNewsChannel.recyclerview.setHasFixedSize(true)
-        binding.rvAllNewsChannel.recyclerview.layoutManager = GridLayoutManager(AppClass.appContext, 2)
+        binding.rvAllNewsChannel.recyclerview.layoutManager =
+            GridLayoutManager(AppClass.appContext, 2)
 
         (mLayoutManager as LinearLayoutManager).orientation = RecyclerView.VERTICAL
     }
@@ -126,6 +125,7 @@ class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
             }
         binding.rvAllNewsChannel.recyclerview.addOnScrollListener(endlessScrollListener)
     }
+
     private fun fetchInitialNews(page: Int) {
         newPaperlList.clear()
 
@@ -138,7 +138,7 @@ class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
         getNewsPaperChannel(1)
     }
 
-    private fun getNewsPaperChannel(page: Int){
+    private fun getNewsPaperChannel(page: Int) {
         viewModel.getAllNewsPaper(page.toString())
     }
 
@@ -147,13 +147,13 @@ class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
         viewModel.newsPaperResponse.observe(this, Observer {
             when (it) {
                 is Resource.Loading -> {
-                    binding.rvAllNewsChannel.progressbar.isVisible=true
+                    binding.rvAllNewsChannel.progressbar.isVisible = true
                 }
 
                 is Resource.Success -> {
                     if (it.value.status) {
                         newsPaperResponse = it.value
-                        binding.rvAllNewsChannel.progressbar.isVisible=false
+                        binding.rvAllNewsChannel.progressbar.isVisible = false
                         binding.swipeContainer.isRefreshing = false
 
                         nextPageUrl = newsPaperResponse.data.next_page_url
@@ -163,19 +163,22 @@ class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
                 }
 
                 is Resource.Failure -> {
-                    binding.rvAllNewsChannel.progressbar.isVisible=false
+                    binding.rvAllNewsChannel.progressbar.isVisible = false
                     binding.swipeContainer.isRefreshing = false
 
                     when {
                         it.isNetworkError -> {
                             if (!isOnline(AppClass.appContext)) {
-                                Snackbar.make(binding.layout,
+                                Snackbar.make(
+                                    binding.layout,
                                     resources.getString(R.string.check_internet),
-                                    Snackbar.LENGTH_LONG).show()
+                                    Snackbar.LENGTH_LONG
+                                ).show()
                             }
                         }
                         else -> {
-                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
+                                .show()
 
                         }
 
@@ -187,19 +190,17 @@ class FragmentAllNewsPaper:BaseFragment<NewsPaperViewModel> (){
             }
         })
     }
+
     private fun addNewsPaperData(response: NewsPaperListResponse) {
-        if(response.data.data.isEmpty() ){
-            binding.rvAllNewsChannel.tvNoData.visibility=View.VISIBLE
-            binding.rvAllNewsChannel.recyclerview.visibility=View.GONE
-        }else{
+        if (response.data.data.isEmpty()) {
+            binding.rvAllNewsChannel.tvNoData.visibility = View.VISIBLE
+            binding.rvAllNewsChannel.recyclerview.visibility = View.GONE
+        } else {
             newPaperlList.addAll(response.data.data)
             newsPaperAdapter.notifyDataSetChanged()
 
         }
-        }
-
-
-
+    }
 
 
 }

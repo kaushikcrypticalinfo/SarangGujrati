@@ -31,22 +31,21 @@ class ContactUsFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
         mActivity = (activity as MainActivity)
-        mActivity.toolbar.title = getString(R.string.app_name)
-        mActivity.enableViews(false)
-        binding.txtTitle.text="Contact us"
+        mActivity.toolbar.title = getString(R.string.str_contact_us)
+        mActivity.enableViews(true)
+        setHasOptionsMenu(true);
         attachListeners()
 
-        if (SavedPrefrence.is_Guest) {
-            setHasOptionsMenu(false)
-        } else {
-            setHasOptionsMenu(true)
-        }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater)
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        if (menu.findItem(R.id.logo) != null) {
+            menu.findItem(R.id.logo).isVisible = false
+        }
+        super.onPrepareOptionsMenu(menu)
     }
+
 
     private fun attachListeners() {
         binding.btnSend.setOnClickListener(this)

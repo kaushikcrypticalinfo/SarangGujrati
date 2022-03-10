@@ -1,5 +1,7 @@
 package com.example.saranggujrati.adapter
 
+import android.os.Build
+import android.text.Html
 import android.view.View
 import androidx.viewpager.widget.PagerAdapter
 import android.view.LayoutInflater
@@ -8,11 +10,14 @@ import android.widget.LinearLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.text.HtmlCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.R
+import com.example.saranggujrati.extensions.formatHtmlText
 import com.example.saranggujrati.model.FeatureData
 import com.example.saranggujrati.ui.visible
 import com.google.android.gms.ads.*
@@ -35,6 +40,7 @@ class FeatureBlogViewPagerAdapter constructor(private var blogList: ArrayList<Fe
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val itemView: View =
             LayoutInflater.from(container.context)
@@ -53,8 +59,12 @@ class FeatureBlogViewPagerAdapter constructor(private var blogList: ArrayList<Fe
         tvPaperName.visible(false)
 
         tvNewsHighlight.text = data.title
-        tvNewsDetail.text = data.description
+
         tvPaperName.text = data.category_name
+
+        tvNewsDetail.formatHtmlText(
+            Html.fromHtml(data.description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
+        )
 
         data.banner_image?.let {
             Glide.with(AppClass.appContext)

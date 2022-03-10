@@ -97,5 +97,7 @@
     <string name="tap_to_read_full_story">Tap to read full story</string>
     <string name="all_news_paper">All News Paper</string>
     <string name="logout_message">Are you sure you want to logout?</string>
+    <string name="str_contact_us">Contact us</string>
+    <string name="str_advertise_with_us">Advertise with us</string>
 
 </resources>

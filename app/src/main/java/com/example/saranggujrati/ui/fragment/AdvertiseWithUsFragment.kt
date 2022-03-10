@@ -21,7 +21,7 @@ class AdvertiseWithUsFragment : BaseFragment<HomeViewModel>(), View.OnClickListe
     private lateinit var mActivity: MainActivity
     private lateinit var binding: FragmentContactUsBinding
 
-    var name="Advertise with us"
+    var name = "Advertise with us"
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
         binding = FragmentContactUsBinding.inflate(inflater, container, false)
         return binding.root
@@ -33,22 +33,18 @@ class AdvertiseWithUsFragment : BaseFragment<HomeViewModel>(), View.OnClickListe
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
         mActivity = (activity as MainActivity)
-        mActivity.toolbar.title = getString(R.string.app_name)
-        mActivity.enableViews(false)
-
-        binding.txtTitle.text="Advertise with us"
+        mActivity.toolbar.title = getString(R.string.str_advertise_with_us)
+        mActivity.enableViews(true)
+        setHasOptionsMenu(true);
         attachListeners()
 
-        if (SavedPrefrence.is_Guest) {
-            setHasOptionsMenu(false)
-        } else {
-            setHasOptionsMenu(true)
-        }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        if (menu.findItem(R.id.logo) != null) {
+            menu.findItem(R.id.logo).isVisible = false
+        }
+        super.onPrepareOptionsMenu(menu)
     }
 
     private fun attachListeners() {
@@ -62,25 +58,21 @@ class AdvertiseWithUsFragment : BaseFragment<HomeViewModel>(), View.OnClickListe
         if (strName.toString().isEmpty()) {
             binding.edtName.error = "Please enter your name"
             binding.edtName.requestFocus()
-        }
-        else if (strEmail.toString().isEmpty()) {
+        } else if (strEmail.toString().isEmpty()) {
             binding.edtEmail.error = "Please enter your mail address"
             binding.edtEmail.requestFocus()
-        }
-        else if (!isValidEmail(strEmail.toString())) {
+        } else if (!isValidEmail(strEmail.toString())) {
             binding.edtEmail.error = "Please enter valid email address"
             binding.edtEmail.requestFocus()
-        }
-        else if (strPhNo.toString().isEmpty()) {
+        } else if (strPhNo.toString().isEmpty()) {
             binding.edtPhoneNo.error = "Please enter your phone number"
             binding.edtPhoneNo.requestFocus()
-        }
-        else {
+        } else {
             val body = "Name:: " + strName.toString() +
                     "\nEmail:: " + strEmail.toString() +
                     "\nPhone No:: " + strPhNo.toString() +
                     "\nMessage:: " + binding.edtMessage.text.toString()
-            sendMail(requireContext(),name, body)
+            sendMail(requireContext(), name, body)
         }
     }
 }

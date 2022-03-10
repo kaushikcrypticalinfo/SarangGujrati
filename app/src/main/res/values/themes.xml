@@ -19,7 +19,7 @@
         <item name="textColor">@color/black_op</item>
         <item name="textColorSecondary">@color/white</item>
         <item name="checkboxcolour">@color/app_blue</item>
-        <!-- Customize your theme here. -->
+
     </style>
 
     <style name="Theme.SarangGujrati.NoActionBar">

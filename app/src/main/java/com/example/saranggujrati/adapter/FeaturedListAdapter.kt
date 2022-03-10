@@ -35,11 +35,6 @@ class FeaturedListAdapter constructor(private var featureList: ArrayList<Feature
             holder.bind(response)
 
 
-            binding.llMain.setOnClickListener {
-                adapterListener?.onClick(binding.llMain, position)
-            }
-
-
         }
     }
 
@@ -51,6 +46,7 @@ class FeaturedListAdapter constructor(private var featureList: ArrayList<Feature
     inner class FeatureListViewHolder constructor(private var binding: ItemFeaturedStoriesBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: FeatureData) {
+
 
             binding.tvName.text = data.title
             binding.tvCount.text = data.view_count.toString()
@@ -65,6 +61,14 @@ class FeaturedListAdapter constructor(private var featureList: ArrayList<Feature
                         ).into(binding.ivImage)
                 }
             }
+
+            binding.llMain.setOnClickListener {
+                adapterListener?.onClick(
+                    it,
+                    absoluteAdapterPosition
+                )
+            }
+
 
         }
     }
