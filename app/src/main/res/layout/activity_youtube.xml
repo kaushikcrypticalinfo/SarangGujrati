@@ -15,14 +15,34 @@
         ads:layout_constraintStart_toStartOf="parent"
         ads:layout_constraintTop_toTopOf="parent" />
 
-    <include
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/toolbar"
-        layout="@layout/toolbar_back_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:gravity="center_vertical"
         ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintStart_toStartOf="parent"
-        ads:layout_constraintTop_toBottomOf="@+id/youtube_player" />
+        ads:layout_constraintTop_toBottomOf="@+id/youtube_player">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ic_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="10dp"
+            android:src="@drawable/ic_back_arrow_white" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:theme="@style/Theme.MyApplication.AppBarOverlay" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <!-- view for AdMob Banner Ad -->
     <com.google.android.gms.ads.AdView
