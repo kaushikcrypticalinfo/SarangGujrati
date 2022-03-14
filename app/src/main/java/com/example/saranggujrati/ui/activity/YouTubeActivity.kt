@@ -46,6 +46,7 @@ class YouTubeActivity : YouTubeBaseActivity() {
     private lateinit var youTubePlayerView: YouTubePlayerView
     private lateinit var binding: ActivityYoutubeBinding
     var urlLink: String? = null
+    var videoName: String? = null
     var videoId: String? = null
 
     private lateinit var mActivity: MainActivity
@@ -73,13 +74,15 @@ class YouTubeActivity : YouTubeBaseActivity() {
             urlLink = intent.getStringExtra("url")
 
         }
+        if (intent.getStringExtra("videoName") != null) {
+            videoName = intent.getStringExtra("videoName")
+        }
+
+        binding.tvVideoTitle.text = videoName
         getYouTubeId(urlLink!!)
         if (videoId != null) {
             playVideo()
-
         } else {
-            Toast.makeText(AppClass.appContext, "Error", Toast.LENGTH_SHORT).show()
-
         }
 
     }
@@ -145,8 +148,8 @@ class YouTubeActivity : YouTubeBaseActivity() {
                     player: YouTubePlayer?,
                     p2: Boolean,
                 ) {
-                    Toast.makeText(AppClass.appContext, "Video player Success", Toast.LENGTH_SHORT)
-                        .show()
+//                    Toast.makeText(AppClass.appContext, "Video player Success", Toast.LENGTH_SHORT)
+//                        .show()
                     //  player?.loadVideo(urlLink.toString())
                     player?.loadVideo(videoId)
                     player?.play()
@@ -159,8 +162,8 @@ class YouTubeActivity : YouTubeBaseActivity() {
                     p0: YouTubePlayer.Provider?,
                     p1: YouTubeInitializationResult?,
                 ) {
-                    Toast.makeText(AppClass.appContext, "Video player Failed", Toast.LENGTH_SHORT)
-                        .show()
+//                    Toast.makeText(AppClass.appContext, "Video player Failed", Toast.LENGTH_SHORT)
+//                        .show()
                 }
             })
 

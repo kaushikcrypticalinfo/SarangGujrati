@@ -6,9 +6,10 @@
         <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/drawable/ic_back.xml" value="0.193" />
         <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/drawable/ic_baseline_refresh_24.xml" value="0.193" />
         <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/drawable/ic_round_home_24.xml" value="0.185" />
+        <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/drawable/ic_round_videocam_24.xml" value="0.2075" />
         <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/drawable/shape_bg_light_grey.xml" value="0.2" />
         <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/layout/activity_cit_cat_blog.xml" value="0.3333333333333333" />
-        <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
+        <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/layout/activity_login.xml" value="0.3416666666666667" />
         <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/layout/activity_splash.xml" value="0.36666666666666664" />
         <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/layout/activity_webview.xml" value="0.36666666666666664" />
@@ -19,6 +20,7 @@
         <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/layout/fragment_contact_us.xml" value="0.36666666666666664" />
         <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/layout/fragment_feature_blog.xml" value="0.3" />
         <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/layout/fragment_home.xml" value="0.3" />
+        <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/layout/fragment_privacy_policy.xml" value="0.3416666666666667" />
         <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/layout/item_featured_stories.xml" value="0.3" />
         <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/layout/item_news_channel.xml" value="0.3" />
         <entry key="..\:/Android-Project/SarangGujarati/Project_Code/SarangGujrati/app/src/main/res/layout/item_news_detail.xml" value="0.3" />

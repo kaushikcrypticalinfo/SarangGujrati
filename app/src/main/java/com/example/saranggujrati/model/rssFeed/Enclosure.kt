@@ -1,4 +1,4 @@
-package com.kakyiretechnologies.bothOfUsRss.data.model
+package com.example.saranggujrati.model.rssFeed
 
 import com.example.saranggujrati.utils.*
 
@@ -8,6 +8,6 @@ import org.simpleframework.xml.Root
 
 @Root(name = ENCLOSURE, strict = false)
 data class Enclosure(
-    @field:Attribute(name = THUMBNAIL_URL)
+    @field:Attribute(name = URL)
     var thumbnailUrl: String? = null,
 )

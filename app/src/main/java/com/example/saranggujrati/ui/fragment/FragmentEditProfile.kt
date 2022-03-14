@@ -57,19 +57,12 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 
-
-
-
-
-
-
-
-class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickListener {
+class FragmentEditProfile : BaseFragment<EditProfilelViewModel>(), View.OnClickListener {
 
     private lateinit var mActivity: MainActivity
     private lateinit var binding: FragmentEditProfileBinding
     private lateinit var contentResolver: ContentResolver
-    private  var selectedImage: Uri? = null
+    private var selectedImage: Uri? = null
 
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
         binding = FragmentEditProfileBinding.inflate(inflater, container, false)
@@ -86,13 +79,14 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
         mActivity.enableViews(true)
 
         binding.etEditProfileEmail.enable(false)
-        binding.etEditProfileEmail.isFocusable=false
+        binding.etEditProfileEmail.isFocusable = false
 
         attachListner()
         setHasOptionsMenu(true);
         getProfile()
 
     }
+
     override fun onPrepareOptionsMenu(menu: Menu) {
         menu.findItem(R.id.logo).isVisible = false
         super.onPrepareOptionsMenu(menu)
@@ -113,17 +107,24 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
         when (requestCode) {
             mActivity.REQUEST_ID_MULTIPLE_PERMISSIONS -> if (ContextCompat.checkSelfPermission(
                     requireContext(),
-                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                    Manifest.permission.CAMERA
+                ) != PackageManager.PERMISSION_GRANTED
             ) {
-                Toast.makeText(requireContext(),
-                    "FlagUp Requires Access to Camara.", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    requireContext(),
+                    "FlagUp Requires Access to Camara.", Toast.LENGTH_SHORT
+                )
                     .show()
-            } else if (ContextCompat.checkSelfPermission(requireContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+            } else if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
             ) {
-                Toast.makeText(requireContext(),
+                Toast.makeText(
+                    requireContext(),
                     "FlagUp Requires Access to Your Storage.",
-                    Toast.LENGTH_SHORT).show()
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
                 selectImage()
             }
@@ -134,16 +135,18 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
 
     //code for select image from gallary or camera
     private fun selectImage() {
-        val options = arrayOf<CharSequence>(getString(R.string.take_photo),
+        val options = arrayOf<CharSequence>(
+            getString(R.string.take_photo),
             getString(R.string.choose_from_gallary),
-            getString(R.string.cancel))
+            getString(R.string.cancel)
+        )
         val builder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
         builder.setTitle(getString(R.string.add_photo))
         builder.setItems(options, DialogInterface.OnClickListener { dialog, item ->
 
             if (options[item] == getString(R.string.take_photo)) {
                 // Open the camera and get the photo
-              openCamare()
+                openCamare()
             } else if (options[item] == getString(R.string.choose_from_gallary)) {
                 // choose from  external storage
                 openImageChooser()
@@ -154,10 +157,11 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
         builder.show()
     }
 
-    private fun openCamare(){
+    private fun openCamare() {
         val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(takePicture, 0)
     }
+
     private fun openImageChooser() {
         Intent(Intent.ACTION_PICK).also {
             it.type = "image/*"
@@ -186,58 +190,66 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
                     binding.ivProfile.setImageURI(selectedImage)
                     uploadImage()
 
-                    }
                 }
             }
         }
+    }
 
     fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
         val bytes = ByteArrayOutputStream()
         inImage.compress(CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(),
+        val path = MediaStore.Images.Media.insertImage(
+            inContext.getContentResolver(),
             inImage,
             "Title",
-            null)
-        selectedImage=Uri.parse(path)
+            null
+        )
+        selectedImage = Uri.parse(path)
         return selectedImage
 
     }
 
 
     private fun uploadImage() {
-    contentResolver=requireContext().contentResolver
-    val parcelFileDescriptor =
-        contentResolver.openFileDescriptor(selectedImage!!, "r", null) ?: return
+        contentResolver = requireContext().contentResolver
+        val parcelFileDescriptor =
+            contentResolver.openFileDescriptor(selectedImage!!, "r", null) ?: return
 
 
-    val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-    val file = File(getCacheDir(), contentResolver.getFileName(selectedImage!!))
-    val outputStream = FileOutputStream(file)
-    inputStream.copyTo(outputStream)
+        val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
+        val file = File(getCacheDir(), contentResolver.getFileName(selectedImage!!))
+        val outputStream = FileOutputStream(file)
+        inputStream.copyTo(outputStream)
 
-    val body = UploadRequestBody(file, "image" )
-        viewModel.updateProfilePhoto(RequestBody.create("text/plain".toMediaTypeOrNull(),SavedPrefrence.getUserId(AppClass.appContext).toString()),MultipartBody.Part.createFormData("photo",
-            file.getName(),
-            body))
-    /*viewModel.updateProfilePhoto(
-        MultipartBody.Part.createFormData("photo", file.name, body))*/
+        val body = UploadRequestBody(file, "image")
+        viewModel.updateProfilePhoto(
+            RequestBody.create(
+                "text/plain".toMediaTypeOrNull(),
+                SavedPrefrence.getUserId(AppClass.appContext).toString()
+            ), MultipartBody.Part.createFormData(
+                "photo",
+                file.getName(),
+                body
+            )
+        )
+        /*viewModel.updateProfilePhoto(
+            MultipartBody.Part.createFormData("photo", file.name, body))*/
 
         setupObserversUploadPhoto()
-    Log.e("image", MultipartBody.Part.createFormData("photo", file.name, body).toString())
+        Log.e("image", MultipartBody.Part.createFormData("photo", file.name, body).toString())
 
 
-}
-
-
+    }
 
 
     private fun showAlertDialogForDeleteAccount() {
-        val alertDialog: androidx.appcompat.app.AlertDialog.Builder = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+        val alertDialog: androidx.appcompat.app.AlertDialog.Builder =
+            androidx.appcompat.app.AlertDialog.Builder(requireContext())
         alertDialog.setTitle(R.string.delete_account_title)
         alertDialog.setMessage(R.string.delete_account_message)
-        alertDialog.setPositiveButton(R.string.yes) {_, _ ->
+        alertDialog.setPositiveButton(R.string.yes) { _, _ ->
             deleteAccount()
-                }
+        }
 
         alertDialog.setNegativeButton(R.string.no) { _, _ -> }
         val alert: androidx.appcompat.app.AlertDialog = alertDialog.create()
@@ -246,17 +258,18 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
 
     }
 
-    private  fun deleteAccount(){
-    viewModel.deleteAccount(SavedPrefrence.getUserId(AppClass.appContext).toString())
+    private fun deleteAccount() {
+        viewModel.deleteAccount(SavedPrefrence.getUserId(AppClass.appContext).toString())
 
         setupObserversDeleteAccount()
     }
 
-    private fun getProfile(){
+    private fun getProfile() {
         viewModel.getProfile(SavedPrefrence.getUserId(requireContext()).toString())
 
         setupObserversGetProfile()
     }
+
     //Upload Photo
     private fun setupObserversUploadPhoto() {
 
@@ -272,7 +285,7 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
                         lifecycleScope.launch {
 
                             //Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
-                            Log.e("sucess",it.value.message)
+                            Log.e("sucess", it.value.message)
 
 
                         }
@@ -283,21 +296,24 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
                 is Resource.Failure -> {
                     //binding.progressBar.progressbar.visible(false)
 
-                    if(it!=null){
-                        Log.e("error",it.value.message)
+                    if (it != null) {
+                        Log.e("error", it.value.message)
 
                     }
 
                     when {
                         it.isNetworkError -> {
                             if (!isOnline(AppClass.appContext)) {
-                                Snackbar.make(binding.layout,
+                                Snackbar.make(
+                                    binding.layout,
                                     resources.getString(R.string.check_internet),
-                                    Snackbar.LENGTH_LONG).show()
+                                    Snackbar.LENGTH_LONG
+                                ).show()
                             }
                         }
                         else -> {
-                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
+                                .show()
 
                         }
 
@@ -312,7 +328,7 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
 
     }
 
-//Get Profile
+    //Get Profile
     private fun setupObserversGetProfile() {
 
         viewModel.getProfileResponse.observe(this, Observer {
@@ -326,8 +342,8 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
                         binding.progressbar.visible(false)
                         lifecycleScope.launch {
 
-                           /* Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
-                            Log.e("sucess",it.value.message)*/
+                            /* Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
+                             Log.e("sucess",it.value.message)*/
 
                             binding.etEditProfileEmail.setText(it.value.data.email)
                             //binding.etEditProfilePassword.setText(it.value.data.otp)
@@ -336,7 +352,10 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
 
                             Glide.with(AppClass.appContext)
                                 .load(it.value.data.photo)
-                                .apply(RequestOptions.placeholderOf(R.drawable.placeholder).error(R.drawable.placeholder))
+                                .apply(
+                                    RequestOptions.placeholderOf(R.drawable.placeholder)
+                                        .error(R.drawable.placeholder)
+                                )
                                 .into(binding.ivProfile);
 
                         }
@@ -346,18 +365,21 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
                 }
                 is Resource.Failure -> {
                     binding.progressbar.visible(false)
-                    Log.e("error",it.value.message)
+                    Log.e("error", it.value.message)
 
                     when {
                         it.isNetworkError -> {
                             if (!isOnline(AppClass.appContext)) {
-                                Snackbar.make(binding.layout,
+                                Snackbar.make(
+                                    binding.layout,
                                     resources.getString(R.string.check_internet),
-                                    Snackbar.LENGTH_LONG).show()
+                                    Snackbar.LENGTH_LONG
+                                ).show()
                             }
                         }
                         else -> {
-                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
+                                .show()
 
                         }
 
@@ -387,17 +409,11 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
                     if (it.value.status) {
                         binding.progressbar.visible(false)
                         lifecycleScope.launch {
-
-                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
+                                .show()
                             SavedPrefrence.clearPrefrence(AppClass.appContext)
                             val i = Intent(requireContext(), LoginActivity::class.java)
                             startActivity(i)
-
-
-
-
-                            ;
-
                         }
 
                     }
@@ -405,18 +421,21 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
                 }
                 is Resource.Failure -> {
                     binding.progressbar.visible(false)
-                    Log.e("error",it.value.message)
+                    Log.e("error", it.value.message)
 
                     when {
                         it.isNetworkError -> {
                             if (!isOnline(AppClass.appContext)) {
-                                Snackbar.make(binding.layout,
+                                Snackbar.make(
+                                    binding.layout,
                                     resources.getString(R.string.check_internet),
-                                    Snackbar.LENGTH_LONG).show()
+                                    Snackbar.LENGTH_LONG
+                                ).show()
                             }
                         }
                         else -> {
-                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
+                                .show()
 
                         }
 
@@ -448,17 +467,16 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
                             Toast.makeText(requireContext(), it.value.message, Toast.LENGTH_SHORT)
                                 .show();
                             //Snackbar.make(binding.tvUpdateProfile, it.value.message, Snackbar.LENGTH_LONG).show()
-                             Log.e("sucess",it.value.message)
+                            Log.e("sucess", it.value.message)
 
-                            SavedPrefrence.setEmail(AppClass.appContext,it.value.data.email)
-                            SavedPrefrence.setPhone(AppClass.appContext,it.value.data.phone)
-                            SavedPrefrence.setUserName(AppClass.appContext,it.value.data.name)
+                            SavedPrefrence.setEmail(AppClass.appContext, it.value.data.email)
+                            SavedPrefrence.setPhone(AppClass.appContext, it.value.data.phone)
+                            SavedPrefrence.setUserName(AppClass.appContext, it.value.data.name)
 
                             getProfile()
                             //SavedPrefrence.setEmail(AppClass.appContext,it.value.data.email)
 
-                        mActivity.onBackPressed()
-
+                            mActivity.onBackPressed()
 
 
                         }
@@ -468,18 +486,24 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
                 }
                 is Resource.Failure -> {
                     binding.progressbar.visible(false)
-                    Log.e("error",it.value.message)
+                    Log.e("error", it.value.message)
 
                     when {
                         it.isNetworkError -> {
                             if (!isOnline(AppClass.appContext)) {
-                                Snackbar.make(binding.tvUpdateProfile,
+                                Snackbar.make(
+                                    binding.tvUpdateProfile,
                                     resources.getString(R.string.check_internet),
-                                    Snackbar.LENGTH_LONG).show()
+                                    Snackbar.LENGTH_LONG
+                                ).show()
                             }
                         }
                         else -> {
-                            Snackbar.make(binding.tvUpdateProfile, it.value.message, Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(
+                                binding.tvUpdateProfile,
+                                it.value.message,
+                                Snackbar.LENGTH_LONG
+                            ).show()
 
                         }
 
@@ -495,55 +519,81 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
     }
 
 
-    private fun validate(){
-    if (binding.etEditProfileName.text.toString().isEmpty()) {
-        Toast.makeText(requireContext(), resources.getString(R.string.v_name), Toast.LENGTH_SHORT)
-            .show();
-
-    } else if (binding.etEditProfileName.text.toString().length < 4) {
-        Toast.makeText(requireContext(), resources.getString(R.string.v_valid_name), Toast.LENGTH_SHORT)
-            .show();
-
-    } else if (binding.etEditProfilePhoneNumber.text.toString().isNotEmpty()&& binding.etEditProfilePhoneNumber.text.toString().length < 10 || binding.etEditProfilePhoneNumber.text.toString().length > 10) {
-        Toast.makeText(requireContext(),
-            resources.getString(R.string.v_valid_phone),
-            Toast.LENGTH_SHORT).show();
-
-    } else if (binding.etEditProfileEmail.text.toString().isEmpty()) {
-        Toast.makeText(requireContext(), resources.getString(R.string.v_email), Toast.LENGTH_SHORT)
-            .show();
-    } else if (!binding.etEditProfileEmail.text.toString()
-            .isEmpty() && !Patterns.EMAIL_ADDRESS.matcher(binding.etEditProfileEmail.text.toString()).matches()
-    ) {
-        Toast.makeText(requireContext(),
-            resources.getString(R.string.v_valid_email),
-            Toast.LENGTH_SHORT).show();
-    } else if (binding.etEditProfilePassword.text.toString().isNotEmpty() &&
-        binding.etEditProfilePassword.text.toString().length < 8 ) {
-        Toast.makeText(requireContext(),
-            resources.getString(R.string.v_valid_password),
-            Toast.LENGTH_SHORT).show();
-
-    } else {
-
-        if(binding.etEditProfilePassword.text.toString().isNotEmpty()){
-            viewModel.editProfileWithPassword(SavedPrefrence.getUserId(AppClass.appContext).toString(),
-                binding.etEditProfileEmail.text.toString(),
-                binding.etEditProfilePassword.text.toString(),
-                binding.etEditProfilePhoneNumber.text.toString(),
-                binding.etEditProfileName.text.toString()
-
+    private fun validate() {
+        if (binding.etEditProfileName.text.toString().isEmpty()) {
+            Toast.makeText(
+                requireContext(),
+                resources.getString(R.string.v_name),
+                Toast.LENGTH_SHORT
             )
-        }else{
-            viewModel.editProfileWithoutPassword(SavedPrefrence.getUserId(AppClass.appContext).toString(),
-                binding.etEditProfileEmail.text.toString(),
-                binding.etEditProfilePhoneNumber.text.toString(),
-                binding.etEditProfileName.text.toString())
+                .show();
+
+        } else if (binding.etEditProfileName.text.toString().length < 4) {
+            Toast.makeText(
+                requireContext(),
+                resources.getString(R.string.v_valid_name),
+                Toast.LENGTH_SHORT
+            )
+                .show();
+
+        } else if (binding.etEditProfilePhoneNumber.text.toString()
+                .isNotEmpty() && binding.etEditProfilePhoneNumber.text.toString().length < 10 || binding.etEditProfilePhoneNumber.text.toString().length > 10
+        ) {
+            Toast.makeText(
+                requireContext(),
+                resources.getString(R.string.v_valid_phone),
+                Toast.LENGTH_SHORT
+            ).show();
+
+        } else if (binding.etEditProfileEmail.text.toString().isEmpty()) {
+            Toast.makeText(
+                requireContext(),
+                resources.getString(R.string.v_email),
+                Toast.LENGTH_SHORT
+            )
+                .show();
+        } else if (!binding.etEditProfileEmail.text.toString()
+                .isEmpty() && !Patterns.EMAIL_ADDRESS.matcher(binding.etEditProfileEmail.text.toString())
+                .matches()
+        ) {
+            Toast.makeText(
+                requireContext(),
+                resources.getString(R.string.v_valid_email),
+                Toast.LENGTH_SHORT
+            ).show();
+        } else if (binding.etEditProfilePassword.text.toString().isNotEmpty() &&
+            binding.etEditProfilePassword.text.toString().length < 8
+        ) {
+            Toast.makeText(
+                requireContext(),
+                resources.getString(R.string.v_valid_password),
+                Toast.LENGTH_SHORT
+            ).show();
+
+        } else {
+
+            if (binding.etEditProfilePassword.text.toString().isNotEmpty()) {
+                viewModel.editProfileWithPassword(
+                    SavedPrefrence.getUserId(AppClass.appContext).toString(),
+                    binding.etEditProfileEmail.text.toString(),
+                    binding.etEditProfilePassword.text.toString(),
+                    binding.etEditProfilePhoneNumber.text.toString(),
+                    binding.etEditProfileName.text.toString()
+
+                )
+            } else {
+                viewModel.editProfileWithoutPassword(
+                    SavedPrefrence.getUserId(AppClass.appContext).toString(),
+                    binding.etEditProfileEmail.text.toString(),
+                    binding.etEditProfilePhoneNumber.text.toString(),
+                    binding.etEditProfileName.text.toString()
+                )
+            }
+            setupObserversUpdateProfile()
         }
-        setupObserversUpdateProfile()
+
     }
 
-}
     override fun onClick(p0: View?) {
         when (p0) {
             binding.cardView -> if (mActivity.checkAndRequestPermissions(requireActivity())) {
@@ -554,8 +604,8 @@ class FragmentEditProfile:BaseFragment<EditProfilelViewModel> (),View.OnClickLis
                 selectImage()
             }
 
-            binding.tvUpdateProfile->validate()
-            binding.tvDeleteProfile->showAlertDialogForDeleteAccount()
+            binding.tvUpdateProfile -> validate()
+            binding.tvDeleteProfile -> showAlertDialogForDeleteAccount()
 
         }
     }

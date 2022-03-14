@@ -75,7 +75,6 @@ class FeedListAdapter constructor(private var categoryList: ArrayList<BlogData>)
                 Html.fromHtml(data.description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
             )
 
-
             Glide.with(AppClass.appContext)
                 .load(data.image)
                 .apply(

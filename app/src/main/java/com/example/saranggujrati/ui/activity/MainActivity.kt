@@ -20,7 +20,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.saranggujrati.R
 import com.example.saranggujrati.adapter.ViewPagerAdapter
 import com.example.saranggujrati.ui.SavedPrefrence
-import com.example.saranggujrati.ui.fragment.HomeFragment
 import com.example.saranggujrati.ui.startNewActivity
 import com.example.saranggujrati.ui.viewModel.LoginViewModel
 import com.example.saranggujrati.ui.viewModel.MainViewModel
@@ -56,9 +55,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.saranggujrati.model.BlogData
-import com.example.saranggujrati.ui.fragment.AdvertiseWithUsFragment
-import com.example.saranggujrati.ui.fragment.ContactUsFragment
-import com.example.saranggujrati.ui.fragment.FragmentAllBlog
+import com.example.saranggujrati.ui.fragment.*
 import com.example.saranggujrati.ui.isOnline
 import com.example.saranggujrati.ui.visible
 import com.example.saranggujrati.webservice.Resource
@@ -270,6 +267,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
             }
 
             R.id.nav_policy_terms -> {
+                pushFragment(PrivacyPolicyFragment())
             }
 
             R.id.nav_Login -> {

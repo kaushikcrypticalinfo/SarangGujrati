@@ -95,6 +95,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
             override fun onClick(view: View, position: Int) {
                 val i = Intent(requireContext(), YouTubeActivity::class.java)
                 i.putExtra("url", onDemandList[position].url)
+                i.putExtra("videoName", onDemandList[position].title)
                 startActivity(i)
             }
         }
@@ -267,6 +268,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         setupObserversFeatureList()
 
         viewModel.gettFeatureList()
+
         viewModel.getOnDemandList()
     }
 
@@ -282,14 +284,15 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                     binding.swipeRefresh.isRefreshing = false
                     if (it.value.status) {
                         binding.rvFeaturedStories.progressbar.visible(false)
-                        getFeatureList(it.value)
                     } else {
                         binding.rvFeaturedStories.progressbar.visible(false)
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
                     }
+                    getFeatureList(it.value)
                 }
                 is Resource.Failure -> {
                     binding.rvFeaturedStories.progressbar.visible(false)
+                    setFeatureStoryLblVisisbility()
                     when {
                         it.isNetworkError -> {
                             if (!isOnline(AppClass.appContext)) {
@@ -303,7 +306,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                         else -> {
                             Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
                                 .show()
-
                         }
 
 
@@ -327,7 +329,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                     if (it.value.status) {
                         binding.rvOnDemand.progressbar.visible(false)
                         it.value.data.data?.let { it1 -> onDemandList.addAll(it1) }
-
+                        onDemandLblVisibility()
                         onDemandAdapter.notifyDataSetChanged()
                     } else {
                         binding.rvOnDemand.progressbar.visible(false)
@@ -336,6 +338,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                 }
 
                 is Resource.Failure -> {
+                    onDemandLblVisibility()
                     binding.rvOnDemand.progressbar.visible(false)
                     when {
                         it.isNetworkError -> {
@@ -363,6 +366,10 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         })
     }
 
+    private fun onDemandLblVisibility() {
+        binding.txtLblOnDemand.visible(onDemandList.isNotEmpty())
+    }
+
     private fun getFeatureList(response: BlogFeatureList) {
         if (response.data.isEmpty()) {
             binding.rvFeaturedStories.tvNoData.visibility = View.VISIBLE
@@ -371,6 +378,11 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
             featureList.addAll(response.data)
             featureAdapter.notifyDataSetChanged()
         }
+        setFeatureStoryLblVisisbility()
+    }
+
+    private fun setFeatureStoryLblVisisbility() {
+        binding.tvFeaturedStories.visible(featureList.isNotEmpty())
     }
 
     private fun getCategory() {

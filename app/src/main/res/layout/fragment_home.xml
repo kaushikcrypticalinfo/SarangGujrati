@@ -176,6 +176,20 @@
 
                 </LinearLayout>
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtLblOnDemand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="?appbackgroundhome"
+                    android:fontFamily="@font/montserrat_extrabold"
+                    android:paddingHorizontal="5dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/app_name"
+                    android:textColor="?textColor"
+                    android:textSize="14sp" />
+
                 <include
                     android:id="@+id/rv_on_demand"
                     layout="@layout/layout_recylerview"
@@ -187,40 +201,19 @@
                     android:layout_height="wrap_content"
                     android:background="?appbackgroundhome"
                     android:orientation="vertical"
-                    android:padding="10dp">
+                    android:paddingHorizontal="10dp"
+                    android:paddingTop="5dp">
 
-                    <LinearLayout
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tvFeatured_stories"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/tvFeatured_stories"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/montserrat_extrabold"
-                            android:text="@string/Featured_stories"
-                            android:textColor="?textColor"
-                            android:textSize="14sp" />
-
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/tvMyNewsFeed"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:background="@drawable/shape_border_black"
-                            android:fontFamily="@font/montserrat_regular"
-                            android:gravity="center"
-                            android:padding="5dp"
-                            android:text="@string/my_news_feed"
-                            android:textColor="?textColor"
-                            android:textSize="10sp" />
-
-                    </LinearLayout>
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/montserrat_extrabold"
+                        android:text="@string/Featured_stories"
+                        android:textColor="?textColor"
+                        android:textSize="14sp" />
 
                     <include
                         android:id="@+id/rv_featured_stories"
@@ -277,8 +270,7 @@
                         android:id="@+id/rv_top_category"
                         layout="@layout/layout_recylerview"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-     />
+                        android:layout_height="wrap_content" />
 
                 </LinearLayout>
 

@@ -6,6 +6,6 @@ import org.simpleframework.xml.Root
 
 @Root(name = THUMBNAIL, strict = false)
 data class Thumbnail(
-    @field:Attribute(name = THUMBNAIL_URL)
+    @field:Attribute(name = URL)
     var thumbnailUrl: String? = null
 )

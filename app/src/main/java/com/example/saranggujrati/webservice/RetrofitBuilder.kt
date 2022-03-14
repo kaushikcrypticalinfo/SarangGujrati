@@ -2,9 +2,12 @@ package com.example.retrofitcoroutineexample.data.api
 
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.BuildConfig
+import com.example.saranggujrati.model.rssFeed.RssFeed
 import com.example.saranggujrati.ui.SavedPrefrence
 import com.example.saranggujrati.webservice.ApiService
 import com.example.saranggujrati.webservice.factory.QualifiedTypeConverterFactory
+import com.github.muhrifqii.parserss.RSSFeedObject
+import com.github.muhrifqii.parserss.retrofit.ParseRSSConverterFactory
 import okhttp3.Authenticator
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

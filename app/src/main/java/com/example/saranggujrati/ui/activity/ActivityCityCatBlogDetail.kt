@@ -16,8 +16,10 @@ import com.example.saranggujrati.R
 import com.example.saranggujrati.adapter.*
 import com.example.saranggujrati.databinding.ActivityCitCatBlogBinding
 import com.example.saranggujrati.model.*
+import com.example.saranggujrati.model.rssFeed.RssItems
 import com.example.saranggujrati.ui.SavedPrefrence
 import com.example.saranggujrati.ui.isOnline
+import com.example.saranggujrati.ui.parseDate
 import com.example.saranggujrati.ui.viewModel.CityCatBlogDetailViewModel
 import com.example.saranggujrati.ui.visible
 import com.example.saranggujrati.utils.RSS_FEED_DATE_FORMAT
@@ -62,7 +64,7 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
             activity.startActivityForResult(intent, REQ_CODE_CITY_CAT_BLOG)
         }
 
-        fun startActivity(activity: Activity, parentId: String,id: String, name: String) {
+        fun startActivity(activity: Activity, parentId: String, id: String, name: String) {
             val intent = Intent(activity, ActivityCityCatBlogDetail::class.java)
             intent.putExtra(EXTRA_ID, id)
             intent.putExtra(EXTRA_PARENT_ID, parentId)
@@ -91,7 +93,7 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
         binding.icBack.setOnClickListener { finish() }
 
         binding.imgRefresh.setOnClickListener {
-            viewModel.getRssfeedList(parentId,id)
+            viewModel.getRssfeedList(parentId, id)
         }
 
         liveFeedlist = ArrayList()
@@ -142,7 +144,7 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
         binding.tvTitle.text = name
 
         if (id.isNotEmpty()) {
-            getAllBlogList(parentId,id)
+            getAllBlogList(parentId, id)
         }
     }
 
@@ -232,17 +234,22 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
                         blogData.title = rssItem.title
                         blogData.description = rssItem.description
                         blogData.category_name = liveFeedlist[callCount].rssName
-                        blogData.image = rssItem.thumbnail?.thumbnailUrl.toString()
+                        blogData.image =
+                            getThumbnailData(rssItem).ifEmpty {
+                                getEnclosureData(rssItem).ifEmpty {
+                                    getMediaContentData(rssItem).ifEmpty {
+                                        getEncodeData(rssItem)
+                                    }
+                                }
+                            }
                         blogData.time = rssItem.pubDate
-                        blogData.url = rssItem.link
+                        blogData.url = rssItem.link?.get(0)?.link ?: ""
                         blogList.add(blogData)
                     }
 
-//                    Sorting all list data recent new first show
+//                  Sorting all list data recent new first show
                     blogList.sortByDescending {
-                        SimpleDateFormat(
-                            RSS_FEED_DATE_FORMAT, Locale.getDefault()
-                        ).parse(it.time)
+                        parseDate(it.time)
                     }
 
                     callCount += 1
@@ -280,6 +287,22 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
             }
         })
     }
+
+    private fun getThumbnailData(rssItem: RssItems) =
+        rssItem.thumbnail?.let { it.thumbnailUrl ?: kotlin.run { "" } }
+            ?: kotlin.run { "" }
+
+    private fun getEnclosureData(rssItem: RssItems) =
+        rssItem.enclosure?.let { it.thumbnailUrl ?: kotlin.run { "" } }
+            ?: kotlin.run { "" }
+
+    private fun getMediaContentData(rssItem: RssItems) =
+        rssItem.mediaContent?.url
+            ?: kotlin.run { "" }
+
+    private fun getEncodeData(rssItem: RssItems) =
+        rssItem.encoded?.img
+            ?: kotlin.run { "" }
 
     private fun callLiveFeesListApi(data: List<CategoryDataModel>, callCount: Int) {
         viewModel.getLiveData(data[callCount].rssUrl)

@@ -64,6 +64,7 @@
                 android:fontFamily="@font/montserrat_regular"
                 android:gravity="bottom"
                 android:padding="10dp"
+                android:visibility="gone"
                 android:singleLine="true"
                 android:text=""
                 android:textColor="@color/white"

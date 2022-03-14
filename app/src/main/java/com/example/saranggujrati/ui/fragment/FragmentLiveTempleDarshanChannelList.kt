@@ -110,6 +110,7 @@ class FragmentLiveTempleDarshanChannelList : BaseFragment<NewsChannelViewModel>(
                 if (view.id == R.id.llMain) {
                     val i = Intent(requireContext(), YouTubeActivity::class.java)
                     i.putExtra("url", pagingDemoAdapter.snapshot()[position]?.url)
+                    i.putExtra("videoName", pagingDemoAdapter.snapshot()[position]?.company_name)
                     startActivity(i)
                 }
             }

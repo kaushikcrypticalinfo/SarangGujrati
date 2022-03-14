@@ -6,8 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.model.*
 import com.example.saranggujrati.model.rssFeed.RssFeed
+
 import com.example.saranggujrati.repositories.AllBlogListRepository
 import com.example.saranggujrati.webservice.Resource
+import com.github.muhrifqii.parserss.RSSFeedObject
 import kotlinx.coroutines.launch
 
 class AllBlogListViewModel(private val repository: AllBlogListRepository) :

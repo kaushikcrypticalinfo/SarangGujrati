@@ -22,7 +22,7 @@
                 android:id="@+id/iv_news_image"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 android:src="@drawable/placeholder" />
 
 
@@ -62,7 +62,7 @@
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
-                    android:scaleType="centerCrop"
+                    android:scaleType="fitXY"
                     android:src="@drawable/ic_share_white"
                     android:text="Read More"
                     android:textColor="@color/white" />

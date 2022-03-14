@@ -4,6 +4,8 @@ import com.example.saranggujrati.model.*
 import com.example.saranggujrati.model.onDemand.OnDemandDataMain
 import com.example.saranggujrati.model.onDemand.OnDemandRes
 import com.example.saranggujrati.model.rssFeed.RssFeed
+
+import com.github.muhrifqii.parserss.RSSFeedObject
 import com.test.pausernew.api.annot.Json
 import com.test.pausernew.api.annot.Xml
 import okhttp3.MultipartBody
@@ -171,7 +173,6 @@ interface ApiService {
     @GET("full-screen-card-list")
     @Json
     suspend fun fullScreenCardList(): CardListRes
-
 
     @GET("{fullUrl}")
     @Xml

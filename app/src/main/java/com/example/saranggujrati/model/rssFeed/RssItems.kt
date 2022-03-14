@@ -2,9 +2,7 @@ package com.example.saranggujrati.model.rssFeed
 
 
 import com.example.saranggujrati.utils.*
-import com.kakyiretechnologies.bothOfUsRss.data.model.Enclosure
-import org.simpleframework.xml.Element
-import org.simpleframework.xml.Root
+import org.simpleframework.xml.*
 import java.io.Serializable
 
 
@@ -16,8 +14,8 @@ data class RssItems(
     @field:Element(name = DESCRIPTION, required = false)
     var description: String = "",
 
-    @field:Element(name = LINK)
-    var link: String = "",
+    @field:ElementList(entry = LINK, inline = true, required = false)
+    var link: List<AtomLink>? = null,
 
     @field:Element(name = PUB_DATE, required = false)
     var pubDate: String = "",
@@ -27,5 +25,11 @@ data class RssItems(
 
     @field:Element(name = THUMBNAIL, required = false)
     var thumbnail: Thumbnail? = null,
+
+    @field:Element(name = MEDIA_CONTENT, required = false)
+    var mediaContent: MediaContent? = null,
+
+    @field:Element(name = ENCODED, required = false)
+    var encoded: Encoded? = null,
 
     ) : Serializable

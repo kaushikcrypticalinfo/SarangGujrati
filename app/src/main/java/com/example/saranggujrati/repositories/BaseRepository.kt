@@ -24,6 +24,7 @@ import okhttp3.ResponseBody.Companion.toResponseBody
 import java.lang.IllegalStateException
 import org.json.JSONObject
 import retrofit2.Call
+import timber.log.Timber
 import java.lang.IllegalArgumentException
 
 
@@ -35,9 +36,14 @@ abstract class BaseRepository {
             try {
                 Resource.Success(apiCall.invoke())
             } catch (throwable: Throwable) {
+                Timber.e(throwable)
                 when (throwable) {
                     is HttpException -> {
-                        Resource.Failure(false, apiCall.invoke(), throwable.code())
+                        if (throwable.code() == 401) {
+                            Resource.Failure(true, null, 0)
+                        } else {
+                            Resource.Failure(false, apiCall.invoke(), throwable.code())
+                        }
                     }
                     is IllegalStateException -> {
                         Resource.Failure(false, apiCall.invoke(), 0)

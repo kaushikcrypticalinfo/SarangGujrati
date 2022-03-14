@@ -13,7 +13,12 @@ import android.util.Log
 import android.util.Patterns
 import android.view.View
 import com.example.saranggujrati.ui.activity.MainActivity
+import com.example.saranggujrati.utils.RSS_FEED_DATE_FORMAT
+import com.example.saranggujrati.utils.RSS_FEED_DATE_FORMAT_GMT
 import com.google.android.material.snackbar.Snackbar
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 lateinit var mainActivity: MainActivity
@@ -25,6 +30,25 @@ fun <A : Activity> Activity.startNewActivity(activity: Class<A>) {
         startActivity(it)
 
     }
+}
+@Throws(Exception::class)
+fun parseDate(strDate: String?): Date? {
+    if (strDate != null && !strDate.isEmpty()) {
+        val formats = arrayOf(
+            SimpleDateFormat(RSS_FEED_DATE_FORMAT),
+            SimpleDateFormat(RSS_FEED_DATE_FORMAT_GMT)
+        )
+        var parsedDate: Date? = null
+        for (i in formats.indices) {
+            return try {
+                parsedDate = formats[i].parse(strDate)
+                parsedDate
+            } catch (e: ParseException) {
+                continue
+            }
+        }
+    }
+    throw Exception("Unknown date format: '$strDate'")
 }
 
 

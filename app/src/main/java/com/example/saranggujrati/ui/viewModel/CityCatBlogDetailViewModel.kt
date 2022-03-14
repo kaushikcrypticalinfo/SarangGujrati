@@ -9,6 +9,7 @@ import com.example.saranggujrati.model.rssFeed.RssFeed
 
 import com.example.saranggujrati.repositories.CityCategoryBlogDetailRepository
 import com.example.saranggujrati.webservice.Resource
+import com.github.muhrifqii.parserss.RSSFeedObject
 import kotlinx.coroutines.launch
 
 class CityCatBlogDetailViewModel(private val repository: CityCategoryBlogDetailRepository) :

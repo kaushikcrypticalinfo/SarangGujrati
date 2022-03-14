@@ -22,6 +22,7 @@ import com.example.saranggujrati.ui.SavedPrefrence
 import com.example.saranggujrati.ui.activity.MainActivity
 import com.example.saranggujrati.ui.activity.WebViewActivity
 import com.example.saranggujrati.ui.isOnline
+import com.example.saranggujrati.ui.parseDate
 import com.example.saranggujrati.ui.viewModel.AllBlogListViewModel
 import com.example.saranggujrati.ui.visible
 import com.example.saranggujrati.utils.*
@@ -238,7 +239,7 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
                         blogData.category_name = liveFeedlist[callCount].rssName
                         blogData.image = rssItem.thumbnail?.thumbnailUrl.toString()
                         blogData.time = rssItem.pubDate
-                        blogData.url = rssItem.link
+                        blogData.url = rssItem.link?.get(0)?.link ?: ""
                         blogList.add(blogData)
                     }
 
@@ -267,6 +268,7 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
                 }
             }
         })
+
     }
 
     private fun callLiveFeesListApi(data: List<CategoryDataModel>, callCount: Int) {
@@ -303,23 +305,5 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
         TODO("Not yet implemented")
     }
 
-    @Throws(Exception::class)
-    fun parseDate(strDate: String?): Date? {
-        if (strDate != null && !strDate.isEmpty()) {
-            val formats = arrayOf(
-                SimpleDateFormat(RSS_FEED_DATE_FORMAT),
-                SimpleDateFormat(RSS_FEED_DATE_FORMAT_GMT)
-            )
-            var parsedDate: Date? = null
-            for (i in formats.indices) {
-                return try {
-                    parsedDate = formats[i].parse(strDate)
-                    parsedDate
-                } catch (e: ParseException) {
-                    continue
-                }
-            }
-        }
-        throw Exception("Unknown date format: '$strDate'")
-    }
+
 }
