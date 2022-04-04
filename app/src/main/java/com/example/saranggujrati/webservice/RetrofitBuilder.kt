@@ -54,10 +54,7 @@ object RetrofitBuilder {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(
-                QualifiedTypeConverterFactory(
-                    GsonConverterFactory.create(),
-                    SimpleXmlConverterFactory.create()
-                )
+                QualifiedTypeConverterFactory(GsonConverterFactory.create(),SimpleXmlConverterFactory.create())
             )
             .addConverterFactory(GsonConverterFactory.create())
             .client(getRetrofitClient())

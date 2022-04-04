@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.*
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.*
@@ -135,8 +136,8 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                     mActivity.pushFragment(FragmentFeatureBlog(b))
                 }
             }
-        }
 
+        }
         topCitiesAdapter.adapterListener = object : TopCitiesAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
                 if (view.id == R.id.tvCity) {
