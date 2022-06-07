@@ -157,10 +157,10 @@ interface ApiService {
     ): DeleteAccountResponse
 
 
-    @GET("rss-feed-json/{id}")
+    @GET("rss-feed-json")
     @Json
     suspend fun getRssFeedList(
-        @Path("id") id: String,
+
     ): FeedResponse
 
     @GET("rss-feed-json/{parentId}/{id}")

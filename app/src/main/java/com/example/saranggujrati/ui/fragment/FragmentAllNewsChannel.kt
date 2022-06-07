@@ -120,13 +120,13 @@ class FragmentAllNewsChannel : BaseFragment<NewsChannelViewModel>() {
     }
 
     private fun setRVLayoutManager() {
-        mLayoutManager = LinearLayoutManager((AppClass.appContext))
-        binding.rvAllNewsChannel.recyclerview.layoutManager = mLayoutManager
+//        mLayoutManager = LinearLayoutManager((AppClass.appContext))
+//        binding.rvAllNewsChannel.recyclerview.layoutManager = mLayoutManager
         binding.rvAllNewsChannel.recyclerview.setHasFixedSize(true)
         binding.rvAllNewsChannel.recyclerview.layoutManager =
-            GridLayoutManager(AppClass.appContext, 2)
+            GridLayoutManager(AppClass.appContext, 2,RecyclerView.VERTICAL,false)
 
-        (mLayoutManager as LinearLayoutManager).orientation = RecyclerView.VERTICAL
+//        (mLayoutManager as LinearLayoutManager).orientation = RecyclerView.VERTICAL
     }
 
     private fun getNewsChannel() {
