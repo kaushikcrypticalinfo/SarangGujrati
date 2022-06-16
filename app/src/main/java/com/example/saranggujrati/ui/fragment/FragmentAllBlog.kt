@@ -165,7 +165,7 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
                         if (it.value.status) {
                             binding.progressbar.visible(false)
                             val data = it.value.data
-                            blogList.addAll(data)
+                            blogList.addAll(data.shuffled())
 
                             if (blogList.isNotEmpty())
                                 getAllBlogList(blogList)

@@ -38,8 +38,7 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
     private var parentId: String = ""
     private var name: String = ""
 
-    private lateinit var liveFeedlist: ArrayList<CategoryDataModel>
-    private lateinit var dummyFeedlist: ArrayList<CategoryDataModel>
+
     private lateinit var mActivity: MainActivity
 
     lateinit var feedListAdapter: FeedListAdapter
@@ -91,9 +90,6 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
         binding.imgRefresh.setOnClickListener {
             viewModel.getRssFeedList(parentId, id)
         }
-
-        liveFeedlist = ArrayList()
-        dummyFeedlist = ArrayList()
 
         feedListAdapter = FeedListAdapter(blogList)
 
@@ -172,7 +168,8 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
                         if (it.value.status) {
                             binding.progressbar.visible(false)
                             val data = it.value.data
-                            blogList.addAll(data)
+                            blogList.addAll(data.shuffled())
+
                             var tempIndex = 2
                             SavedPrefrence.getAdsCard(this)?.data?.forEachIndexed { index, cardData ->
                                 val blogData = RssFeedModelData()

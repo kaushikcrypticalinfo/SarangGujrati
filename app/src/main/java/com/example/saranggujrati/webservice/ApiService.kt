@@ -160,7 +160,6 @@ interface ApiService {
     @GET("rss-feed-json")
     @Json
     suspend fun getRssFeedList(
-
     ): FeedResponse
 
     @GET("rss-feed-json/{parentId}/{id}")
