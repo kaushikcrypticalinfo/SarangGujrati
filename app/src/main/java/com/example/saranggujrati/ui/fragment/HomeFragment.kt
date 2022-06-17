@@ -45,9 +45,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     lateinit var categoryAdapter: CategoryListAdapter
     private var categoryList = ArrayList<CityCatageoryChild>()
 
-    lateinit var mLayoutManager: RecyclerView.LayoutManager
-    lateinit var mLayoutManagerHorizontal: RecyclerView.LayoutManager
-
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -61,11 +58,13 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         mActivity = (activity as MainActivity)
         mActivity.toolbar.title = getString(R.string.app_name)
         mActivity.enableViews(false)
+
+        setRVLayoutManager()
+
         setAdapter()
 
         attachListeners()
 
-        setRVLayoutManager()
 
         callApi()
 
@@ -83,6 +82,16 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
 
     private fun setAdapter() {
         topCitiesAdapter = TopCitiesAdapter(topCitiesList)
+        topCitiesAdapter.adapterListener = object : TopCitiesAdapter.AdapterListener {
+            override fun onClick(view: View, position: Int) {
+                if (view.id == R.id.tvCity) {
+                    val data = topCitiesList[position]
+                    ActivityCityCatBlogDetail.startActivity(
+                        activity!!, data.parent_id, data.id.toString(), data.name
+                    )
+                }
+            }
+        }
         binding.rvTopCities.recyclerview.adapter = topCitiesAdapter
 
         featureAdapter = FeaturedListAdapter(featureList)
@@ -114,8 +123,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         binding.rvOnDemand.recyclerview.adapter = onDemandAdapter
 
         categoryAdapter = CategoryListAdapter(categoryList)
-        binding.rvTopCategory.recyclerview.adapter = categoryAdapter
-
         categoryAdapter.adapterListener = object : CategoryListAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
                 if (view.id == R.id.llMain) {
@@ -126,6 +133,9 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                 }
             }
         }
+        binding.rvTopCategory.recyclerview.adapter = categoryAdapter
+
+
 
         featureAdapter.adapterListener = object : FeaturedListAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
@@ -137,43 +147,25 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
             }
         }
 
-        topCitiesAdapter.adapterListener = object : TopCitiesAdapter.AdapterListener {
-            override fun onClick(view: View, position: Int) {
-                if (view.id == R.id.tvCity) {
-                    val data = topCitiesList[position]
-                    ActivityCityCatBlogDetail.startActivity(
-                        activity!!, data.parent_id, data.id.toString(), data.name
-                    )
-                }
-            }
-        }
+
     }
 
     private fun setRVLayoutManager() {
-        mLayoutManager = LinearLayoutManager(AppClass.appContext)
-        mLayoutManagerHorizontal = LinearLayoutManager(AppClass.appContext)
-
-        binding.rvTopCities.recyclerview.layoutManager = mLayoutManager
         binding.rvTopCities.recyclerview.setHasFixedSize(true)
         binding.rvTopCities.recyclerview.layoutManager = GridLayoutManager(AppClass.appContext, 3)
 
-        binding.rvFeaturedStories.recyclerview.layoutManager = mLayoutManagerHorizontal
         binding.rvFeaturedStories.recyclerview.setHasFixedSize(true)
         binding.rvFeaturedStories.recyclerview.layoutManager =
             LinearLayoutManager(AppClass.appContext, LinearLayoutManager.HORIZONTAL, false)
 
 //        Live temple
-        binding.rvOnDemand.recyclerview.layoutManager = mLayoutManagerHorizontal
         binding.rvOnDemand.recyclerview.setHasFixedSize(true)
         binding.rvOnDemand.recyclerview.layoutManager =
             LinearLayoutManager(AppClass.appContext, LinearLayoutManager.HORIZONTAL, false)
 
-        binding.rvTopCategory.recyclerview.layoutManager = mLayoutManager
         binding.rvTopCategory.recyclerview.setHasFixedSize(true)
         binding.rvTopCategory.recyclerview.layoutManager = GridLayoutManager(AppClass.appContext, 3)
 
-        (mLayoutManager as LinearLayoutManager).orientation = RecyclerView.VERTICAL
-        (mLayoutManagerHorizontal as LinearLayoutManager).orientation = RecyclerView.HORIZONTAL
     }
 
     private fun attachListeners() {
@@ -197,8 +189,8 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     }
 
     private fun getCity() {
-        viewModel.gettTopCitiesCategories()
         setupObserversTopCities()
+        viewModel.gettTopCitiesCategories()
     }
     //Top Cities
 

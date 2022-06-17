@@ -33,10 +33,6 @@ class OnDemandListAdapter(private var featureList: ArrayList<OnDemandData>) :
         if (holder is FeatureListViewHolder) {
             val response: OnDemandData = featureList[position]
             holder.bind(response)
-
-            binding.llMain.setOnClickListener {
-                adapterListener?.onClick(binding.llMain, position)
-            }
         }
     }
 
@@ -54,6 +50,10 @@ class OnDemandListAdapter(private var featureList: ArrayList<OnDemandData>) :
                     RequestOptions.placeholderOf(R.drawable.placeholder)
                         .error(R.drawable.placeholder)
                 ).into(binding.ivImage)
+
+            binding.llMain.setOnClickListener {
+                adapterListener?.onClick(binding.llMain, absoluteAdapterPosition)
+            }
         }
     }
 

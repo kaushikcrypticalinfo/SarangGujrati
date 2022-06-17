@@ -73,6 +73,7 @@ class WebViewActivity : AppCompatActivity() {
 
         // this will enable the javascript settings
         binding.webview.settings.javaScriptEnabled = true
+        binding.webview.settings.domStorageEnabled  = true
 
         // if you want to enable zoom feature
         binding.webview.settings.setSupportZoom(true)
