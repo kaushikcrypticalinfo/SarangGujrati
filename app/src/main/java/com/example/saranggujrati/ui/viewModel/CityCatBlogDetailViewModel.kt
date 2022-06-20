@@ -9,7 +9,6 @@ import com.example.saranggujrati.model.rssFeed.RssFeed
 
 import com.example.saranggujrati.repositories.CityCategoryBlogDetailRepository
 import com.example.saranggujrati.webservice.Resource
-import com.github.muhrifqii.parserss.RSSFeedObject
 import kotlinx.coroutines.launch
 
 class CityCatBlogDetailViewModel(private val repository: CityCategoryBlogDetailRepository) :
@@ -37,10 +36,10 @@ class CityCatBlogDetailViewModel(private val repository: CityCategoryBlogDetailR
             _cityCatBlogDetailResponse.value = repository.getCityCatBlogDetail(id)
         }
 
-    fun getRssfeedList(parentId: String, id: String) =
+    fun getRssFeedList(parentId: String, id: String) =
         viewModelScope.launch {
             _feedList.value = Resource.Loading
-            _feedList.value = repository.getRssfeedList(parentId,id)
+            _feedList.value = repository.getRssFeedList(parentId,id)
         }
 
     fun getLiveData(url: String) =

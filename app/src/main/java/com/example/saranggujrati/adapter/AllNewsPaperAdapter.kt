@@ -28,12 +28,19 @@ class AllNewsPaperAdapter constructor(private var itemList: ArrayList<NewsPaperD
         val inflater = LayoutInflater.from(parent.context)
 
         if (viewType == LoadMoreConstant.VIEW_TYPE_ITEM) {
+
             val binding = ItemNewsChannelBinding.inflate(inflater, parent, false)
             return ItemViewHolder(binding)
+
         } else {
+
             val binding = RLoadingBinding.inflate(inflater, parent, false)
             return LoadingViewHolder(binding)
+
+
         }
+
+
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -42,13 +49,18 @@ class AllNewsPaperAdapter constructor(private var itemList: ArrayList<NewsPaperD
         } else if (holder is LoadingViewHolder) {
             holder.bind()
         }
+
     }
 
     override fun getItemCount(): Int {
+
         return if (itemList == null) 0 else itemList.size
+
     }
 
+
     override fun getItemViewType(position: Int): Int {
+
         return if (itemList.get(position) == null) LoadMoreConstant.VIEW_TYPE_LOADING else LoadMoreConstant.VIEW_TYPE_ITEM
 
         /*return if (itemList[position] == null) {
@@ -56,21 +68,27 @@ class AllNewsPaperAdapter constructor(private var itemList: ArrayList<NewsPaperD
          } else {
              LoadMoreConstant.VIEW_TYPE_ITEM
          }*/
+
+
     }
 
     fun remove(position: Int) {
         itemList.removeAt(position)
         notifyItemRemoved(position)
+
+
     }
 
     fun getList(): ArrayList<NewsPaperData?> {
         return itemList
-    }
 
+
+    }
     fun clear() {
         this.itemList.clear()
         notifyDataSetChanged()
     }
+
 
 
     fun setList(list: ArrayList<NewsPaperData?>) {
@@ -78,23 +96,26 @@ class AllNewsPaperAdapter constructor(private var itemList: ArrayList<NewsPaperD
         notifyDataSetChanged()
     }
 
+
     inner class ItemViewHolder constructor(private var binding: ItemNewsChannelBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: NewsPaperData?) {
 
+
             binding.tvName.text = data?.title
+
+
+
             Glide.with(AppClass.appContext)
                 .load(data?.image)
-                .apply(
-                    RequestOptions.placeholderOf(R.drawable.placeholder)
-                        .error(R.drawable.placeholder)
-                )
+                .apply(RequestOptions.placeholderOf(R.drawable.placeholder).error(R.drawable.placeholder))
                 .into(binding.ivNews);
 
             binding.llMain.setOnClickListener {
                 adapterListener?.onClick(binding.llMain, adapterPosition)
             }
         }
+
     }
 
     inner class LoadingViewHolder(private var binding: RLoadingBinding) :

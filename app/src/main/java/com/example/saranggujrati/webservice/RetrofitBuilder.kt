@@ -23,7 +23,6 @@ object RetrofitBuilder {
 
     private const val BASE_URL = "https://sarangnews.app/gujarati/api/"
 
-
     //print responce in json format
     private fun getRetrofitClient(authenticator: Authenticator? = null): OkHttpClient {
         return OkHttpClient.Builder()

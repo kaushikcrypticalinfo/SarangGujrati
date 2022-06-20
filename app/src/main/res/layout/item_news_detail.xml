@@ -47,7 +47,7 @@
                     android:paddingTop="10dp"
                     android:paddingRight="15dp"
                     android:paddingBottom="10dp"
-                    android:text="Divy Bhaskar"
+                    android:text="Divya Bhaskar"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 

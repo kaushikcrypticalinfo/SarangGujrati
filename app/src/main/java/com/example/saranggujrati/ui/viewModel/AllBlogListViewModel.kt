@@ -9,7 +9,6 @@ import com.example.saranggujrati.model.rssFeed.RssFeed
 
 import com.example.saranggujrati.repositories.AllBlogListRepository
 import com.example.saranggujrati.webservice.Resource
-import com.github.muhrifqii.parserss.RSSFeedObject
 import kotlinx.coroutines.launch
 
 class AllBlogListViewModel(private val repository: AllBlogListRepository) :
@@ -20,21 +19,10 @@ class AllBlogListViewModel(private val repository: AllBlogListRepository) :
     val feedList: LiveData<Resource<FeedResponse>>
         get() = _feedList
 
-    private val _feedLiveData: MutableLiveData<Resource<RssFeed>> =
-        MutableLiveData()
-    val feedLiveData: LiveData<Resource<RssFeed>>
-        get() = _feedLiveData
-
-    fun getRssfeedList(id: String) =
+    fun getRssFeedList(id: String) =
         viewModelScope.launch {
             _feedList.value = Resource.Loading
-            _feedList.value = repository.getRssfeedList(id)
-        }
-
-    fun getLiveData(url: String) =
-        viewModelScope.launch {
-            _feedLiveData.value = Resource.Loading
-            _feedLiveData.value = repository.getFeedLiveData(url)
+            _feedList.value = repository.getRssFeedList(id)
         }
 
 }

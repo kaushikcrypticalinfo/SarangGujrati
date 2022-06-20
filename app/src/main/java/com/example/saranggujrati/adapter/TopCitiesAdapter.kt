@@ -32,12 +32,6 @@ class TopCitiesAdapter constructor(private var selfList: ArrayList<CityCatageory
             val response: CityCatageoryChild = selfList[position]
             holder.bind(response)
 
-
-            binding.tvCity.setOnClickListener {
-                adapterListener?.onClick(binding.tvCity, position)
-            }
-
-
         }
     }
 
@@ -45,11 +39,13 @@ class TopCitiesAdapter constructor(private var selfList: ArrayList<CityCatageory
         return selfList.size
     }
 
-
     inner class CitiesViewHolder constructor(private var binding: ItemTopCitiesBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: CityCatageoryChild) {
             binding.tvCity.text = data.name
+            binding.tvCity.setOnClickListener {
+                adapterListener?.onClick(binding.tvCity, absoluteAdapterPosition)
+            }
 
         }
     }

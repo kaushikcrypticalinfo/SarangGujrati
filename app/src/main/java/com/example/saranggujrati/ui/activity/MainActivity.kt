@@ -94,6 +94,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
     }
 
     private fun setupUI() {
+//        throw RuntimeException("Test Crash") // Force a crash
 
         setupObservers()
 

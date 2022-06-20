@@ -1,12 +1,16 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id  'kotlin-kapt'
+    id 'kotlin-kapt'
     id 'com.google.gms.google-services'
+    // Apply the Crashlytics Gradle plugin
+    id 'com.google.firebase.crashlytics'
 }
+
 static def getDate() {
     new Date().format('dd_MMM_yyyy')
 }
+
 android {
     compileSdk 31
 
@@ -14,9 +18,9 @@ android {
         applicationId "com.example.saranggujrati"
         minSdk 21
         targetSdk 30
-        versionCode 1
-        versionName "1.0"
-        setProperty("archivesBaseName","SarangGujarati-"+ getDate() + "-V" + versionName)
+        versionCode 2
+        versionName "1.1"
+        setProperty("archivesBaseName", "SarangGujarati-" + getDate() + "-V" + versionName)
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
@@ -45,15 +49,15 @@ repositories {
 
 dependencies {
 
-    def lifecycle_version = "2.4.0"
-    def rss_parser = "0.4.0"
+    def lifecycle_version = "2.4.1"
+    def rss_parser = "0.6.0"
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    implementation 'com.google.android.material:material:1.5.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.4.0'
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
     testImplementation 'junit:junit:'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -61,27 +65,29 @@ dependencies {
     implementation files('libs/libs/YouTubeAndroidPlayerApi.jar')
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
     implementation 'com.facebook.android:facebook-android-sdk:5.0.0'
-    implementation 'com.google.android.gms:play-services-auth:20.1.0'
+
     implementation "androidx.preference:preference-ktx:1.2.0"
 
     //google login
-    implementation 'com.google.android.gms:play-services-auth:20.1.0'
+    implementation 'com.google.android.gms:play-services-auth:20.2.0'
+
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:28.1.0')
-
     // Declare the dependency for the Firebase Authentication library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+//    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
 
-    // Also declare the dependency for the Google Play services library and specify its version
-    implementation 'com.google.firebase:firebase-auth:21.0.1'
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.google.code.gson:gson:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation "com.squareup.retrofit2:converter-simplexml:2.9.0"
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.6'
 
     //LifeCycle
     implementation "androidx.lifecycle:lifecycle-common:$lifecycle_version"
@@ -90,7 +96,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 
     //Banner Add
-    implementation "com.google.android.gms:play-services-ads:20.5.0"
+    implementation "com.google.android.gms:play-services-ads:21.0.0"
 
     //Gif Image
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
@@ -99,7 +105,7 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.12.0'
 
     //paging3
-    implementation "androidx.paging:paging-runtime-ktx:3.1.0"
+    implementation "androidx.paging:paging-runtime-ktx:3.1.1"
 
     implementation "com.github.muhrifqii.ParseRSS:parserss:$rss_parser"
     implementation "com.github.muhrifqii.ParseRSS:retrofit:$rss_parser"

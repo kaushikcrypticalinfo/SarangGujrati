@@ -4,45 +4,37 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.google.android.material.card.MaterialCardView
+    <RelativeLayout
+        android:id="@+id/llMain"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="8dp"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <RelativeLayout
-            android:id="@+id/llMain"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivCategoryImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_above="@+id/tvCategory" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/ivCategoryImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_above="@+id/tvCategory"
-                android:scaleType="fitXY"
-                android:src="@drawable/placeholder" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/montserrat_bold"
+            android:gravity="center"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="5dp"
+            android:text=""
+            android:textColor="?textColor"
+            android:textSize="12sp" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/montserrat_bold"
-                android:gravity="center"
-                android:paddingHorizontal="5dp"
-                android:paddingVertical="5dp"
-                android:text=""
-                android:textColor="?textColor"
-                android:textSize="12sp" />
+    </RelativeLayout>
 
-        </RelativeLayout>
 
-    </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

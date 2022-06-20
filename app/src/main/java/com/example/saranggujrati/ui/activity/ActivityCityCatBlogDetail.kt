@@ -19,10 +19,8 @@ import com.example.saranggujrati.model.*
 import com.example.saranggujrati.model.rssFeed.RssItems
 import com.example.saranggujrati.ui.SavedPrefrence
 import com.example.saranggujrati.ui.isOnline
-import com.example.saranggujrati.ui.parseDate
 import com.example.saranggujrati.ui.viewModel.CityCatBlogDetailViewModel
 import com.example.saranggujrati.ui.visible
-import com.example.saranggujrati.utils.RSS_FEED_DATE_FORMAT
 import com.example.saranggujrati.webservice.Resource
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
@@ -30,8 +28,6 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
 import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -42,13 +38,12 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
     private var parentId: String = ""
     private var name: String = ""
 
-    private lateinit var liveFeedlist: ArrayList<CategoryDataModel>
-    private lateinit var dummyFeedlist: ArrayList<CategoryDataModel>
+
     private lateinit var mActivity: MainActivity
 
     lateinit var feedListAdapter: FeedListAdapter
 
-    private var blogList = ArrayList<BlogData>()
+    private var blogList = ArrayList<RssFeedModelData>()
 
     lateinit var binding: ActivityCitCatBlogBinding
 
@@ -93,11 +88,8 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
         binding.icBack.setOnClickListener { finish() }
 
         binding.imgRefresh.setOnClickListener {
-            viewModel.getRssfeedList(parentId, id)
+            viewModel.getRssFeedList(parentId, id)
         }
-
-        liveFeedlist = ArrayList()
-        dummyFeedlist = ArrayList()
 
         feedListAdapter = FeedListAdapter(blogList)
 
@@ -110,7 +102,7 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
                     }
                     R.id.txtReadMore -> {
                         val i = Intent(this@ActivityCityCatBlogDetail, WebViewActivity::class.java)
-                        i.putExtra("url", blogList[position].url)
+                        i.putExtra("url", blogList[position].link)
                         i.putExtra("title", blogList[position].title)
                         startActivity(i)
                     }
@@ -157,7 +149,7 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
 
     private fun getAllBlogList(parentId: String, id: String) {
         setupObservers()
-        viewModel.getRssfeedList(parentId, id)
+        viewModel.getRssFeedList(parentId, id)
     }
 
     //setup observer
@@ -176,25 +168,33 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
                         if (it.value.status) {
                             binding.progressbar.visible(false)
                             val data = it.value.data
+                            blogList.addAll(data.shuffled())
 
-                            data.forEach {
-                                liveFeedlist.add(it)
+                            var tempIndex = 2
+                            SavedPrefrence.getAdsCard(this)?.data?.forEachIndexed { index, cardData ->
+                                val blogData = RssFeedModelData()
+                                blogData.isBanner = true
+                                blogData.image = cardData.image
+                                if (tempIndex < blogList.size - 1) {
+                                    blogList[tempIndex] = blogData
+                                    tempIndex += 6
+                                }
                             }
+                            feedListAdapter.notifyDataSetChanged()
 
-                            dummyFeedlist.addAll(data)
 
-                            if (dummyFeedlist.isNotEmpty())
-                                callLiveFeesListApi(dummyFeedlist, callCount)
+                            if (blogList.isNotEmpty())
+//                                callLiveFeesListApi(dummyFeedlist, callCount)
                             else {
                                 binding.tvNoData.visibility = View.VISIBLE
                                 binding.rvNewsFeed.visibility = View.GONE
                             }
 
                             binding.tvNoData.visibility =
-                                if (dummyFeedlist.isNotEmpty()) View.GONE else View.VISIBLE
+                                if (blogList.isNotEmpty()) View.GONE else View.VISIBLE
 
                             binding.rvNewsFeed.visibility =
-                                if (dummyFeedlist.isNotEmpty()) View.VISIBLE else View.GONE
+                                if (blogList.isNotEmpty()) View.VISIBLE else View.GONE
                         }
                     } else {
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
@@ -221,91 +221,6 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
             }
         })
 
-        viewModel.feedLiveData.observe(this, Observer { it ->
-            when (it) {
-                is Resource.Loading -> {
-                    binding.progressbar.isVisible = true
-                }
-
-                is Resource.Success -> {
-                    binding.progressbar.isVisible = false
-                    it.value.newsChannel?.newsItems?.forEach { rssItem ->
-                        val blogData = BlogData()
-                        blogData.title = rssItem.title
-                        blogData.description = rssItem.description
-                        blogData.category_name = liveFeedlist[callCount].rssName
-                        blogData.image =
-                            getThumbnailData(rssItem).ifEmpty {
-                                getEnclosureData(rssItem).ifEmpty {
-                                    getMediaContentData(rssItem).ifEmpty {
-                                        getEncodeData(rssItem)
-                                    }
-                                }
-                            }
-                        blogData.time = rssItem.pubDate
-                        blogData.url = rssItem.link?.get(0)?.link ?: ""
-                        blogList.add(blogData)
-                    }
-
-//                  Sorting all list data recent new first show
-                    blogList.sortByDescending {
-                        parseDate(it.time)
-                    }
-
-                    callCount += 1
-                    if (callCount < dummyFeedlist.size - 1) {
-                        callLiveFeesListApi(dummyFeedlist, callCount)
-                    } else {
-                        var tempIndex = 2
-                        SavedPrefrence.getAdsCard(this)?.data?.forEachIndexed { index, cardData ->
-                            val blogData = BlogData()
-                            blogData.isBanner = true
-                            blogData.image = cardData.image
-                            if (tempIndex < blogList.size - 1) {
-                                blogList[tempIndex] = blogData
-                                tempIndex += 6
-                            }
-                        }
-                        feedListAdapter.notifyDataSetChanged()
-                    }
-
-                }
-                is Resource.Failure -> {
-                    binding.progressbar.isVisible = false
-                    when {
-                        it.isNetworkError -> {
-                            if (!isOnline(AppClass.appContext)) {
-                                Snackbar.make(
-                                    binding.layout,
-                                    resources.getString(R.string.check_internet),
-                                    Snackbar.LENGTH_LONG
-                                ).show()
-                            }
-                        }
-                    }
-                }
-            }
-        })
-    }
-
-    private fun getThumbnailData(rssItem: RssItems) =
-        rssItem.thumbnail?.let { it.thumbnailUrl ?: kotlin.run { "" } }
-            ?: kotlin.run { "" }
-
-    private fun getEnclosureData(rssItem: RssItems) =
-        rssItem.enclosure?.let { it.thumbnailUrl ?: kotlin.run { "" } }
-            ?: kotlin.run { "" }
-
-    private fun getMediaContentData(rssItem: RssItems) =
-        rssItem.mediaContent?.url
-            ?: kotlin.run { "" }
-
-    private fun getEncodeData(rssItem: RssItems) =
-        rssItem.encoded?.img
-            ?: kotlin.run { "" }
-
-    private fun callLiveFeesListApi(data: List<CategoryDataModel>, callCount: Int) {
-        viewModel.getLiveData(data[callCount].rssUrl)
     }
 
     override fun onClick(p0: View?) {
