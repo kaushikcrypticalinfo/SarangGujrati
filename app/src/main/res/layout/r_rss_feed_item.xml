@@ -16,8 +16,10 @@
         android:src="@drawable/placeholder"
         ads:layout_constraintBottom_toBottomOf="parent"
         ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintHorizontal_bias="0.0"
         ads:layout_constraintStart_toStartOf="parent"
-        ads:layout_constraintTop_toTopOf="parent" />
+        ads:layout_constraintTop_toTopOf="parent"
+        ads:layout_constraintVertical_bias="0.0" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_news_image"
@@ -61,6 +63,7 @@
         android:paddingHorizontal="15dp"
         android:paddingVertical="10dp"
         android:scaleType="fitXY"
+        android:justificationMode="inter_word"
         android:src="@drawable/ic_share_white"
         android:text="Read More"
         android:textColor="@color/white"
@@ -94,17 +97,17 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="fill|center_horizontal"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
         android:ellipsize="end"
-
-        android:maxLines="8"
-        ads:layout_constrainedWidth="true"
-        android:lineSpacingExtra="5dp"
         android:fontFamily="@font/montserrat_regular"
         android:inputType="textMultiLine|textNoSuggestions"
-        android:layout_marginHorizontal="10dp"
+        android:justificationMode="inter_word"
+        android:lineSpacingExtra="5dp"
+        android:maxLines="8"
         android:textColor="?textColor"
         android:textSize="12sp"
-        android:layout_marginBottom="10dp"
+        ads:layout_constrainedWidth="true"
         ads:layout_constraintBottom_toBottomOf="parent"
         ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintStart_toStartOf="parent"
