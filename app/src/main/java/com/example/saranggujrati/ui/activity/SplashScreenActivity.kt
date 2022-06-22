@@ -3,6 +3,7 @@ package com.example.saranggujrati.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -10,8 +11,6 @@ import com.example.saranggujrati.AppClass
 import com.example.saranggujrati.R
 import com.example.saranggujrati.ui.SavedPrefrence
 
-
-@Suppress("DEPRECATION")
 class SplashScreenActivity : AppCompatActivity() {
 
 
@@ -20,6 +19,7 @@ class SplashScreenActivity : AppCompatActivity() {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_splash)
 
+        SavedPrefrence.getLoginFrom(this)
 
         // This is used to hide the status bar and make
         // the splash screen as a full screen activity.
@@ -30,7 +30,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
         // we used the postDelayed(Runnable, time) method
         // to send a message with a delayed time.
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             val intent = when {
                 SavedPrefrence.getUserId(AppClass.appContext) != "" -> {
                     Intent(this, MainActivity::class.java)

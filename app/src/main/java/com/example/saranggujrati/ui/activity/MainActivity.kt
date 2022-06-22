@@ -59,7 +59,9 @@ import com.example.saranggujrati.ui.fragment.*
 import com.example.saranggujrati.ui.isOnline
 import com.example.saranggujrati.ui.visible
 import com.example.saranggujrati.webservice.Resource
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.messaging.FirebaseMessaging
 
 
 class MainActivity : BaseActicvity<MainViewModel>(),
@@ -91,6 +93,17 @@ class MainActivity : BaseActicvity<MainViewModel>(),
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
         setupUI()
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("Notification Token", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+            // Get new FCM registration token
+            val token = task.result
+            // Log and toast
+            Log.e("Notification Token", token)
+        })
     }
 
     private fun setupUI() {

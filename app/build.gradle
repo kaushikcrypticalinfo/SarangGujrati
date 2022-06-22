@@ -5,6 +5,7 @@ plugins {
     id 'com.google.gms.google-services'
     // Apply the Crashlytics Gradle plugin
     id 'com.google.firebase.crashlytics'
+
 }
 
 static def getDate() {
@@ -49,6 +50,7 @@ repositories {
 
 dependencies {
 
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.0.5'
     def lifecycle_version = "2.4.1"
     def rss_parser = "0.6.0"
 
@@ -109,4 +111,6 @@ dependencies {
 
     implementation "com.github.muhrifqii.ParseRSS:parserss:$rss_parser"
     implementation "com.github.muhrifqii.ParseRSS:retrofit:$rss_parser"
+
+    implementation 'com.google.firebase:firebase-messaging:23.0.5'
 }

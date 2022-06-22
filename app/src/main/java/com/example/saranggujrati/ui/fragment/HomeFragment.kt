@@ -174,6 +174,10 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         binding.llLatestNews.setOnClickListener(this)
         binding.tvLiveTempleDarshan.setOnClickListener(this)
 
+        binding.llLatestNews.setOnClickListener {
+
+        }
+
         binding.swipeRefresh.setOnRefreshListener {
             callApi()
         }

@@ -561,7 +561,6 @@ class LoginActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener {
                 is Resource.Failure -> {
                     binding.progressbar.visible(false)
 
-
                     when {
                         it.isNetworkError -> {
                             if (!isOnline(applicationContext)) {
