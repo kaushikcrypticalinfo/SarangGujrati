@@ -32,5 +32,9 @@ class RssFeedModelData {
     @Expose
     var publishDate: String = ""
 
+  @SerializedName("feed_type")
+    @Expose
+    var feedType: String = ""
+
     var isBanner:Boolean = false
 }

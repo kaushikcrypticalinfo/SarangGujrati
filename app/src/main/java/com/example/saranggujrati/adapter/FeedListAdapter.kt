@@ -66,9 +66,10 @@ class FeedListAdapter(private var categoryList: ArrayList<RssFeedModelData>) :
                     ).into(binding.imgBanner)
 
 
+
             binding.tvNewsHighLight.text = data.title
 
-            binding.tvNewsPaperName.text = data.cat
+            binding.tvNewsPaperName.text = data.feedType
 
             binding.tvNewsDetail.formatHtmlText(
                 Html.fromHtml(data.description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
@@ -77,8 +78,8 @@ class FeedListAdapter(private var categoryList: ArrayList<RssFeedModelData>) :
             Glide.with(AppClass.appContext)
                 .load(data.image)
                 .apply(
-                    RequestOptions.placeholderOf(R.drawable.placeholder)
-                        .error(R.drawable.placeholder)
+                    RequestOptions.placeholderOf(R.drawable.ic_placeholder)
+                        .error(R.drawable.ic_placeholder)
                 ).into(binding.ivNewsImage)
 
             binding.txtReadMore.setOnClickListener {

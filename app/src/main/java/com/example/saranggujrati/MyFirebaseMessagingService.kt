@@ -12,6 +12,7 @@ import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.example.saranggujrati.ui.activity.MainActivity
+import com.example.saranggujrati.ui.activity.StartMainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -22,10 +23,10 @@ const val channelName = "Push Notification"
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        Log.d("From: ", remoteMessage.from.toString())
         if (remoteMessage.notification != null) {
             //showNotification(remoteMessage.notification!!.title,remoteMessage.notification!!.body)
-
-            showNotification(remoteMessage.data["bodyText"], remoteMessage.data["organization"])
+            showNotification(remoteMessage.data["bodyText"], remoteMessage.data["organization"], remoteMessage.notification!!.clickAction.toString())
             Log.e("From: " , remoteMessage.from.toString())
             //This will give you the Text property in the curl request(Sample Message):
             Log.e("Notification Message Body: " , remoteMessage.notification!!.body.toString())
@@ -35,18 +36,26 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
-    private fun showNotification(title: String?, message: String?) {
+    private fun showNotification(title: String?, message: String?, click_action: String) {
         // Pass the intent to switch to the MainActivity
-        val intent = Intent(this, MainActivity::class.java)
+        val intent : Intent
+        if (click_action.equals("STARTMAINACTIVITY")) {
+            intent = Intent(this, StartMainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        } else {
+            intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent,PendingIntent.FLAG_ONE_SHOT)
+
+        //val intent = Intent(this, MainActivity::class.java)
         // Assign channel ID
         // Here FLAG_ACTIVITY_CLEAR_TOP flag is set to clear
         // the activities present in the activity stack,
         // on the top of the Activity that is to be launched
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         // Pass the intent to PendingIntent to start the
         // next Activity
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent,PendingIntent.FLAG_ONE_SHOT)
-
         // Create a Builder object using NotificationCompat
         // class. This will allow control over all the flags
         var builder: NotificationCompat.Builder = NotificationCompat.Builder(applicationContext,channelId)
