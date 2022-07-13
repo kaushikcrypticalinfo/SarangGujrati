@@ -16,11 +16,11 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.example.saranggujrati"
+        applicationId "com.saranggujrati"
         minSdk 21
         targetSdk 30
-        versionCode 2
-        versionName "1.1"
+        versionCode 1
+        versionName "1.0"
         setProperty("archivesBaseName", "SarangGujarati-" + getDate() + "-V" + versionName)
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -40,6 +40,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
 }
 
 
@@ -50,16 +54,16 @@ repositories {
 
 dependencies {
 
-    implementation 'com.google.firebase:firebase-messaging-ktx:23.0.5'
-    def lifecycle_version = "2.4.1"
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.0.6'
+    def lifecycle_version = "2.5.0"
     def rss_parser = "0.6.0"
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.0'
     testImplementation 'junit:junit:'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -109,8 +113,8 @@ dependencies {
     //paging3
     implementation "androidx.paging:paging-runtime-ktx:3.1.1"
 
-    implementation "com.github.muhrifqii.ParseRSS:parserss:$rss_parser"
-    implementation "com.github.muhrifqii.ParseRSS:retrofit:$rss_parser"
+//    implementation "com.github.muhrifqii.ParseRSS:parserss:$rss_parser"
+//    implementation "com.github.muhrifqii.ParseRSS:retrofit:$rss_parser"
 
-    implementation 'com.google.firebase:firebase-messaging:23.0.5'
+    implementation 'com.google.firebase:firebase-messaging:23.0.6'
 }

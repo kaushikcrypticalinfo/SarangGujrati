@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.saranggujrati">
+    package="com.saranggujrati">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
 
     <queries>
-        <package android:name="com.example.saranggujrati" />
+        <package android:name="com.saranggujrati" />
         <intent>
             <action android:name="com.google.android.youtube.api.service.START" />
         </intent>
@@ -23,23 +23,23 @@
 
     <queries>
         <intent>
-            <action android:name="android.intent.action.SENDTO"/>
+            <action android:name="android.intent.action.SENDTO" />
             <data android:mimeType="*/*" />
         </intent>
     </queries>
 
     <application
-        android:name="com.example.saranggujrati.AppClass"
+        android:name="com.saranggujrati.AppClass"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.SarangGujrati"
-        tools:targetApi="n"
-        android:largeHeap="true"
-        android:hardwareAccelerated="false">
+        android:usesCleartextTraffic="true"
+        tools:targetApi="n">
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
@@ -47,8 +47,8 @@
 
         <activity
             android:name=".ui.activity.SplashScreenActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -57,8 +57,8 @@
 
         <activity
             android:name=".ui.activity.StartMainActivity"
-            android:theme="@style/Theme.SarangGujrati.NoActionBar"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.SarangGujrati.NoActionBar">
             <intent-filter>
                 <action android:name="STARTMAINACTIVITY"></action>
                 <category android:name="android.intent.category.DEFAULT"></category>
@@ -71,8 +71,8 @@
 
         <activity
             android:name=".ui.activity.MainActivity"
-            android:theme="@style/Theme.SarangGujrati.NoActionBar"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.SarangGujrati.NoActionBar">
             <intent-filter>
                 <action android:name="MAINACTIVITY"></action>
                 <category android:name="android.intent.category.DEFAULT"></category>
@@ -81,30 +81,26 @@
 
         <activity
             android:name=".ui.activity.YouTubeActivity"
-            android:theme="@style/Theme.SarangGujrati.NoActionBar"/>
+            android:theme="@style/Theme.SarangGujrati.NoActionBar" />
 
         <activity
             android:name=".ui.activity.WebViewActivity"
-            android:theme="@style/Theme.SarangGujrati.NoActionBar"/>
+            android:theme="@style/Theme.SarangGujrati.NoActionBar" />
 
         <!--  Banner Add metadata -->
         <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
-        <meta-data
-            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
-            android:value="true"/>
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3125008321195277~5675173289" />
 
         <!--  facebook metadata -->
         <meta-data
-            tools:replace="android:value"
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+            android:value="@string/facebook_app_id"
+            tools:replace="android:value" />
 
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
@@ -124,7 +120,7 @@
             android:name=".MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 

@@ -29,13 +29,12 @@
             tools:layout_editor_absoluteY="8dp" />
 
 
-        <pl.droidsonroids.gif.GifImageView
+        <ProgressBar
             android:id="@+id/progressbar"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:src="@drawable/progress"
             android:visibility="gone" />
 
 

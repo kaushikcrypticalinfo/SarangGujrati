@@ -12,6 +12,7 @@
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/activity_login.xml" value="0.14709569577935647" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/activity_main.xml" value="0.14709569577935647" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/activity_splash.xml" value="0.14709569577935647" />
+        <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/activity_webview.xml" value="0.16417272338606242" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/activity_youtube.xml" value="0.14709569577935647" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/app_bar_main.xml" value="0.14709569577935647" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/dialogue_signup.xml" value="0.3009833262077811" />
@@ -22,12 +23,15 @@
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/fragment_feature_blog.xml" value="0.14709569577935647" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/fragment_home.xml" value="0.33" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/fragment_privacy_policy.xml" value="0.3009833262077811" />
+        <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/item_featured_stories.xml" value="0.3108165882855921" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/item_news_detail.xml" value="0.3009833262077811" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/item_on_demand.xml" value="0.14709569577935647" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/item_top_categories.xml" value="0.14709569577935647" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/item_top_cities.xml" value="0.14709569577935647" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/layout_recylerview.xml" value="0.14709569577935647" />
+        <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/nav_header_main.xml" value="0.3108165882855921" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/notification.xml" value="0.3108165882855921" />
+        <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/r_loading.xml" value="0.3108165882855921" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/r_rss_feed_item.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/menu/main_menu.xml" value="0.3009833262077811" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/menu/menu_switch.xml" value="0.29717180244829045" />

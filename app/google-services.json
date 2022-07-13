@@ -7,20 +7,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:533857723057:android:6112455dd0a933046d3890",
+        "mobilesdk_app_id": "1:533857723057:android:cc47f1370d8b63e06d3890",
         "android_client_info": {
-          "package_name": "com.example.saranggujrati"
+          "package_name": "com.saranggujrati"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "533857723057-9h1hdt0dl3d0tgokcmparjifi4rfta1s.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.saranggujrati",
-            "certificate_hash": "84424f934f315c4b1e689ca83cee404dfb75b108"
-          }
-        },
         {
           "client_id": "533857723057-nedgu745mg0q6n1c1jshauc7tl2e49gl.apps.googleusercontent.com",
           "client_type": 3
