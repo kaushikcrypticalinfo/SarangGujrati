@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.saranggujrati",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 2,
+      "versionName": "1.1",
+      "outputFile": "SarangGujarati-20_Jul_2022-V1.1-release.apk"
+    }
+  ],
+  "elementType": "File"
+}

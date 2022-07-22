@@ -29,7 +29,6 @@ class TopCitiesAdapter constructor(private var selfList: ArrayList<CityCatageory
         if (holder is CitiesViewHolder) {
             val response: CityCatageoryChild = selfList[position]
             holder.bind(response)
-
         }
     }
 

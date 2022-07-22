@@ -47,16 +47,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
         val pendingIntent = PendingIntent.getActivity(this, 0, intent,PendingIntent.FLAG_ONE_SHOT)
 
-        //val intent = Intent(this, MainActivity::class.java)
-        // Assign channel ID
-        // Here FLAG_ACTIVITY_CLEAR_TOP flag is set to clear
-        // the activities present in the activity stack,
-        // on the top of the Activity that is to be launched
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        // Pass the intent to PendingIntent to start the
-        // next Activity
-        // Create a Builder object using NotificationCompat
-        // class. This will allow control over all the flags
         var builder: NotificationCompat.Builder = NotificationCompat.Builder(applicationContext,channelId)
             .setSmallIcon(R.drawable.ic_logo)
             .setAutoCancel(true)

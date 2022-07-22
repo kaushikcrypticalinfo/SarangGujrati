@@ -2,16 +2,17 @@ package com.saranggujrati.adapter
 
 import android.os.Build
 import android.text.Html
-import android.view.View
-import androidx.viewpager.widget.PagerAdapter
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.HtmlCompat
+import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.saranggujrati.AppClass
@@ -63,6 +64,8 @@ class FeatureBlogViewPagerAdapter constructor(private var blogList: ArrayList<Fe
         tvNewsDetail.formatHtmlText(
             Html.fromHtml(data.description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
         )
+
+        tvNewsDetail.movementMethod = ScrollingMovementMethod()
 
         data.banner_image?.let {
             Glide.with(AppClass.appContext)

@@ -35,12 +35,6 @@ class CategoryListAdapter constructor(private var categoryList: ArrayList<CityCa
             val response: CityCatageoryChild = categoryList[position]
             holder.bind(response)
 
-
-            binding.llMain.setOnClickListener {
-                adapterListener?.onClick(binding.llMain, position)
-            }
-
-
         }
     }
 
@@ -55,6 +49,7 @@ class CategoryListAdapter constructor(private var categoryList: ArrayList<CityCa
             binding.tvCategory.text = data.name
 
             Timber.e(data.image)
+
             Glide.with(AppClass.appContext)
                 .load(data.image)
                 .apply(
@@ -63,6 +58,9 @@ class CategoryListAdapter constructor(private var categoryList: ArrayList<CityCa
                 )
                 .into(binding.ivCategoryImage)
 
+            binding.llMain.setOnClickListener {
+                adapterListener?.onClick(binding.llMain, position)
+            }
         }
     }
 
