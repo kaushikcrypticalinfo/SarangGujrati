@@ -107,8 +107,8 @@ dependencies {
     //Gif Image
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.3'
 
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
-    kapt 'com.github.bumptech.glide:compiler:4.12.0'
+    implementation 'com.github.bumptech.glide:glide:4.13.2'
+    kapt 'com.github.bumptech.glide:compiler:4.13.2'
 
     //paging3
     implementation "androidx.paging:paging-runtime-ktx:3.1.1"

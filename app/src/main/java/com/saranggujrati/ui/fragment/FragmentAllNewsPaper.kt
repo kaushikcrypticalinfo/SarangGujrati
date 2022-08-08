@@ -12,7 +12,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
 import com.saranggujrati.adapter.AllNewsPaperAdapter
-import com.saranggujrati.databinding.FragmentAllNewsChannelBinding
 import com.saranggujrati.loadmore.EndlessScrollListener
 import com.saranggujrati.model.NewsPaperData
 import com.saranggujrati.model.NewsPaperListResponse
@@ -23,6 +22,7 @@ import com.saranggujrati.ui.viewModel.NewsPaperViewModel
 import com.saranggujrati.webservice.Resource
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
+import com.saranggujrati.databinding.FragmentAllNewsChannelBinding
 import kotlin.collections.ArrayList
 
 class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {

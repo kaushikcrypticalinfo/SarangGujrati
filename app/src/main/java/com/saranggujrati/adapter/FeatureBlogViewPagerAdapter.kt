@@ -15,6 +15,7 @@ import androidx.core.text.HtmlCompat
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
 import com.saranggujrati.extensions.formatHtmlText
@@ -37,7 +38,6 @@ class FeatureBlogViewPagerAdapter constructor(private var blogList: ArrayList<Fe
         // Return the current view
         return v === `object` as View
     }
-
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun instantiateItem(container: ViewGroup, position: Int): Any {

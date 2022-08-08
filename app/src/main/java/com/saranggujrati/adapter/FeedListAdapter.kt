@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
+
+import com.saranggujrati.databinding.RRssFeedItemBinding
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
-import com.saranggujrati.databinding.RRssFeedItemBinding
+
 import com.saranggujrati.extensions.formatHtmlText
 import com.saranggujrati.model.RssFeedModelData
 

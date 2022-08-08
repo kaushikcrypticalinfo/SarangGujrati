@@ -5,6 +5,7 @@ import android.view.View
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import com.saranggujrati.databinding.ActivityBaseBinding
+
 import com.saranggujrati.ui.viewModel.BaseViewModel
 
 abstract class BaseActicvity <VM : BaseViewModel> : AppCompatActivity() {

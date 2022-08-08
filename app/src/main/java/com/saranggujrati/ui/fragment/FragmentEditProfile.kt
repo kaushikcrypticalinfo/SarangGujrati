@@ -23,7 +23,6 @@ import android.app.Activity.RESULT_OK
 import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import com.saranggujrati.databinding.FragmentEditProfileBinding
 import com.saranggujrati.ui.activity.MainActivity
 import com.performly.ext.obtainViewModel
 import java.io.*
@@ -45,6 +44,7 @@ import com.saranggujrati.ui.activity.LoginActivity
 import com.saranggujrati.webservice.Resource
 import com.facebook.FacebookSdk.getCacheDir
 import com.google.android.material.snackbar.Snackbar
+import com.saranggujrati.databinding.FragmentEditProfileBinding
 import kotlinx.coroutines.launch
 import net.simplifiedcoding.imageuploader.UploadRequestBody
 

@@ -11,9 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
-import com.saranggujrati.adapter.PagingDemoAdapter
+import com.saranggujrati.adapter.LiveTemplateAdapter
 import com.saranggujrati.adapter.PlayersLoadingStateAdapter
-import com.saranggujrati.databinding.FragmentAllNewsChannelBinding
 import com.saranggujrati.model.NewsChannelListRespnse
 import com.saranggujrati.model.NewsData
 import com.saranggujrati.ui.activity.MainActivity
@@ -21,6 +20,7 @@ import com.saranggujrati.ui.activity.YouTubeActivity
 import com.saranggujrati.ui.viewModel.NewsChannelViewModel
 import com.saranggujrati.ui.visible
 import com.performly.ext.obtainViewModel
+import com.saranggujrati.databinding.FragmentAllNewsChannelBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlin.collections.ArrayList
@@ -32,10 +32,9 @@ class FragmentLiveTempleDarshanChannelList : BaseFragment<NewsChannelViewModel>(
     lateinit var binding: FragmentAllNewsChannelBinding
     lateinit var mLayoutManager: RecyclerView.LayoutManager
 
-    lateinit var pagingDemoAdapter: PagingDemoAdapter
+    lateinit var pagingDemoAdapter: LiveTemplateAdapter
 
-
-    override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
+    override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = FragmentAllNewsChannelBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -74,7 +73,7 @@ class FragmentLiveTempleDarshanChannelList : BaseFragment<NewsChannelViewModel>(
     }
 
     private fun setAdapter() {
-        pagingDemoAdapter = PagingDemoAdapter()
+        pagingDemoAdapter = LiveTemplateAdapter()
 
         pagingDemoAdapter.withLoadStateFooter(PlayersLoadingStateAdapter { retry() })
 
@@ -105,7 +104,7 @@ class FragmentLiveTempleDarshanChannelList : BaseFragment<NewsChannelViewModel>(
             }
         }
 
-        pagingDemoAdapter.adapterListener = object : PagingDemoAdapter.AdapterListener {
+        pagingDemoAdapter.adapterListener = object : LiveTemplateAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
                 if (view.id == R.id.llMain) {
                     val i = Intent(requireContext(), YouTubeActivity::class.java)

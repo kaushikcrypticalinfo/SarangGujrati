@@ -11,7 +11,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.saranggujrati.R
-import com.saranggujrati.databinding.ActivityStartMainBinding
 import com.saranggujrati.ui.SavedPrefrence
 import com.saranggujrati.ui.isOnline
 import com.saranggujrati.ui.startNewActivity
@@ -21,6 +20,7 @@ import com.saranggujrati.webservice.Resource
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
+import com.saranggujrati.databinding.ActivityStartMainBinding
 import kotlinx.coroutines.launch
 
 

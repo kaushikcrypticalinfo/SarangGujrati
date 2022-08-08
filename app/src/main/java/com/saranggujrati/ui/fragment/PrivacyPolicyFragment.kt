@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.*
 import androidx.annotation.RequiresApi
 import com.saranggujrati.R
-import com.saranggujrati.databinding.FragmentPrivacyPolicyBinding
 import com.saranggujrati.extensions.formatHtmlText
 import com.saranggujrati.ui.activity.MainActivity
 import com.saranggujrati.ui.viewModel.HomeViewModel
 import com.performly.ext.obtainViewModel
+import com.saranggujrati.databinding.FragmentPrivacyPolicyBinding
 
 class PrivacyPolicyFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
 

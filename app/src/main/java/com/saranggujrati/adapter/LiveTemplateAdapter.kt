@@ -6,14 +6,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+
+import com.saranggujrati.databinding.ItemNewsChannelBinding
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
-import com.saranggujrati.databinding.ItemNewsChannelBinding
 import com.saranggujrati.model.NewsData
 
 
-class PagingDemoAdapter :
-    PagingDataAdapter<NewsData, PagingDemoAdapter.ItemViewHolder>(PlayersDiffCallback()) {
+class LiveTemplateAdapter :
+    PagingDataAdapter<NewsData, LiveTemplateAdapter.ItemViewHolder>(PlayersDiffCallback()) {
 
     var adapterListener: AdapterListener? = null
 

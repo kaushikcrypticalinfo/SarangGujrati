@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
 import com.saranggujrati.adapter.*
-import com.saranggujrati.databinding.FragmentFeatureBlogBinding
 import com.saranggujrati.model.*
 import com.saranggujrati.ui.activity.MainActivity
 import com.saranggujrati.ui.activity.WebViewActivity
@@ -23,6 +22,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
+import com.saranggujrati.databinding.FragmentFeatureBlogBinding
 import kotlin.collections.ArrayList
 
 

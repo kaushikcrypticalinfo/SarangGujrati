@@ -7,13 +7,13 @@ import com.google.android.youtube.player.*
 
 
 import androidx.annotation.NonNull
-import com.saranggujrati.databinding.ActivityYoutubeBinding
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 
 
 import com.google.android.youtube.player.YouTubeInitializationResult
+import com.saranggujrati.databinding.ActivityYoutubeBinding
 import java.util.regex.Pattern
 
 

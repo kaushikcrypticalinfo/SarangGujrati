@@ -3,12 +3,12 @@ package com.saranggujrati.ui.fragment
 import android.os.Bundle
 import android.view.*
 import com.saranggujrati.R
-import com.saranggujrati.databinding.FragmentContactUsBinding
 import com.saranggujrati.ui.activity.MainActivity
 import com.saranggujrati.ui.isValidEmail
 import com.saranggujrati.ui.sendMail
 import com.saranggujrati.ui.viewModel.HomeViewModel
 import com.performly.ext.obtainViewModel
+import com.saranggujrati.databinding.FragmentContactUsBinding
 
 
 class AdvertiseWithUsFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {

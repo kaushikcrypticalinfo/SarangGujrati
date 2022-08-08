@@ -12,11 +12,11 @@ import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.lifecycleScope
 import com.saranggujrati.R
-import com.saranggujrati.databinding.ActivityLoginBinding
 import com.saranggujrati.ui.startNewActivity
 import com.saranggujrati.ui.viewModel.LoginViewModel
 import com.saranggujrati.webservice.Resource
 import androidx.lifecycle.Observer
+
 import com.saranggujrati.ui.SavedPrefrence
 import com.saranggujrati.ui.isOnline
 import com.saranggujrati.ui.visible
@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
+import com.saranggujrati.databinding.ActivityLoginBinding
 import kotlinx.coroutines.launch
 import org.json.JSONException
 import timber.log.Timber

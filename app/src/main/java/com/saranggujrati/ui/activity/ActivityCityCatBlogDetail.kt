@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
-import com.saranggujrati.AppClass
-import com.saranggujrati.R
-import com.saranggujrati.adapter.*
+
 import com.saranggujrati.databinding.ActivityCitCatBlogBinding
+import com.saranggujrati.AppClass
+import com.saranggujrati.adapter.*
 import com.saranggujrati.model.*
 import com.saranggujrati.ui.SavedPrefrence
 import com.saranggujrati.ui.isOnline
@@ -26,6 +26,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
+import com.saranggujrati.R
 import timber.log.Timber
 import kotlin.collections.ArrayList
 

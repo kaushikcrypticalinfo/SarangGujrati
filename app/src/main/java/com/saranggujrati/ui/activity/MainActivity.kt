@@ -21,7 +21,6 @@ import com.performly.ext.obtainViewModel
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.saranggujrati.AppClass
-import com.saranggujrati.databinding.ActivityMainBinding
 import androidx.core.app.ActivityCompat
 
 import android.content.pm.PackageManager
@@ -41,10 +40,12 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.Observer
+
 import com.saranggujrati.ui.fragment.*
 import com.saranggujrati.webservice.Resource
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import com.saranggujrati.databinding.ActivityMainBinding
 
 
 class MainActivity : BaseActicvity<MainViewModel>(),

@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.SnapHelper
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
 import com.saranggujrati.adapter.FeedListAdapter
-import com.saranggujrati.databinding.FragmentAllNewsBlogBinding
 import com.saranggujrati.model.*
 import com.saranggujrati.ui.SavedPrefrence
 import com.saranggujrati.ui.activity.MainActivity
@@ -27,6 +26,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
+import com.saranggujrati.databinding.FragmentAllNewsBlogBinding
 import java.util.*
 
 

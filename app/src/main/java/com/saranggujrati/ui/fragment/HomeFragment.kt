@@ -13,7 +13,6 @@ import com.saranggujrati.adapter.CategoryListAdapter
 import com.saranggujrati.adapter.FeaturedListAdapter
 import com.saranggujrati.adapter.OnDemandListAdapter
 import com.saranggujrati.adapter.TopCitiesAdapter
-import com.saranggujrati.databinding.FragmentHomeBinding
 import com.saranggujrati.model.*
 import com.saranggujrati.model.onDemand.OnDemandData
 import com.saranggujrati.ui.SavedPrefrence
@@ -26,6 +25,7 @@ import com.saranggujrati.ui.visible
 import com.saranggujrati.webservice.Resource
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
+import com.saranggujrati.databinding.FragmentHomeBinding
 import kotlin.collections.ArrayList
 
 
