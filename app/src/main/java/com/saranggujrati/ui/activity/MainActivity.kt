@@ -62,7 +62,6 @@ class MainActivity : BaseActicvity<MainViewModel>(),
     private lateinit var icMinus: ImageView
     private lateinit var tvValue: TextView
     var minteger = 0
-    var isDarkMode = false
 
     val REQUEST_ID_MULTIPLE_PERMISSIONS = 101
 
@@ -154,23 +153,20 @@ class MainActivity : BaseActicvity<MainViewModel>(),
     }
 
     private fun setDarkMode() {
-
-        mySwitch.isChecked = SavedPrefrence.is_DARKMODE
+        val isDarkMode = SavedPrefrence.getIsDarkMode(this)!!
+        mySwitch.isChecked = isDarkMode
         mySwitch.setOnCheckedChangeListener { _, isChecked ->
-
             // if the button is checked, i.e., towards the right or enabled
             // enable dark mode, change the text to disable dark mode
             // else keep the switch text to enable dark mode
-            if (mySwitch.isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                SavedPrefrence.is_DARKMODE = true
-                isDarkMode = true
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                SavedPrefrence.is_DARKMODE = false
-                isDarkMode = false
-            }
+            SavedPrefrence.setIsDarkMode(this, isChecked)
+            setDarkMode(isChecked)
         }
+
+    }
+
+    private fun setDarkMode(isDarkMode: Boolean) {
+        AppCompatDelegate.setDefaultNightMode(if (isDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO)
     }
 
 
@@ -238,41 +234,53 @@ class MainActivity : BaseActicvity<MainViewModel>(),
         when (item.itemId) {
             R.id.nav_home -> {
                 binding.appBarToolbar.viewPager.currentItem = 0
+                return true
             }
 
             R.id.nav_font_size -> {
+                return true
             }
 
             R.id.nav_select_language -> {
+                return true
             }
 
             R.id.nav_dark_mode -> {
-                mySwitch.isChecked = !isDarkMode
+                binding.drawerLayout.closeDrawers()
+                mySwitch.isChecked = !SavedPrefrence.getIsDarkMode(this)!!
+                return true
             }
 
             R.id.nav_about_us -> {
+                return true
             }
 
             R.id.nav_join_us -> {
+                return true
             }
 
             R.id.nav_advertise -> {
                 pushFragment(AdvertiseWithUsFragment())
+                return true
             }
 
             R.id.nav_contact_us -> {
                 pushFragment(ContactUsFragment())
+                return true
             }
 
             R.id.nav_policy_terms -> {
                 pushFragment(PrivacyPolicyFragment())
+                return true
             }
 
             R.id.nav_Login -> {
                 startNewActivity(LoginActivity::class.java)
+                return true
             }
             R.id.nav_Logout -> {
                 showAlertDialogForLogout()
+                return true
             }
         }
         binding.drawerLayout.closeDrawers()
@@ -282,8 +290,6 @@ class MainActivity : BaseActicvity<MainViewModel>(),
     private fun createViewPager() {
         val adapter = ViewPagerAdapter(supportFragmentManager)
         adapter.addFrag(HomeFragment())
-//        adapter.addFrag(ContactUsFragment())
-//        adapter.addFrag(AdvertiseWithUsFragment())
         binding.appBarToolbar.viewPager.adapter = adapter
     }
 

@@ -28,10 +28,12 @@ object SavedPrefrence {
     const val USER = "user"
     const val ADS_CARD = "ads_card"
     const val is_guest = "is_guest"
+    const val IS_DARK_MODE = "is_dark_mode"
 
     var is_LOGIN: Boolean = false
     var is_DARKMODE: Boolean = false
     var is_Guest: Boolean = false
+
 
     fun getIsGuest(context: Context) = getSharedPreference(
         context
@@ -40,6 +42,15 @@ object SavedPrefrence {
     fun setGuest(context: Context, type: Boolean) {
         editor(context, is_guest, type)
     }
+
+    fun getIsDarkMode(context: Context) = getSharedPreference(
+        context
+    )?.getBoolean(IS_DARK_MODE, false)
+
+    fun setIsDarkMode(context: Context, type: Boolean) {
+        editor(context, IS_DARK_MODE, type)
+    }
+
 
     private fun getSharedPreference(ctx: Context?): SharedPreferences? {
         return PreferenceManager.getDefaultSharedPreferences(ctx!!)

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,19 +16,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?appbackgroundhome"
                     android:orientation="horizontal"
                     android:padding="10dp">
 
-                    <LinearLayout
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/llLatestNews"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -62,9 +63,9 @@
                             android:textColor="?textColor"
                             android:textSize="10sp" />
 
-                    </LinearLayout>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <LinearLayout
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/llallGujNews"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -72,13 +73,13 @@
                         android:gravity="center"
                         android:orientation="vertical">
 
-                        <LinearLayout
+                        <androidx.appcompat.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/shape_bg_lightest_orange"
                             android:orientation="vertical">
 
-                            <ImageView
+                            <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/ic_allGuj_news"
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
@@ -86,7 +87,7 @@
                                 android:padding="10dp"
                                 android:scaleType="centerInside"
                                 android:src="@drawable/ic_all_gujarati_news" />
-                        </LinearLayout>
+                        </androidx.appcompat.widget.LinearLayoutCompat>
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/tvallGujNews"
@@ -99,9 +100,9 @@
                             android:textColor="?textColor"
                             android:textSize="10sp" />
 
-                    </LinearLayout>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <LinearLayout
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/llLiveNews"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -109,13 +110,13 @@
                         android:gravity="center"
                         android:orientation="vertical">
 
-                        <LinearLayout
+                        <androidx.appcompat.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/shape_bg_light_red"
                             android:orientation="vertical">
 
-                            <ImageView
+                            <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/ic_liveNews"
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
@@ -123,7 +124,7 @@
                                 android:padding="10dp"
                                 android:scaleType="centerInside"
                                 android:src="@drawable/ic_live_news_channels" />
-                        </LinearLayout>
+                        </androidx.appcompat.widget.LinearLayoutCompat>
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:id="@+id/tvLiveNews"
@@ -136,33 +137,32 @@
                             android:textColor="?textColor"
                             android:textSize="10sp" />
 
-                    </LinearLayout>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
-                </LinearLayout>
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
-                <LinearLayout
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/tvLiveTempleDarshan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="10dp">
 
-                    <LinearLayout
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_bg_yellow"
                         android:orientation="horizontal">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:layout_width="60dp"
                             android:layout_height="60dp"
                             android:layout_gravity="center"
                             android:padding="10dp"
                             android:scaleType="centerInside"
-                            android:src="@drawable/ic_live_mandir_dershan" />
-
+                            app:srcCompat="@drawable/ic_live_mandir_darshan" />
 
                         <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/tvLiveTempleDarshan"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -172,9 +172,9 @@
                             android:text="@string/str_live_darshan_temple"
                             android:textColor="@color/white"
                             android:textSize="20sp" />
-                    </LinearLayout>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
-                </LinearLayout>
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/txtLblOnDemand"
@@ -196,7 +196,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <LinearLayout
+                <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="?appbackgroundhome"
@@ -221,7 +221,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                </LinearLayout>
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -274,7 +274,7 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

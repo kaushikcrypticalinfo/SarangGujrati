@@ -25,10 +25,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlin.collections.ArrayList
 
-class FragmentLiveTempleDarshanChannelList : BaseFragment<NewsChannelViewModel>() {
+class FrLiveTempleDarshanChannel : BaseFragment<NewsChannelViewModel>() {
 
     private lateinit var mActivity: MainActivity
-    private var newsChannelList = ArrayList<NewsData?>()
     lateinit var binding: FragmentAllNewsChannelBinding
     lateinit var mLayoutManager: RecyclerView.LayoutManager
 
@@ -132,10 +131,6 @@ class FragmentLiveTempleDarshanChannelList : BaseFragment<NewsChannelViewModel>(
         (mLayoutManager as LinearLayoutManager).orientation = RecyclerView.VERTICAL
     }
 
-
-    private fun setRVScrollListener() {
-    }
-
     private fun fetchInitialNews() {
         getNewsChannel()
     }
@@ -151,19 +146,6 @@ class FragmentLiveTempleDarshanChannelList : BaseFragment<NewsChannelViewModel>(
 
     //setup observer
     private fun setupObservers() {
-    }
-
-    private fun addNewsData(response: NewsChannelListRespnse) {
-        if (response.data.data.isEmpty()) {
-            binding.rvAllNewsChannel.tvNoData.visibility = View.VISIBLE
-            binding.rvAllNewsChannel.recyclerview.visibility = View.GONE
-        } else {
-            for (i in response.data.data.indices) {
-                if (response.data.data[i].category == "1") {
-                    newsChannelList.add(response.data.data[i])
-                }
-            }
-        }
     }
 
 }

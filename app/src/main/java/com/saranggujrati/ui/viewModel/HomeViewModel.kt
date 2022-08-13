@@ -43,10 +43,10 @@ class HomeViewModel(private val repository: HomeRepository):BaseViewModel(AppCla
             _topCategoryResponse.value = repository.topCitiesCategories()}
 
 
-    fun gettFeatureList() =
+    fun getFeatureList() =
         viewModelScope.launch {
             _featureListResponse.value=  Resource.Loading
-            _featureListResponse.value = repository.getfeatureList()}
+            _featureListResponse.value = repository.getFeatureList()}
 
     fun getOnDemandList() =
         viewModelScope.launch {

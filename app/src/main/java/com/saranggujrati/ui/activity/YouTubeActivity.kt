@@ -1,6 +1,7 @@
 package com.saranggujrati.ui.activity
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 
 import com.saranggujrati.R
 import com.google.android.youtube.player.*
@@ -9,6 +10,7 @@ import com.google.android.youtube.player.*
 import androidx.annotation.NonNull
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.LoadAdError
 
 
@@ -68,18 +70,29 @@ class YouTubeActivity : YouTubeBaseActivity() {
 
     private fun loadBannerAd() {
         val adRequest = AdRequest.Builder().build()
+//        binding.adView.setAdSize(getAdSize())
         binding.adView.loadAd(adRequest)
-
         binding.adView.adListener = object : AdListener() {
-            override fun onAdFailedToLoad(@NonNull p0: LoadAdError) {
-                super.onAdFailedToLoad(p0)
-            }
         }
+    }
+    private fun getAdSize(): AdSize {
+        //Determine the screen width to use for the ad width.
+        val display = windowManager.defaultDisplay
+        val outMetrics = DisplayMetrics()
+        display.getMetrics(outMetrics)
+        val widthPixels = outMetrics.widthPixels.toFloat()
+        val density = outMetrics.density
+
+        //you can also pass your selected width here in dp
+        val adWidth = (widthPixels / density).toInt()
+
+        //return the optimal size depends on your orientation (landscape or portrait)
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
     }
 
     override fun onPause() {
         if (binding.adView != null) {
-            binding.adView!!.pause();
+            binding.adView.pause()
         }
         super.onPause()
     }
@@ -87,15 +100,15 @@ class YouTubeActivity : YouTubeBaseActivity() {
     override fun onResume() {
         super.onResume()
         if (binding.adView != null) {
-            binding.adView!!.resume();
+            binding.adView.resume()
         }
     }
 
     override fun onDestroy() {
         if (binding.adView != null) {
-            binding.adView!!.destroy();
+            binding.adView.destroy()
         }
-        super.onDestroy();
+        super.onDestroy()
     }
 
     private fun getYouTubeId(youTubeUrl: String): String? {
@@ -108,7 +121,7 @@ class YouTubeActivity : YouTubeBaseActivity() {
         }
         //Log.e("videoId", videoId.toString())
 
-        return videoId;
+        return videoId
     }
 
 

@@ -23,5 +23,10 @@ class AllBlogListViewModel(private val repository: AllBlogListRepository) :
             _feedList.value = Resource.Loading
             _feedList.value = repository.getRssFeedList(id)
         }
+  fun getRssLatestNews() =
+        viewModelScope.launch {
+            _feedList.value = Resource.Loading
+            _feedList.value = repository.getRssLatestNews()
+        }
 
 }

@@ -83,15 +83,9 @@ interface ApiService {
     @Json
     suspend fun getOnDemandList(): OnDemandRes
 
-    //news channel list
-    @GET("live-news-list")
-    @Json
-    suspend fun getLiveNewsChannelList(@Query("page") page: String): NewsChannelListRespnse
-
     @GET("live-news-list")
     @Json
     suspend fun getLiveChannelWithPaging(@Query("page") page: String): NewsChannelListRespnse
-
 
     //news paper list
     @GET("news-paper-list")
@@ -157,6 +151,11 @@ interface ApiService {
     @GET("rss-feed-json")
     @Json
     suspend fun getRssFeedList(
+    ): FeedResponse
+
+ @GET("rss-lastest-news")
+    @Json
+    suspend fun getRssLatestNews(
     ): FeedResponse
 
     @GET("rss-feed-json/{parentId}/{id}")

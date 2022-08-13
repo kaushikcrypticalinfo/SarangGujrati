@@ -64,6 +64,8 @@ class FeaturedListAdapter constructor(private var featureList: ArrayList<Feature
                 }
             }
 
+            binding.tvCount.visibility=View.GONE
+
             binding.llMain.setOnClickListener {
                 adapterListener?.onClick(
                     it,

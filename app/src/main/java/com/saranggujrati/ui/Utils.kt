@@ -9,14 +9,17 @@ import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
 import android.provider.OpenableColumns
+import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Patterns
+import android.view.Display
 import android.view.View
+import com.google.android.gms.ads.AdSize
+import com.google.android.material.snackbar.Snackbar
 import com.saranggujrati.ui.activity.MainActivity
 import com.saranggujrati.utils.RSS_FEED_DATE_FORMAT
 import com.saranggujrati.utils.RSS_FEED_DATE_FORMAT_GMT
 import com.saranggujrati.utils.RSS_FEED_DATE_FORMAT_T
-import com.google.android.material.snackbar.Snackbar
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -63,7 +66,6 @@ fun snackbarWithAction(view: View, message: String, action: (() -> Unit)? = null
     }
     snackbar.show()
 }
-
 
 fun isValidEmail(target: CharSequence?): Boolean {
     return if (target == null) false else Patterns.EMAIL_ADDRESS.matcher(target).matches()

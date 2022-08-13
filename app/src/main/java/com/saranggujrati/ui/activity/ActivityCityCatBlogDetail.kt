@@ -3,6 +3,7 @@ package com.saranggujrati.ui.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.*
 import androidx.annotation.NonNull
 import androidx.core.view.isVisible
@@ -11,24 +12,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
-
-import com.saranggujrati.databinding.ActivityCitCatBlogBinding
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.material.snackbar.Snackbar
+import com.performly.ext.obtainViewModel
 import com.saranggujrati.AppClass
+import com.saranggujrati.R
 import com.saranggujrati.adapter.*
+import com.saranggujrati.databinding.ActivityCitCatBlogBinding
 import com.saranggujrati.model.*
 import com.saranggujrati.ui.SavedPrefrence
 import com.saranggujrati.ui.isOnline
 import com.saranggujrati.ui.viewModel.CityCatBlogDetailViewModel
 import com.saranggujrati.ui.visible
 import com.saranggujrati.webservice.Resource
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.material.snackbar.Snackbar
-import com.performly.ext.obtainViewModel
-import com.saranggujrati.R
 import timber.log.Timber
-import kotlin.collections.ArrayList
 
 
 class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
@@ -75,14 +75,25 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
 
     private fun loadBannerAd() {
         val adRequest = AdRequest.Builder().build()
+//        binding.adView.setAdSize(getAdSize())
         binding.adView.loadAd(adRequest)
         binding.adView.adListener = object : AdListener() {
-            override fun onAdFailedToLoad(@NonNull p0: LoadAdError) {
-                super.onAdFailedToLoad(p0)
-            }
         }
     }
+    private fun getAdSize(): AdSize {
+        //Determine the screen width to use for the ad width.
+        val display = windowManager.defaultDisplay
+        val outMetrics = DisplayMetrics()
+        display.getMetrics(outMetrics)
+        val widthPixels = outMetrics.widthPixels.toFloat()
+        val density = outMetrics.density
 
+        //you can also pass your selected width here in dp
+        val adWidth = (widthPixels / density).toInt()
+
+        //return the optimal size depends on your orientation (landscape or portrait)
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
+    }
     override fun setUpChildUI(savedInstanceState: Bundle?) {
         loadBannerAd()
         binding.icBack.setOnClickListener { finish() }

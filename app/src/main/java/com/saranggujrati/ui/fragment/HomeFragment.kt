@@ -65,7 +65,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
 
         attachListeners()
 
-
         callApi()
 
         if (SavedPrefrence.is_Guest) {
@@ -259,7 +258,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     private fun getFeaturedListData() {
         setupObserversFeatureList()
 
-        viewModel.gettFeatureList()
+        viewModel.getFeatureList()
 
         viewModel.getOnDemandList()
     }
@@ -299,14 +298,9 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                             Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
                                 .show()
                         }
-
-
                     }
-
-
                 }
             }
-
         })
 
         viewModel.onDemandList.observe(this, Observer {
@@ -347,14 +341,9 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                                 .show()
 
                         }
-
-
                     }
-
-
                 }
             }
-
         })
     }
 
@@ -456,7 +445,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
             binding.llallGujNews -> mActivity.pushFragment(FragmentAllNewsPaper())
             binding.llLatestNews -> mActivity.pushFragment(FragmentAllBlog())
             binding.tvLiveTempleDarshan -> mActivity.pushFragment(
-                FragmentLiveTempleDarshanChannelList()
+                FrLiveTempleDarshanChannel()
             )
         }
     }

@@ -55,12 +55,12 @@ class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {
         setAdapter()
         setRVLayoutManager()
         setRVScrollListener()
-        fetchInitialNews(1)
+        fetchInitialNews()
         setHasOptionsMenu(true);
 
         binding.swipeContainer.setOnRefreshListener {
             endlessScrollListener.resetState()
-            fetchInitialNews(1)
+            fetchInitialNews()
         }
 
         setupObservers()
@@ -119,7 +119,7 @@ class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {
         binding.rvAllNewsChannel.recyclerview.addOnScrollListener(endlessScrollListener)
     }
 
-    private fun fetchInitialNews(page: Int) {
+    private fun fetchInitialNews() {
         newPaperlList.clear()
 
         val insertSize: Int = newPaperlList.size
@@ -127,7 +127,7 @@ class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {
         binding.rvAllNewsChannel.recyclerview.post {
             newsPaperAdapter.notifyItemRangeInserted(insertPos, insertSize)
         }
-        endlessScrollListener.resetState()
+//        endlessScrollListener.resetState()
         getNewsPaperChannel(1)
     }
 

@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
 import com.saranggujrati.ui.SavedPrefrence
@@ -27,6 +28,10 @@ class SplashScreenActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
+
+
+        AppCompatDelegate.setDefaultNightMode(if (SavedPrefrence.getIsDarkMode(this)!!) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO)
+
 
         // we used the postDelayed(Runnable, time) method
         // to send a message with a delayed time.

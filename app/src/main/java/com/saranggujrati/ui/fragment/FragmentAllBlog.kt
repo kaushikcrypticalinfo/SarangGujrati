@@ -2,6 +2,7 @@ package com.saranggujrati.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.*
 import androidx.annotation.NonNull
 import androidx.core.view.isVisible
@@ -23,6 +24,7 @@ import com.saranggujrati.ui.visible
 import com.saranggujrati.webservice.Resource
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
@@ -58,7 +60,7 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
         }
 
         binding.imgRefresh.setOnClickListener {
-            viewModel.getRssFeedList("0")
+            viewModel.getRssLatestNews()
         }
 
         binding.tvTitle.text = getString(R.string.latest_gujrati_news)
@@ -117,33 +119,43 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
 
         requireView().setOnKeyListener(object : View.OnKeyListener {
             override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
-                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
                     mActivity.supportActionBar?.show()
                     mActivity.onBackPressed()
-                    return true;
+                    return true
                 }
                 return false
             }
         })
     }
 
-    override fun onDestroy() {
-        super.onDestroy();
-    }
-
     private fun loadBannerAd() {
         val adRequest = AdRequest.Builder().build()
+//        binding.adView.setAdSize(getAdSize())
         binding.adView.loadAd(adRequest)
         binding.adView.adListener = object : AdListener() {
-            override fun onAdFailedToLoad(@NonNull p0: LoadAdError) {
-                super.onAdFailedToLoad(p0)
-            }
         }
+
     }
+    private fun getAdSize(): AdSize {
+        //Determine the screen width to use for the ad width.
+        val display = requireActivity().windowManager.defaultDisplay
+        val outMetrics = DisplayMetrics()
+        display.getMetrics(outMetrics)
+        val widthPixels = outMetrics.widthPixels.toFloat()
+        val density = outMetrics.density
+
+        //you can also pass your selected width here in dp
+        val adWidth = (widthPixels / density).toInt()
+
+        //return the optimal size depends on your orientation (landscape or portrait)
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(requireContext(), adWidth)
+    }
+
 
     private fun getAllBlogList() {
         setupObservers()
-        viewModel.getRssFeedList("0")
+        viewModel.getRssLatestNews()
 
     }
 

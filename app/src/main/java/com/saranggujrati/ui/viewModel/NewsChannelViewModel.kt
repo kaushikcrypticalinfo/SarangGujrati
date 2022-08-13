@@ -15,19 +15,6 @@ import kotlinx.coroutines.launch
 class NewsChannelViewModel(private val repository: AllNewsChannelRepository) :
     BaseViewModel(AppClass.instance) {
 
-    //TopCities
-    private val _newsChannelResponse: MutableLiveData<Resource<NewsChannelListRespnse>> =
-        MutableLiveData()
-    val newsChannelResponse: LiveData<Resource<NewsChannelListRespnse>>
-        get() = _newsChannelResponse
-
-
-    fun getAllNewsChannel(page: String) =
-        viewModelScope.launch {
-            _newsChannelResponse.value = Resource.Loading
-            _newsChannelResponse.value = repository.getNewsChannel(page)
-        }
-
     fun getPagingData(): Flow<PagingData<NewsData>> {
         return repository.getNewChannelPaging()
             .cachedIn(viewModelScope)

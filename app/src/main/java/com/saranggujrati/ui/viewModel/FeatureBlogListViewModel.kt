@@ -17,10 +17,9 @@ class FeatureBlogListViewModel(private val repository: HomeRepository):BaseViewM
         get() = _featureBlogListResponse
 
 
-
-
     fun getFeatureBlogList() =
         viewModelScope.launch {
             _featureBlogListResponse.value=  Resource.Loading
-            _featureBlogListResponse.value = repository.getfeatureList()}
+            _featureBlogListResponse.value = repository.getFeatureList()}
+
 }
