@@ -134,8 +134,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         }
         binding.rvTopCategory.recyclerview.adapter = categoryAdapter
 
-
-
         featureAdapter.adapterListener = object : FeaturedListAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
                 if (view.id == R.id.llMain) {

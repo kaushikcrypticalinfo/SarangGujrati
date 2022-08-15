@@ -17,15 +17,17 @@ import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.saranggujrati.databinding.RRssFeedItemBinding
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
+import com.saranggujrati.databinding.ItemNewsDetailBinding
 
 import com.saranggujrati.extensions.formatHtmlText
 import com.saranggujrati.model.FeatureData
+import com.saranggujrati.ui.visible
 
 class FeatureStoryListAdapter(private var categoryList: ArrayList<FeatureData>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var adapterListener: AdapterListener? = null
-    lateinit var binding: RRssFeedItemBinding
+    lateinit var binding: ItemNewsDetailBinding
 
     interface AdapterListener {
         fun onClick(view: View, position: Int)
@@ -33,7 +35,7 @@ class FeatureStoryListAdapter(private var categoryList: ArrayList<FeatureData>) 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        binding = RRssFeedItemBinding.inflate(inflater, parent, false)
+        binding = ItemNewsDetailBinding.inflate(inflater, parent, false)
         return CategoryViewHolder(binding)
     }
 
@@ -49,45 +51,28 @@ class FeatureStoryListAdapter(private var categoryList: ArrayList<FeatureData>) 
         return categoryList.size
     }
 
-    inner class CategoryViewHolder(private var binding: RRssFeedItemBinding) :
+    inner class CategoryViewHolder(private var binding: ItemNewsDetailBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @RequiresApi(Build.VERSION_CODES.N)
         fun bind(data: FeatureData) {
-
-//            binding.groupNews.visibility = if (data.isBanner) GONE else VISIBLE
-//            binding.imgBanner.visibility = if (data.isBanner) VISIBLE else GONE
-            binding.imgBanner.visibility = GONE
-
-
-            /* if (data.isBanner)
-                 Glide.with(AppClass.appContext)
-                     .load(data.image)
-                     .override(SIZE_ORIGINAL, SIZE_ORIGINAL)
-                     .apply(
-                         RequestOptions.placeholderOf(R.drawable.placeholder)
-                             .error(R.drawable.placeholder)
-                     ).into(binding.imgBanner)*/
-
-
+            binding.tvNewsPaperName.visible(false)
+            binding.txtReadMore.visible(false)
 
             binding.tvNewsHighLight.text = data.title
-
-            binding.tvNewsPaperName.text = data.category_name
 
             binding.tvNewsDetail.formatHtmlText(
                 Html.fromHtml(data.description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
             )
 
-            Glide.with(AppClass.appContext)
-                .load(data.image)
-                .apply(
-                    RequestOptions.placeholderOf(R.drawable.placeholder)
-                        .error(R.drawable.ic_placeholder)
-                ).into(binding.ivNewsImage)
-
-            binding.txtReadMore.setOnClickListener {
-                adapterListener?.onClick(it, absoluteAdapterPosition)
+            data.banner_image?.let {
+                Glide.with(AppClass.appContext)
+                    .load(it[0])
+                    .apply(
+                        RequestOptions.placeholderOf(R.drawable.placeholder)
+                            .error(R.drawable.ic_placeholder)
+                    ).into(binding.ivNewsImage)
             }
+
 
         }
     }
