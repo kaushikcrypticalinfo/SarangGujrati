@@ -5,16 +5,21 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.material.snackbar.Snackbar
+import com.performly.ext.obtainViewModel
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
 import com.saranggujrati.adapter.*
+import com.saranggujrati.databinding.FragmentFeatureBlogBinding
 import com.saranggujrati.model.*
 import com.saranggujrati.ui.activity.MainActivity
 import com.saranggujrati.ui.activity.WebViewActivity
@@ -22,13 +27,6 @@ import com.saranggujrati.ui.isOnline
 import com.saranggujrati.ui.viewModel.FeatureBlogListViewModel
 import com.saranggujrati.ui.visible
 import com.saranggujrati.webservice.Resource
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
-import com.google.android.material.snackbar.Snackbar
-import com.performly.ext.obtainViewModel
-import com.saranggujrati.databinding.FragmentFeatureBlogBinding
-import kotlin.collections.ArrayList
 
 
 class FragmentFeatureBlog(val b: Bundle) : BaseFragment<FeatureBlogListViewModel>(),
@@ -182,10 +180,9 @@ class FragmentFeatureBlog(val b: Bundle) : BaseFragment<FeatureBlogListViewModel
 
     private fun loadBannerAd() {
         val adRequest = AdRequest.Builder().build()
-//        binding.adView.setAdSize(getAdSize())
+        binding.adView.setAdSize(getAdSize())
         binding.adView.loadAd(adRequest)
         binding.adView.adListener = object : AdListener() {
-
         }
     }
     private fun getAdSize(): AdSize {
