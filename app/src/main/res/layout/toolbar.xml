@@ -20,9 +20,6 @@
             app:titleTextColor="@color/white"
             android:theme="@style/Theme.MyApplication.AppBarOverlay"
             app:popupTheme="@style/Theme.MyApplication.PopupOverlay" >
-
-
-
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>

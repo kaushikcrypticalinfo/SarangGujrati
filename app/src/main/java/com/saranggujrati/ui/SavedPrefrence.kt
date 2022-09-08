@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.saranggujrati.model.CardDataMain
 import com.google.gson.Gson
+import com.saranggujrati.adapter.NewsOnTheGoAdapter
 
 object SavedPrefrence {
 

@@ -14,7 +14,6 @@ import android.util.Log
 import android.util.Patterns
 import android.view.Display
 import android.view.View
-import com.google.android.gms.ads.AdSize
 import com.google.android.material.snackbar.Snackbar
 import com.saranggujrati.ui.activity.MainActivity
 import com.saranggujrati.utils.RSS_FEED_DATE_FORMAT

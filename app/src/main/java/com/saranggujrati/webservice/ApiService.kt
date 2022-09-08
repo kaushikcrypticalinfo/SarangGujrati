@@ -153,7 +153,7 @@ interface ApiService {
     suspend fun getRssFeedList(
     ): FeedResponse
 
- @GET("rss-lastest-news")
+    @GET("rss-lastest-news")
     @Json
     suspend fun getRssLatestNews(
     ): FeedResponse

@@ -58,17 +58,26 @@
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/activity_base.xml" value="0.3108165882855921" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/activity_cit_cat_blog.xml" value="0.3108165882855921" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/activity_main.xml" value="0.15190137902214793" />
+        <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/activity_splash.xml" value="0.3108165882855921" />
+        <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/activity_webview.xml" value="0.3108165882855921" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/activity_youtube.xml" value="0.3108165882855921" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/app_bar_main.xml" value="0.15190137902214793" />
+        <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/fragment_all_news_blog.xml" value="0.3108165882855921" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/fragment_all_news_channel.xml" value="0.15190137902214793" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/fragment_edit_profile.xml" value="0.3108165882855921" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/fragment_feature_blog.xml" value="0.15190137902214793" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/fragment_home.xml" value="0.242520398912058" />
+        <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/fragment_privacy_policy.xml" value="0.15190137902214793" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/item_featured_stories.xml" value="0.3108165882855921" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/item_news_channel.xml" value="0.15190137902214793" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/item_news_detail.xml" value="0.15190137902214793" />
+        <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/item_news_on_the_go.xml" value="0.25" />
+        <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/item_top_categories.xml" value="0.3108165882855921" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/item_top_cities.xml" value="0.3108165882855921" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/layout_recylerview.xml" value="0.15190137902214793" />
+        <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/r_rss_feed_item.xml" value="0.3108165882855921" />
+        <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/layout/toolbar.xml" value="0.3108165882855921" />
+        <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/menu/main_menu.xml" value="0.3108165882855921" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/menu/nav_sidemenu.xml" value="0.3108165882855921" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2075" />
         <entry key="..\:/AndroidStudioProjects/SarangGujrati/Project/SarangGujrati/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2075" />

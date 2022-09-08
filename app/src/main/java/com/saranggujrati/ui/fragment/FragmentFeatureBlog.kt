@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.SnapHelper
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.LoadAdError
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
 import com.saranggujrati.AppClass
@@ -180,7 +179,7 @@ class FragmentFeatureBlog(val b: Bundle) : BaseFragment<FeatureBlogListViewModel
 
     private fun loadBannerAd() {
         val adRequest = AdRequest.Builder().build()
-        binding.adView.setAdSize(getAdSize())
+        //binding.adView.setAdSize(getAdSize())
         binding.adView.loadAd(adRequest)
         binding.adView.adListener = object : AdListener() {
         }

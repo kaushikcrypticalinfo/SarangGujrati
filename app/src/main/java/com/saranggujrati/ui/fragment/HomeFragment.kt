@@ -170,6 +170,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         binding.llallGujNews.setOnClickListener(this)
         binding.llLatestNews.setOnClickListener(this)
         binding.tvLiveTempleDarshan.setOnClickListener(this)
+        binding.llLatestNewsOnTheGo.setOnClickListener(this)
 
         binding.swipeRefresh.setOnRefreshListener {
             callApi()
@@ -445,6 +446,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
             binding.tvLiveTempleDarshan -> mActivity.pushFragment(
                 FrLiveTempleDarshanChannel()
             )
+            binding.llLatestNewsOnTheGo -> mActivity.pushFragment(FragmentLatestNewsOnTheGo())
         }
     }
 

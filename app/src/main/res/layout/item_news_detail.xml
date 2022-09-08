@@ -7,104 +7,103 @@
     android:background="?appBackground"
     android:orientation="vertical">
 
-    <LinearLayout
+    <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical">-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_news_image"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/placeholder" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="225dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="horizontal">
 
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iv_news_image"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/placeholder" />
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvNewsPaperName"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="225dp"
-                android:layout_marginEnd="20dp"
-                android:orientation="horizontal">
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:background="@drawable/shape_bg_blue"
+                android:fontFamily="@font/montserrat_regular"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
+                android:text="Divya Bhaskar"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtReadMore"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:background="@drawable/shape_bg_light_orange"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="10dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_share_white"
+                android:text="Read More"
+                android:textColor="@color/white" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tvNewsPaperName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/shape_bg_blue"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:paddingLeft="15dp"
-                    android:paddingTop="10dp"
-                    android:paddingRight="15dp"
-                    android:paddingBottom="10dp"
-                    android:text="Divya Bhaskar"
-                    android:textColor="@color/white"
-                    android:textSize="12sp" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/txtReadMore"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/shape_bg_light_orange"
-                    android:paddingLeft="15dp"
-                    android:paddingTop="10dp"
-                    android:paddingRight="15dp"
-                    android:paddingBottom="10dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_share_white"
-                    android:text="Read More"
-                    android:textColor="@color/white" />
-
-            </RelativeLayout>
         </RelativeLayout>
 
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvNewsHighLight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_horizontal"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:ellipsize="end"
-            android:fontFamily="@font/montserrat_bold"
-            android:gravity="start"
-            android:inputType="textMultiLine|textNoSuggestions"
-            android:maxLines="2"
-            android:textColor="?textColor"
-            android:textSize="16dp" />
+    </RelativeLayout>
 
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tvNewsDetail"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="start|center_horizontal"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:fontFamily="@font/montserrat_regular"
-            android:gravity="start"
-            android:inputType="textMultiLine|textNoSuggestions"
-            android:isScrollContainer="true"
-            android:scrollbars="vertical"
-            android:textColor="?textColor"
-            android:textSize="12sp" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvNewsHighLight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_horizontal"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="start"
+        android:inputType="textMultiLine|textNoSuggestions"
+        android:maxLines="2"
+        android:textColor="?textColor"
+        android:textSize="16dp" />
 
-    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvNewsDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_horizontal"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="start"
+        android:inputType="textMultiLine|textNoSuggestions"
+        android:isScrollContainer="true"
+        android:scrollbars="vertical"
+        android:textColor="?textColor"
+        android:textSize="12sp" />
+
+    <!--</LinearLayout>-->
 
 
 </LinearLayout>

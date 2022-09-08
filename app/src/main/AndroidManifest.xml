@@ -71,7 +71,8 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.SarangGujrati.NoActionBar">
+            android:theme="@style/Theme.SarangGujrati.NoActionBar"
+            android:hardwareAccelerated="true">
             <intent-filter>
                 <action android:name="MAINACTIVITY"></action>
                 <category android:name="android.intent.category.DEFAULT"></category>
@@ -84,7 +85,8 @@
 
         <activity
             android:name=".ui.activity.WebViewActivity"
-            android:theme="@style/Theme.SarangGujrati.NoActionBar" />
+            android:theme="@style/Theme.SarangGujrati.NoActionBar"
+            android:hardwareAccelerated="true"/>
 
         <!--  Banner Add metadata -->
         <meta-data

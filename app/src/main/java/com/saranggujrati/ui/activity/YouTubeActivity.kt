@@ -2,18 +2,11 @@ package com.saranggujrati.ui.activity
 
 import android.os.Bundle
 import android.util.DisplayMetrics
-
-import com.saranggujrati.R
-import com.google.android.youtube.player.*
-
-
-import androidx.annotation.NonNull
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
-import com.google.android.gms.ads.LoadAdError
-
-
+import com.saranggujrati.R
+import com.google.android.youtube.player.*
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.saranggujrati.databinding.ActivityYoutubeBinding
 import java.util.regex.Pattern

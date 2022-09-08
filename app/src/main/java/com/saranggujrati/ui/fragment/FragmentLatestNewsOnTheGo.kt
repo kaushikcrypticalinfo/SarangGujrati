@@ -2,22 +2,21 @@ package com.saranggujrati.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.DisplayMetrics
-import android.view.*
-import androidx.annotation.NonNull
+import android.view.KeyEvent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.PagerSnapHelper
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SnapHelper
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
+import com.google.android.material.snackbar.Snackbar
+import com.performly.ext.obtainViewModel
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
 import com.saranggujrati.adapter.FeedListAdapter
-import com.saranggujrati.model.*
+import com.saranggujrati.adapter.NewsOnTheGoAdapter
+import com.saranggujrati.databinding.FragmentAllNewsBlogBinding
+import com.saranggujrati.model.RssFeedModelData
 import com.saranggujrati.ui.SavedPrefrence
 import com.saranggujrati.ui.activity.MainActivity
 import com.saranggujrati.ui.activity.WebViewActivity
@@ -25,20 +24,13 @@ import com.saranggujrati.ui.isOnline
 import com.saranggujrati.ui.viewModel.AllBlogListViewModel
 import com.saranggujrati.ui.visible
 import com.saranggujrati.webservice.Resource
-import com.google.android.material.snackbar.Snackbar
-import com.performly.ext.obtainViewModel
-import com.saranggujrati.databinding.FragmentAllNewsBlogBinding
-import java.util.*
 
-
-class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListener {
-
+class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
     private lateinit var mActivity: MainActivity
     lateinit var binding: FragmentAllNewsBlogBinding
 
-    lateinit var allBogAdapter: FeedListAdapter
-
-    private var blogList = ArrayList<RssFeedModelData>()
+    lateinit var newsOnTheGoAdapter : NewsOnTheGoAdapter
+    private var newsList = ArrayList<RssFeedModelData>()
 
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
         binding = FragmentAllNewsBlogBinding.inflate(inflater, container, false)
@@ -50,9 +42,6 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
-
-        loadBannerAd()
-
         binding.icBack.setOnClickListener {
             mActivity.supportActionBar?.show()
             mActivity.onBackPressed()
@@ -62,53 +51,40 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
             viewModel.getRssLatestNews()
         }
 
-        binding.tvTitle.text = getString(R.string.latest_gujrati_news)
+        /*binding.adView.visibility = View.GONE*/
 
-        allBogAdapter = FeedListAdapter(blogList)
+        binding.tvTitle.text = getString(R.string.gujarati_news_on_the_go)
 
-        allBogAdapter.adapterListener = object : FeedListAdapter.AdapterListener {
+        newsOnTheGoAdapter = NewsOnTheGoAdapter(newsList)
+
+        newsOnTheGoAdapter.adapterListener = object : NewsOnTheGoAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
                 when (view.id) {
                     R.id.ic_back -> {
                         mActivity.supportActionBar?.show()
                         mActivity.onBackPressed()
                     }
-                    R.id.txtReadMore -> {
+                    R.id.txtReadMore_news_on_the_go -> {
                         val i = Intent(requireContext(), WebViewActivity::class.java)
-                        i.putExtra("url", blogList[position].link)
-                        i.putExtra("title", blogList[position].title)
+                        i.putExtra("url", newsList[position].link)
+                        i.putExtra("title", newsList[position].title)
                         startActivity(i)
                     }
                 }
             }
         }
-        val snapHelper: SnapHelper = PagerSnapHelper()
-        val linearLayoutManager = LinearLayoutManager(context)
-        with(binding.rvNewsFeed)
-        {
-            layoutManager = linearLayoutManager
-            snapHelper.attachToRecyclerView(this)
-            adapter = allBogAdapter
-        }
 
-        binding.rvNewsFeed.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val pos = linearLayoutManager.findLastCompletelyVisibleItemPosition()
-                if (pos >= 0) {
-                    val banner = blogList[pos].isBanner
-                    binding.relativeLayout.visible(!banner)
-                    /*binding.adView.visible(!banner)*/
-                }
-            }
-        })
+        binding.rvNewsFeed.apply {
+            layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = newsOnTheGoAdapter
+        }
 
         mActivity = (activity as MainActivity)
         mActivity.enableViews(true)
         mActivity.supportActionBar?.hide()
         getAllBlogList()
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -128,36 +104,12 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
         })
     }
 
-    private fun loadBannerAd() {
-        val adRequest = AdRequest.Builder().build()
-//        binding.adView.setAdSize(getAdSize())
-        binding.adView.loadAd(adRequest)
-        binding.adView.adListener = object : AdListener() {
-        }
-    }
-    private fun getAdSize(): AdSize {
-        //Determine the screen width to use for the ad width.
-        val display = requireActivity().windowManager.defaultDisplay
-        val outMetrics = DisplayMetrics()
-        display.getMetrics(outMetrics)
-        val widthPixels = outMetrics.widthPixels.toFloat()
-        val density = outMetrics.density
-
-        //you can also pass your selected width here in dp
-        val adWidth = (widthPixels / density).toInt()
-
-        //return the optimal size depends on your orientation (landscape or portrait)
-        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(requireContext(), adWidth)
-    }
-
-
     private fun getAllBlogList() {
         setupObservers()
         viewModel.getRssLatestNews()
 
     }
 
-    //setup observer
     private fun setupObservers() {
 
         viewModel.feedList.observe(this, Observer { it ->
@@ -169,25 +121,25 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
 
                 is Resource.Success -> {
                     //when refresh data clear old data
-                    blogList.clear()
+                    newsList.clear()
                     if (it.value.status) {
                         if (it.value.status) {
                             binding.progressbar.visible(false)
                             val data = it.value.data
-                            blogList.addAll(data.shuffled())
+                            newsList.addAll(data.shuffled())
 
-                            if (blogList.isNotEmpty())
-                                getAllBlogList(blogList)
+                            if (newsList.isNotEmpty())
+                                getAllBlogList(newsList)
                             else {
                                 binding.tvNoData.visibility = View.VISIBLE
                                 binding.rvNewsFeed.visibility = View.GONE
                             }
 
                             binding.tvNoData.visibility =
-                                if (blogList.isNotEmpty()) View.GONE else View.VISIBLE
+                                if (newsList.isNotEmpty()) View.GONE else View.VISIBLE
 
                             binding.rvNewsFeed.visibility =
-                                if (blogList.isNotEmpty()) View.VISIBLE else View.GONE
+                                if (newsList.isNotEmpty()) View.VISIBLE else View.GONE
                         }
                     } else {
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
@@ -215,8 +167,7 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
         })
     }
 
-
-    private fun getAllBlogList(response: ArrayList<RssFeedModelData>) {
+    private fun getAllBlogList(response: java.util.ArrayList<RssFeedModelData>) {
         if (response.isEmpty()) {
             binding.tvNoData.visibility = View.VISIBLE
             binding.rvNewsFeed.visibility = View.GONE
@@ -232,19 +183,13 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
                 val blogData = RssFeedModelData()
                 blogData.isBanner = true
                 blogData.image = cardData.image
-                if (tempIndex < blogList.size - 1) {
-                    blogList[tempIndex] = blogData
+                if (tempIndex < newsList.size - 1) {
+                    newsList[tempIndex] = blogData
                     tempIndex += 6
                 }
             }
 
-            allBogAdapter.notifyDataSetChanged()
+            newsOnTheGoAdapter.notifyDataSetChanged()
         }
     }
-
-    override fun onClick(p0: View?) {
-        TODO("Not yet implemented")
-    }
-
-
 }

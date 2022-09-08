@@ -3,12 +3,13 @@ package com.saranggujrati.ui.activity
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
+import android.webkit.WebChromeClient
+import android.webkit.WebSettings
 import android.webkit.WebView
 
 
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.saranggujrati.databinding.ActivityWebviewBinding
 
 
@@ -27,7 +28,7 @@ class WebViewActivity : AppCompatActivity() {
 
         readIntentData()
 
-        setupToolbar(binding.toolbar.toolbar)
+        setupToolbar()
 
         loadWebView()
     }
@@ -45,13 +46,11 @@ class WebViewActivity : AppCompatActivity() {
 
     }
 
-
-    private fun setupToolbar(toolbar: Toolbar) {
-        setSupportActionBar(binding.toolbar.toolbar)
+    private fun setupToolbar() {
+        setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        binding.toolbar.toolbar.title = title
-        supportActionBar!!.title = title
-
+        binding.toolbar.title = title!!.trim()
+        supportActionBar!!.title = title!!.trim()
     }
 
     private fun loadWebView() {
@@ -67,15 +66,19 @@ class WebViewActivity : AppCompatActivity() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 binding.progressbar.visibility = View.GONE
             }
+
         }
 
         // this will enable the javascript settings
         binding.webview.settings.javaScriptEnabled = true
-        binding.webview.settings.domStorageEnabled  = true
+        binding.webview.settings.domStorageEnabled = true
+        binding.webview.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+        binding.webview.settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.NARROW_COLUMNS
+        binding.webview.settings.useWideViewPort = true
+
 
         // if you want to enable zoom feature
         binding.webview.settings.setSupportZoom(true)
-
         binding.webview.loadUrl(urlLink.toString())
 
     }

@@ -69,7 +69,7 @@ class FeedListAdapter(private var categoryList: ArrayList<RssFeedModelData>) :
 
 
 
-            binding.tvNewsHighLight.text = data.title
+            binding.tvNewsHighLight.text = data.title.trim()
 
             binding.tvNewsPaperName.text = data.feedType
 

@@ -2,26 +2,22 @@ package com.saranggujrati.adapter
 
 import android.os.Build
 import android.text.Html
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
-
-import com.saranggujrati.databinding.RRssFeedItemBinding
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
 import com.saranggujrati.databinding.ItemNewsDetailBinding
-
 import com.saranggujrati.extensions.formatHtmlText
 import com.saranggujrati.model.FeatureData
 import com.saranggujrati.ui.visible
+
 
 class FeatureStoryListAdapter(private var categoryList: ArrayList<FeatureData>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -60,9 +56,8 @@ class FeatureStoryListAdapter(private var categoryList: ArrayList<FeatureData>) 
 
             binding.tvNewsHighLight.text = data.title
 
-            binding.tvNewsDetail.formatHtmlText(
-                Html.fromHtml(data.description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
-            )
+            binding.tvNewsDetail.formatHtmlText(Html.fromHtml(data.description.trim(), HtmlCompat.FROM_HTML_MODE_LEGACY).toString())
+            binding.tvNewsDetail.movementMethod = ScrollingMovementMethod()
 
             data.banner_image?.let {
                 Glide.with(AppClass.appContext)
