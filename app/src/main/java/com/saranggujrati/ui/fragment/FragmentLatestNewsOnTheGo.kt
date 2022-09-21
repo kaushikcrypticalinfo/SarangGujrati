@@ -51,7 +51,7 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
             viewModel.getRssLatestNews()
         }
 
-        /*binding.adView.visibility = View.GONE*/
+        binding.adView.visibility = View.GONE
 
         binding.tvTitle.text = getString(R.string.gujarati_news_on_the_go)
 

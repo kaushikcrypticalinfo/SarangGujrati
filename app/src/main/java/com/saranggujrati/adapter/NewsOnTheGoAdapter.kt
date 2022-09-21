@@ -50,7 +50,8 @@ class NewsOnTheGoAdapter(private var newsList: ArrayList<RssFeedModelData>) :
             binding.adView.adListener = object : AdListener() {
             }
             binding.adView.visibility = View.VISIBLE
-            binding.deviderLine2.visibility = View.VISIBLE
+        } else {
+            binding.adView.visibility = View.GONE
         }
     }
 

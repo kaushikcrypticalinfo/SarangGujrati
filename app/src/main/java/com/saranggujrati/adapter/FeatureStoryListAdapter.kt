@@ -1,13 +1,11 @@
 package com.saranggujrati.adapter
 
 import android.os.Build
-import android.text.Html
 import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
-import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -56,8 +54,8 @@ class FeatureStoryListAdapter(private var categoryList: ArrayList<FeatureData>) 
 
             binding.tvNewsHighLight.text = data.title
 
-            binding.tvNewsDetail.formatHtmlText(Html.fromHtml(data.description.trim(), HtmlCompat.FROM_HTML_MODE_LEGACY).toString())
-            binding.tvNewsDetail.movementMethod = ScrollingMovementMethod()
+            /*binding.tvNewsDetail.formatHtmlText(Html.fromHtml(data.description.trim(), HtmlCompat.FROM_HTML_MODE_LEGACY).toString())*/
+            binding.tvNewsDetail.formatHtmlText(data.description).toString().trim()
 
             data.banner_image?.let {
                 Glide.with(AppClass.appContext)

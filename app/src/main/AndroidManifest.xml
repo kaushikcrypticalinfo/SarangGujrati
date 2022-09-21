@@ -91,7 +91,7 @@
         <!--  Banner Add metadata -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3125008321195277~5675173289" />
+            android:value="ca-app-pub-3940256099942544~3347511713" />
 
         <!--  facebook metadata -->
         <meta-data
