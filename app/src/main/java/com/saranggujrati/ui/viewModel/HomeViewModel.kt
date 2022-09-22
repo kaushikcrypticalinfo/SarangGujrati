@@ -31,6 +31,11 @@ class HomeViewModel(private val repository: HomeRepository):BaseViewModel(AppCla
     val onDemandList: LiveData<Resource<OnDemandRes>>
         get() = _onDemandList
 
+    private val _apiRecord: MutableLiveData<Resource<ApiRecordResponse>> =
+        MutableLiveData()
+    val apiRecord: LiveData<Resource<ApiRecordResponse>>
+        get() = _apiRecord
+
 
     fun gettTopCitiesCategories() =
         viewModelScope.launch {
@@ -52,4 +57,10 @@ class HomeViewModel(private val repository: HomeRepository):BaseViewModel(AppCla
         viewModelScope.launch {
             _onDemandList.value=  Resource.Loading
             _onDemandList.value = repository.getOnDemandList()}
+
+    fun getApiRecordFound() =
+        viewModelScope.launch {
+            _apiRecord.value = Resource.Loading
+            _apiRecord.value = repository.apiRecordFound()
+        }
 }

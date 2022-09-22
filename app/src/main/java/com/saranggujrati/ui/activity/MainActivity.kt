@@ -40,12 +40,17 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 
 import com.saranggujrati.ui.fragment.*
 import com.saranggujrati.webservice.Resource
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
 import com.saranggujrati.databinding.ActivityMainBinding
+import com.saranggujrati.ui.isOnline
+import com.saranggujrati.ui.visible
+import kotlinx.coroutines.launch
 
 
 class MainActivity : BaseActicvity<MainViewModel>(),
@@ -169,14 +174,13 @@ class MainActivity : BaseActicvity<MainViewModel>(),
         AppCompatDelegate.setDefaultNightMode(if (isDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO)
     }
 
-
     private fun displayValue(number: Int) {
         tvValue.text = number.toString()
     }
 
     fun enableViews(enable: Boolean) {
 
-        //  enableViews(false)
+        // enableViews(false)
         // To keep states of ActionBar and ActionBarDrawerToggle synchronized,
         // when you enable on one, you disable on the other.
         // And as you may notice, the order for this operation is disable first, then enable - VERY VERY IMPORTANT.

@@ -169,6 +169,9 @@ interface ApiService {
     @Json
     suspend fun fullScreenCardList(): CardListRes
 
+    @GET("api-records-found")
+    suspend fun apiRecordFound(): ApiRecordResponse
+
     @GET("{fullUrl}")
     @Xml
     suspend fun getFeedLiveData(

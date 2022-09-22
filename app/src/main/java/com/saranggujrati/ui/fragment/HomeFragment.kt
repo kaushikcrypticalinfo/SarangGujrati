@@ -9,10 +9,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.*
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
-import com.saranggujrati.adapter.CategoryListAdapter
-import com.saranggujrati.adapter.FeaturedListAdapter
-import com.saranggujrati.adapter.OnDemandListAdapter
-import com.saranggujrati.adapter.TopCitiesAdapter
 import com.saranggujrati.model.*
 import com.saranggujrati.model.onDemand.OnDemandData
 import com.saranggujrati.ui.SavedPrefrence
@@ -24,7 +20,9 @@ import com.saranggujrati.ui.viewModel.HomeViewModel
 import com.saranggujrati.ui.visible
 import com.saranggujrati.webservice.Resource
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import com.performly.ext.obtainViewModel
+import com.saranggujrati.adapter.*
 import com.saranggujrati.databinding.FragmentHomeBinding
 import kotlin.collections.ArrayList
 
@@ -44,6 +42,9 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
 
     lateinit var categoryAdapter: CategoryListAdapter
     private var categoryList = ArrayList<CityCatageoryChild>()
+
+    lateinit var topMenuAdapter: TopMenuAdapter
+    private var topMenuItemList = ArrayList<ApiRecordData>()
 
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -72,11 +73,50 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         } else {
             setHasOptionsMenu(true)
         }
+
+        viewModel.apiRecord.observe(this) {
+            when (it) {
+                is Resource.Loading -> {
+                }
+                is Resource.Success -> {
+                    if (it.value.status) {
+//                        topMenuItemList.addAll(it.value.data)
+//                        topMenuAdapter.notifyDataSetChanged()
+                    }
+                }
+                is Resource.Failure -> {
+                    when {
+                        it.isNetworkError -> {
+                            if (!isOnline(requireContext())) {
+                                Snackbar.make(
+                                    binding.layout,
+                                    resources.getString(R.string.check_internet),
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                        else -> {
+                            Snackbar.make(
+                                binding.layout,
+                                it.value.message,
+                                Snackbar.LENGTH_LONG
+                            )
+                                .show()
+                        }
+                    }
+                }
+            }
+        };
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_menu, menu);
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onResume() {
+//        viewModel.getApiRecordFound()
+        super.onResume()
     }
 
     private fun setAdapter() {
@@ -144,6 +184,51 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
             }
         }
 
+        var str = "{\n" +
+                "  \"status\": true,\n" +
+                "  \"message\": \"List of Found Records\",\n" +
+                "  \"data\": [\n" +
+                "    {\n" +
+                "      \"id\": 1,\n" +
+                "      \"name\":\"Latest Gujrati News\",\n" +
+                "      \"found\": true,\n" +
+                "      \"records\": 176\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"id\": 2,\n" +
+                "      \"name\":\"All Gujrati Newspapers\",\n" +
+                "      \"found\": true,\n" +
+                "      \"records\": 8\n" +
+                "    },\n" +
+                "    {\n" +
+                "      \"id\": 3,\n" +
+                "      \"name\":\"NewsOn-The-Go\",\n" +
+                "      \"found\": true,\n" +
+                "      \"records\": 6\n" +
+                "    },\n" +
+                " {\n" +
+                "      \"id\": 4,\n" +
+                "      \"name\":\"Live News Channels\",\n" +
+                "      \"found\": true,\n" +
+                "      \"records\": 6\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}"
+        val fromJson = Gson().fromJson(str, ApiRecordResponse::class.java)
+        topMenuItemList.addAll(fromJson.data)
+        topMenuAdapter = TopMenuAdapter(topMenuItemList)
+        topMenuAdapter.adapterListener = object : TopMenuAdapter.AdapterListener {
+            override fun onClick(view: View, position: Int) {
+                when (position) {
+                    1 -> mActivity.pushFragment(FragmentAllBlog())
+                    2 -> mActivity.pushFragment(FragmentAllNewsPaper())
+                    3 -> mActivity.pushFragment(FragmentLatestNewsOnTheGo())
+                    4 -> mActivity.pushFragment(FragmentAllNewsChannel())
+                }
+            }
+        }
+        binding.rvTopMenu.adapter = topMenuAdapter
+
 
     }
 
@@ -163,15 +248,13 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         binding.rvTopCategory.recyclerview.setHasFixedSize(true)
         binding.rvTopCategory.recyclerview.layoutManager = GridLayoutManager(AppClass.appContext, 3)
 
+        binding.rvTopMenu.setHasFixedSize(true)
+        binding.rvTopMenu.layoutManager = GridLayoutManager(AppClass.appContext, 2)
+
     }
 
     private fun attachListeners() {
-        binding.llLiveNews.setOnClickListener(this)
-        binding.llallGujNews.setOnClickListener(this)
-        binding.llLatestNews.setOnClickListener(this)
         binding.tvLiveTempleDarshan.setOnClickListener(this)
-        binding.llLatestNewsOnTheGo.setOnClickListener(this)
-
         binding.swipeRefresh.setOnRefreshListener {
             callApi()
         }
@@ -416,8 +499,8 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
             binding.rvTopCategory.tvNoData.visibility = View.VISIBLE
             binding.rvTopCategory.recyclerview.visibility = View.GONE
         } else {
-            response?.let { res ->
-                res.data?.let { data ->
+            response.let { res ->
+                res.data.let { data ->
                     data.find { it.id == 21 }?.let { cateData ->
                         cateData.child?.let {
                             categoryList.addAll(it)
@@ -425,14 +508,14 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                         }
                     }
                 }
-            }
+            }?: kotlin.run {  }
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.logo -> {
-            /*mActivity.pushFragment(FragmentEditProfile())*/
             }
         }
         return super.onOptionsItemSelected(item)
@@ -440,13 +523,9 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
 
     override fun onClick(p0: View?) {
         when (p0) {
-            binding.llLiveNews -> mActivity.pushFragment(FragmentAllNewsChannel())
-            binding.llallGujNews -> mActivity.pushFragment(FragmentAllNewsPaper())
-            binding.llLatestNews -> mActivity.pushFragment(FragmentAllBlog())
             binding.tvLiveTempleDarshan -> mActivity.pushFragment(
                 FrLiveTempleDarshanChannel()
             )
-            binding.llLatestNewsOnTheGo -> mActivity.pushFragment(FragmentLatestNewsOnTheGo())
         }
     }
 
