@@ -120,16 +120,23 @@
         ads:layout_constraintStart_toStartOf="parent"
         ads:layout_constraintTop_toBottomOf="@+id/devider_line2" />
 
-    <!--<View
+    <View
         android:id="@+id/devider_line3"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:background="@color/black"
-        android:visibility="visible"
         ads:layout_constraintBottom_toBottomOf="parent"
         ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintHorizontal_bias="1.0"
         ads:layout_constraintStart_toStartOf="parent"
-        ads:layout_constraintTop_toBottomOf="@+id/adView" />-->
+        ads:layout_constraintTop_toBottomOf="@+id/adView"
+        ads:layout_constraintVertical_bias="0.0" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupAdView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        ads:constraint_referenced_ids="devider_line2,adView,devider_line3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

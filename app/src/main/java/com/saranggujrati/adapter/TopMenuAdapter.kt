@@ -68,7 +68,7 @@ class TopMenuAdapter constructor(private var categoryList: ArrayList<ApiRecordDa
                     when (data.id) {
                         1 -> R.drawable.ic_letest_gujarati_news
                         2 -> R.drawable.ic_all_gujarati_news
-                        3 -> R.drawable.ic_letest_gujarati_news
+                        3 -> R.drawable.ic_new_on_the_go
                         4 -> R.drawable.ic_live_news_channels
                         else -> R.drawable.ic_letest_gujarati_news
                     }

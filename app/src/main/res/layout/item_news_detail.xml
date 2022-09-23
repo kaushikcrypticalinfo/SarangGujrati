@@ -78,14 +78,14 @@
         android:textColor="?textColor"
         android:textSize="16sp" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvNewsDetail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="start|center_horizontal"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
@@ -98,8 +98,7 @@
             android:textColor="?textColor"
             android:textSize="12sp" />
 
-    </ScrollView>
-
+    </androidx.core.widget.NestedScrollView>
 
 
     <!--</LinearLayout>-->

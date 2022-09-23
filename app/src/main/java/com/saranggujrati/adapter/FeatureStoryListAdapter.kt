@@ -3,12 +3,16 @@ package com.saranggujrati.adapter
 import android.os.Build
 import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.youtube.player.internal.v
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
 import com.saranggujrati.databinding.ItemNewsDetailBinding
@@ -54,10 +58,9 @@ class FeatureStoryListAdapter(private var categoryList: ArrayList<FeatureData>) 
 
             binding.tvNewsHighLight.text = data.title
 
-            /*binding.tvNewsDetail.formatHtmlText(Html.fromHtml(data.description.trim(), HtmlCompat.FROM_HTML_MODE_LEGACY).toString())*/
             binding.tvNewsDetail.formatHtmlText(data.description).toString().trim()
 
-            data.banner_image?.let {
+            data.banner_image.let {
                 Glide.with(AppClass.appContext)
                     .load(it[0])
                     .apply(
@@ -66,6 +69,18 @@ class FeatureStoryListAdapter(private var categoryList: ArrayList<FeatureData>) 
                     ).into(binding.ivNewsImage)
             }
 
+            binding.tvNewsDetail.movementMethod = ScrollingMovementMethod()
+
+            /*val listener = OnTouchListener { v, event ->
+                val isLarger: Boolean = (v as TextView).lineCount * v.lineHeight > v.getHeight()
+                if (event.action === MotionEvent.ACTION_MOVE && isLarger) {
+                    v.getParent().requestDisallowInterceptTouchEvent(true)
+                } else {
+                    v.getParent().requestDisallowInterceptTouchEvent(false)
+                }
+                false
+            }
+            binding.tvNewsDetail.setOnTouchListener(listener)*/
 
         }
     }

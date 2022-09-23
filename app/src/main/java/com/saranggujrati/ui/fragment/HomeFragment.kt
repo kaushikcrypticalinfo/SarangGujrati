@@ -24,6 +24,7 @@ import com.google.gson.Gson
 import com.performly.ext.obtainViewModel
 import com.saranggujrati.adapter.*
 import com.saranggujrati.databinding.FragmentHomeBinding
+import java.util.*
 import kotlin.collections.ArrayList
 
 
@@ -77,14 +78,20 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         viewModel.apiRecord.observe(this) {
             when (it) {
                 is Resource.Loading -> {
+                    binding.progressbar.visible(true)
                 }
                 is Resource.Success -> {
+                    binding.progressbar.visible(false)
                     if (it.value.status) {
-//                        topMenuItemList.addAll(it.value.data)
-//                        topMenuAdapter.notifyDataSetChanged()
+                        topMenuItemList.apply {
+                            clear()
+                            addAll(it.value.data)
+                        }
+                        topMenuAdapter.notifyDataSetChanged()
                     }
                 }
                 is Resource.Failure -> {
+                    binding.progressbar.visible(false)
                     when {
                         it.isNetworkError -> {
                             if (!isOnline(requireContext())) {
@@ -100,13 +107,12 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                                 binding.layout,
                                 it.value.message,
                                 Snackbar.LENGTH_LONG
-                            )
-                                .show()
+                            ).show()
                         }
                     }
                 }
             }
-        };
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -115,7 +121,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     }
 
     override fun onResume() {
-//        viewModel.getApiRecordFound()
         super.onResume()
     }
 
@@ -184,38 +189,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
             }
         }
 
-        var str = "{\n" +
-                "  \"status\": true,\n" +
-                "  \"message\": \"List of Found Records\",\n" +
-                "  \"data\": [\n" +
-                "    {\n" +
-                "      \"id\": 1,\n" +
-                "      \"name\":\"Latest Gujrati News\",\n" +
-                "      \"found\": true,\n" +
-                "      \"records\": 176\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"id\": 2,\n" +
-                "      \"name\":\"All Gujrati Newspapers\",\n" +
-                "      \"found\": true,\n" +
-                "      \"records\": 8\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"id\": 3,\n" +
-                "      \"name\":\"NewsOn-The-Go\",\n" +
-                "      \"found\": true,\n" +
-                "      \"records\": 6\n" +
-                "    },\n" +
-                " {\n" +
-                "      \"id\": 4,\n" +
-                "      \"name\":\"Live News Channels\",\n" +
-                "      \"found\": true,\n" +
-                "      \"records\": 6\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}"
-        val fromJson = Gson().fromJson(str, ApiRecordResponse::class.java)
-        topMenuItemList.addAll(fromJson.data)
         topMenuAdapter = TopMenuAdapter(topMenuItemList)
         topMenuAdapter.adapterListener = object : TopMenuAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
@@ -266,6 +239,8 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         getCity()
 
         getCategory()
+
+        viewModel.getApiRecordFound()
 
     }
 

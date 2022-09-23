@@ -18,8 +18,8 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/img_left"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
             android:padding="10dp"
             android:scaleType="centerInside"
@@ -27,16 +27,17 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvLatestNews"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:minLines="2"
+            android:gravity="center_vertical"
             android:layout_gravity="center_vertical"
             android:fontFamily="@font/montserrat_bold"
-            android:gravity="center"
             android:padding="10dp"
             android:text="@string/latest_gujrati_news"
             android:textColor="@color/white"
             android:textSize="14sp" />
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

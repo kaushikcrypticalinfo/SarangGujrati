@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
@@ -78,6 +79,7 @@ class FragmentFeatureBlog(val b: Bundle) : BaseFragment<FeatureBlogListViewModel
         }
         val snapHelper: SnapHelper = PagerSnapHelper()
         val linearLayoutManager = LinearLayoutManager(context)
+
         with(binding.rvNewsFeed)
         {
             layoutManager = linearLayoutManager
@@ -184,6 +186,7 @@ class FragmentFeatureBlog(val b: Bundle) : BaseFragment<FeatureBlogListViewModel
         binding.adView.adListener = object : AdListener() {
         }
     }
+
     private fun getAdSize(): AdSize {
         //Determine the screen width to use for the ad width.
         val display = requireActivity().windowManager.defaultDisplay
@@ -200,12 +203,13 @@ class FragmentFeatureBlog(val b: Bundle) : BaseFragment<FeatureBlogListViewModel
     }
 
 
-
     private fun getAllBlogList(response: BlogFeatureList, pos: Int) {
         if (response.data.isEmpty()) {
             binding.tvNoData.visibility = View.VISIBLE
             binding.appBarLayout.visibility = View.VISIBLE
         } else {
+            mBlogList.addAll(response.data)
+            mBlogList.addAll(response.data)
             mBlogList.addAll(response.data)
             allBogAdapter.notifyDataSetChanged()
         }

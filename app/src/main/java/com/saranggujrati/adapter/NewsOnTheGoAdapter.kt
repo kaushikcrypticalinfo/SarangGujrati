@@ -39,7 +39,7 @@ class NewsOnTheGoAdapter(private var newsList: ArrayList<RssFeedModelData>) :
             holder.bind(response)
         }
 
-        if (SavedPrefrence.getIsDarkMode(binding.deviderLine2.context)!! == true) {
+        if (SavedPrefrence.getIsDarkMode(binding.deviderLine2.context)!!) {
             binding.deviderLine.setBackgroundColor(Color.parseColor("#ffffff"))
             binding.deviderLine2.setBackgroundColor(Color.parseColor("#ffffff"))
         }
@@ -49,9 +49,9 @@ class NewsOnTheGoAdapter(private var newsList: ArrayList<RssFeedModelData>) :
             binding.adView.loadAd(adRequest)
             binding.adView.adListener = object : AdListener() {
             }
-            binding.adView.visibility = View.VISIBLE
+            binding.groupAdView.visibility = View.VISIBLE
         } else {
-            binding.adView.visibility = View.GONE
+            binding.groupAdView.visibility = View.GONE
         }
     }
 
@@ -60,7 +60,7 @@ class NewsOnTheGoAdapter(private var newsList: ArrayList<RssFeedModelData>) :
     }
 
     inner class NewsOnTheGoViewHolder(private val binding: ItemNewsOnTheGoBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+        ViewHolder(binding.root) {
         fun bind(data: RssFeedModelData) {
 
             binding.tvNewsHighLightNewsOnTheGo.text = data.title
@@ -75,9 +75,8 @@ class NewsOnTheGoAdapter(private var newsList: ArrayList<RssFeedModelData>) :
                 ).into(binding.imgNewsOnTheGo)
 
             binding.txtReadMoreNewsOnTheGo.setOnClickListener {
-                adapterListener?.onClick(it, adapterPosition)
+                adapterListener?.onClick(it, absoluteAdapterPosition)
             }
-
         }
     }
 }
