@@ -75,7 +75,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
             setHasOptionsMenu(true)
         }
 
-        viewModel.apiRecord.observe(this) {
+        viewModel.apiRecord.observe(this) { it ->
             when (it) {
                 is Resource.Loading -> {
                     binding.progressbar.visible(true)
@@ -85,8 +85,17 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                     if (it.value.status) {
                         topMenuItemList.apply {
                             clear()
-                            addAll(it.value.data)
+                            addAll(it.value.data.filter { it.id != 5 && it.found == true })
                         }
+                        it.value.data.let { it ->
+                            it.find { it.id == 5 && it.found == true }?.let {
+                                binding.tvLiveTempleDarshan.visible(true)
+                            } ?: kotlin.run {
+                                binding.tvLiveTempleDarshan.visible(false)
+                            }
+                        }
+
+
                         topMenuAdapter.notifyDataSetChanged()
                     }
                 }
@@ -104,9 +113,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                         }
                         else -> {
                             Snackbar.make(
-                                binding.layout,
-                                it.value.message,
-                                Snackbar.LENGTH_LONG
+                                binding.layout, it.value.message, Snackbar.LENGTH_LONG
                             ).show()
                         }
                     }
@@ -234,14 +241,13 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     }
 
     private fun callApi() {
+        viewModel.getApiRecordFound()
+
         getFeaturedListData()
 
         getCity()
 
         getCategory()
-
-        viewModel.getApiRecordFound()
-
     }
 
     private fun getCity() {
@@ -483,7 +489,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                         }
                     }
                 }
-            }?: kotlin.run {  }
+            } ?: kotlin.run { }
         }
     }
 

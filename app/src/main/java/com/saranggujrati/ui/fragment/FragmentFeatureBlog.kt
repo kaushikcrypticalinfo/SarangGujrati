@@ -209,8 +209,6 @@ class FragmentFeatureBlog(val b: Bundle) : BaseFragment<FeatureBlogListViewModel
             binding.appBarLayout.visibility = View.VISIBLE
         } else {
             mBlogList.addAll(response.data)
-            mBlogList.addAll(response.data)
-            mBlogList.addAll(response.data)
             allBogAdapter.notifyDataSetChanged()
         }
     }

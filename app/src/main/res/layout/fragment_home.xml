@@ -24,6 +24,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
+                    android:layout_marginBottom="8dp"
                     android:layout_height="wrap_content">
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -48,6 +49,7 @@
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/tvLiveTempleDarshan"
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="10dp">

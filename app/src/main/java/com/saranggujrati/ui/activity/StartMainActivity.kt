@@ -1,5 +1,7 @@
 package com.saranggujrati.ui.activity
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Patterns
 import android.view.View
@@ -10,17 +12,17 @@ import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
+import com.performly.ext.obtainViewModel
 import com.saranggujrati.R
+import com.saranggujrati.databinding.ActivityStartMainBinding
 import com.saranggujrati.ui.SavedPrefrence
 import com.saranggujrati.ui.isOnline
 import com.saranggujrati.ui.startNewActivity
 import com.saranggujrati.ui.viewModel.LoginViewModel
 import com.saranggujrati.ui.visible
 import com.saranggujrati.webservice.Resource
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.snackbar.Snackbar
-import com.performly.ext.obtainViewModel
-import com.saranggujrati.databinding.ActivityStartMainBinding
 import kotlinx.coroutines.launch
 
 
@@ -56,6 +58,8 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
     private fun attachListeners() {
         binding.tvForgotPassword.setOnClickListener(this)
         binding.tvGuest.setOnClickListener(this)
+        binding.tvTerms.setOnClickListener(this)
+        binding.tvPrivacyPolicy.setOnClickListener(this)
     }
 
     private fun openForgotPasswordDialogue() {
@@ -370,6 +374,21 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
         when (p0) {
             binding.tvGuest -> clickOnGuest()
             binding.tvForgotPassword -> openForgotPasswordDialogue()
+            binding.tvTerms -> {
+                val browserIntent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://www.sarangnews.app/terms-conditions/")
+                )
+                startActivity(browserIntent)
+
+            }
+            binding.tvPrivacyPolicy -> {
+                val browserIntent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://www.sarangnews.app/privacy-policy/")
+                )
+                startActivity(browserIntent)
+            }
         }
     }
 }

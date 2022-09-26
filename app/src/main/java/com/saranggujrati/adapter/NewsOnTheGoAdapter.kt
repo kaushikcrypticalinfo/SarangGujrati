@@ -39,9 +39,11 @@ class NewsOnTheGoAdapter(private var newsList: ArrayList<RssFeedModelData>) :
             holder.bind(response)
         }
 
-        if (SavedPrefrence.getIsDarkMode(binding.deviderLine2.context)!!) {
-            binding.deviderLine.setBackgroundColor(Color.parseColor("#ffffff"))
-            binding.deviderLine2.setBackgroundColor(Color.parseColor("#ffffff"))
+        if (SavedPrefrence.getIsDarkMode(binding.dividerLineTwo.context)!!) {
+            binding.dividerLineOne.setBackgroundColor(Color.parseColor("#ffffff"))
+            binding.dividerLineTwo.setBackgroundColor(Color.parseColor("#ffffff"))
+            binding.dividerLineThree.setBackgroundColor(Color.parseColor("#ffffff"))
+            binding.dividerLineFour.setBackgroundColor(Color.parseColor("#ffffff"))
         }
 
         if (position % 3 == 0) {
