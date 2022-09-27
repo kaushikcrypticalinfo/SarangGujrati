@@ -113,7 +113,9 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                         }
                         else -> {
                             Snackbar.make(
-                                binding.layout, it.value.message, Snackbar.LENGTH_LONG
+                                binding.layout,
+                                getString(R.string.something_went_wrong),
+                                Snackbar.LENGTH_LONG
                             ).show()
                         }
                     }

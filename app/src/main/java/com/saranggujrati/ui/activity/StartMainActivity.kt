@@ -306,10 +306,7 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
 
             }
         })
-
     }
-
-
     //Reset Password
     private fun setupObserversResetPassword(
         dialog: BottomSheetDialog,
@@ -318,7 +315,6 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
     ) {
 
         viewModel.resetPasswordResponse.observe(this, Observer {
-
             when (it) {
                 is Resource.Loading -> {
                     progressBar.visible(true)
@@ -327,19 +323,12 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
                     if (it.value.status) {
                         progressBar.visible(false)
                         lifecycleScope.launch {
-
                             Snackbar.make(view, it.value.message, Snackbar.LENGTH_LONG).show()
                             dialog.dismiss()
-
-
                         }
-
                     } else {
-
                         binding.progressbar.visible(false)
-
                     }
-
                 }
                 is Resource.Failure -> {
                     progressBar.visible(false)
@@ -356,15 +345,9 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
                         }
                         else -> {
                             Snackbar.make(view, it.value.message, Snackbar.LENGTH_LONG).show()
-
                         }
-
-
                     }
-
                 }
-
-
             }
         })
 

@@ -25,7 +25,7 @@ abstract class BaseRepository {
                         if (throwable.code() == 401) {
                             Resource.Failure(true, null, 0)
                         } else {
-                            Resource.Failure(false, apiCall.invoke(), throwable.code())
+                            Resource.Failure(false, null, throwable.code())
                         }
                     }
                     is IllegalStateException -> {
