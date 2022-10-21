@@ -30,3 +30,5 @@ const val RSS_FEED_DATE_FORMAT_T = "yyyy-MM-dd'T'hh:mm:ssZ"
 const val STARTING_PAGE_INDEX = 1
 const val NETWORK_PAGE_SIZE = 10
 
+const val qul_beans_flavors = "gujarati"
+

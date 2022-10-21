@@ -4,6 +4,7 @@ package com.example.retrofitcoroutineexample.data.api
 import com.saranggujrati.AppClass
 import com.saranggujrati.BuildConfig
 import com.saranggujrati.ui.SavedPrefrence
+import com.saranggujrati.utils.qul_beans_flavors
 import com.saranggujrati.webservice.ApiService
 import com.saranggujrati.webservice.factory.QualifiedTypeConverterFactory
 import okhttp3.Authenticator
@@ -17,7 +18,8 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitBuilder {
 
-    private const val BASE_URL = "https://sarangnews.app/gujarati/api/"
+//    private const val BASE_URL = "https://sarangnews.app/gujarati/api/"
+    private const val BASE_URL = "http://newsnmore.in/api/"
 
     //print responce in json format
     private fun getRetrofitClient(authenticator: Authenticator? = null): OkHttpClient {
@@ -29,6 +31,14 @@ object RetrofitBuilder {
                             "Authorization",
                             "Bearer ${SavedPrefrence.getApiToken(AppClass.appContext)}"
                         )
+                        it.addHeader(
+                            "siteid",
+                            when (BuildConfig.FLAVOR) {
+                                qul_beans_flavors -> "1"
+                                else -> "4"
+                            }
+                        )
+
                     }
                 }.build())
             }
@@ -49,7 +59,10 @@ object RetrofitBuilder {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(
-                QualifiedTypeConverterFactory(GsonConverterFactory.create(),SimpleXmlConverterFactory.create())
+                QualifiedTypeConverterFactory(
+                    GsonConverterFactory.create(),
+                    SimpleXmlConverterFactory.create()
+                )
             )
             .addConverterFactory(GsonConverterFactory.create())
             .client(getRetrofitClient())

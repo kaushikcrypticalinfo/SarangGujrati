@@ -45,12 +45,31 @@ android {
         checkReleaseBuilds false
     }
     namespace 'com.saranggujrati'
-}
+    flavorDimensions 'newslanguage'
+    productFlavors {
+        gujarati {
+            dimension 'newslanguage'
+            applicationIdSuffix ".gujarati"
+            resValue "string", "flavoured_app_name", "Sarang Gujarati"
+        }
+        marathi {
+            dimension 'newslanguage'
+//          applicationIdSuffix ".marathi"
+            resValue "string", "flavoured_app_name", "My News"
+        }
 
+    }
 
-repositories {
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
+    sourceSets {
+        gujarati {
+            java.srcDirs('src/gujarati/java')
+            res.srcDirs('src/gujarati/res')
+        }
+        marathi {
+            java.srcDirs('src/marathi/java')
+            res.srcDirs('src/marathi/res')
+        }
+    }
 }
 
 dependencies {

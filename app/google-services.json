@@ -33,6 +33,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:533857723057:android:2c8d425416d19d486d3890",
+        "android_client_info": {
+          "package_name": "com.saranggujrati.gujarati"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "533857723057-nedgu745mg0q6n1c1jshauc7tl2e49gl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlTfB_aW2CoKyW-zhcv8kbiA1yiF4-M5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "533857723057-nedgu745mg0q6n1c1jshauc7tl2e49gl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
