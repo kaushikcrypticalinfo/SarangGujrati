@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         this.requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.activity_splash)
+        Log.e("SplashScreenActivity","=======>SplashScreenActivity")
 
         SavedPrefrence.getLoginFrom(this)
 
@@ -36,6 +38,7 @@ class SplashScreenActivity : AppCompatActivity() {
         // we used the postDelayed(Runnable, time) method
         // to send a message with a delayed time.
         Handler(Looper.getMainLooper()).postDelayed({
+
             val intent = when {
                 SavedPrefrence.getUserId(AppClass.appContext) != "" -> {
                     Intent(this, MainActivity::class.java)
@@ -47,8 +50,9 @@ class SplashScreenActivity : AppCompatActivity() {
                     Intent(this, StartMainActivity::class.java)
                 }
             }
+
             startActivity(intent)
-            finish()
+            this.finish()
         }, 4000) // 3000 is the delayed time in milliseconds.
     }
 }
