@@ -4,7 +4,7 @@ package com.example.retrofitcoroutineexample.data.api
 import com.saranggujrati.AppClass
 import com.saranggujrati.BuildConfig
 import com.saranggujrati.ui.SavedPrefrence
-import com.saranggujrati.utils.qul_beans_flavors
+import com.saranggujrati.utils.gujarati_flavors
 import com.saranggujrati.webservice.ApiService
 import com.saranggujrati.webservice.factory.QualifiedTypeConverterFactory
 import okhttp3.Authenticator
@@ -26,20 +26,17 @@ object RetrofitBuilder {
         return OkHttpClient.Builder()
             .addInterceptor { chain ->
                 chain.proceed(chain.request().newBuilder().also {
-                    if (SavedPrefrence.getApiToken(AppClass.appContext) != "") {
-                        it.addHeader(
-                            "Authorization",
-                            "Bearer ${SavedPrefrence.getApiToken(AppClass.appContext)}"
-                        )
-                        it.addHeader(
-                            "siteid",
-                            when (BuildConfig.FLAVOR) {
-                                qul_beans_flavors -> "1"
-                                else -> "4"
-                            }
-                        )
-
-                    }
+                    /*it.addHeader(
+                        "Authorization",
+                        "Bearer ${SavedPrefrence.getApiToken(AppClass.appContext)}"
+                    )*/
+                    it.addHeader(
+                        "siteid",
+                        when (BuildConfig.FLAVOR) {
+                            gujarati_flavors -> "1"
+                            else -> "4"
+                        }
+                    )
                 }.build())
             }
             .also { client ->

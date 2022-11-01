@@ -2,7 +2,8 @@
     <string name="app_name">Sarang Gujarati</string>
     <string name="api_key">AIzaSyDbCHpHjoiWINRI3bgLeXfCNBwGXv28FSo</string>
 
-    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+<!--    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>--> <!--Old app unit id-->
+    <string name="banner_add_app_id">ca-app-pub-3125008321195277/8293686391</string><!--New app unit id planetgujarat@gmail.com-->
 
     <string name="facebook_app_id">1234</string>
     <string name="fb_login_protocol_scheme">fb1243</string>
@@ -10,7 +11,6 @@
     <string name="client_id">533857723057-nedgu745mg0q6n1c1jshauc7tl2e49gl.apps.googleusercontent.com</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="empty" />
 
 
     <string name="guest_text">start as a guest</string>
@@ -43,12 +43,8 @@
     <string name="v_code">Please enter code</string>
     <string name="latest_gujrati_news">Latest Gujrati News</string>
     <string name="gujarati_news_on_the_go">News On-The-Go</string>
-    <string name="live_news_channels">&#160; Live News &#160;\nChannels</string>
-    <string name="all_guj_news_papers">All Gujrati \nNewspapers</string>
-    <string name="latest_news_on_the_go">&#160;&#160;News &#160;\n&#160;&#160;On-The-Go&#160;</string>
     <string name="str_live_darshan_temple">લાઈવ મંદિર દર્શન</string>
     <string name="Featured_stories">Featured Stories</string>
-    <string name="my_news_feed">My News Feed</string>
     <string name="no_task_available">No Data Found!</string>
     <string name="top_cities">Top Cities</string>
     <string name="top_category">Top Categories</string>
@@ -65,7 +61,6 @@
     <string name="v_valid_phone">Please enter only 10 digit for phone</string>
     <string name="v_valid_password">Please enter at least 8 digit for password</string>
     <string name="v_valid_name">Please enter at least 4 character for name</string>
-    <string name="code">Code</string>
     <string name="forgot_password_txt_detail">To reset password please enter your email address</string>
     <string name="otp">Otp</string>
     <string name="send_otp">Send Otp</string>
@@ -76,14 +71,9 @@
     <string name="otp_send_success">Otp Sent Successfully</string>
     <string name="otp_verified">Otp verified Successfully</string>
     <string name="v_confirm_password">Please enter confirm password</string>
-    <string name="v_valid_confirm_password">Please enter at least 8 digit for confirm password</string>
     <string name="logout">Logout</string>
-    <string name="exit_app_message">Are you sure you want to exit ?</string>
-    <string name="alert">Alert!</string>
     <string name="back_to_channel">Back to channel</string>
-    <string name="player_error">Error</string>
     <string name="all_channels">All News Channels</string>
-    <string name="Yes">Yes</string>
     <string name="no">No</string>
     <string name="back_again_text">Please click BACK again to exit</string>
     <string name="update_profile">Update Profile</string>
@@ -96,7 +86,6 @@
     <string name="delete_account_title">Delete Account!</string>
     <string name="yes">Yes</string>
     <string name="delete_account_message">Are you sure you want to delete this account?</string>
-    <string name="tap_to_read_full_story">Tap to read full story</string>
     <string name="all_news_paper">All News Paper</string>
     <string name="logout_message">Are you sure you want to logout?</string>
     <string name="str_contact_us">Contact us</string>

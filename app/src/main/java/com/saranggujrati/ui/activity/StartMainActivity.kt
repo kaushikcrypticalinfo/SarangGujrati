@@ -3,6 +3,7 @@ package com.saranggujrati.ui.activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.EditText
@@ -47,6 +48,7 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
+        Log.e("sta","One Time")
         setupUI()
     }
 
@@ -363,8 +365,8 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
                     Uri.parse("https://www.sarangnews.app/terms-conditions/")
                 )
                 startActivity(browserIntent)
-
             }
+
             binding.tvPrivacyPolicy -> {
                 val browserIntent = Intent(
                     Intent.ACTION_VIEW,
