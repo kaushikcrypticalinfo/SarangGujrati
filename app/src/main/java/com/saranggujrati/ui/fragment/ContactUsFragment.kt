@@ -1,7 +1,11 @@
 package com.saranggujrati.ui.fragment
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.*
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import com.saranggujrati.R
 import com.saranggujrati.ui.activity.MainActivity
 
@@ -34,7 +38,7 @@ class ContactUsFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         mActivity.enableViews(true)
         setHasOptionsMenu(true);
         attachListeners()
-
+        loadWebView()
     }
 
 
@@ -75,5 +79,35 @@ class ContactUsFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                         "\nMessage:: " + binding.edtMessage.text.toString()
             )
         }
+    }
+
+    private fun loadWebView() {
+        binding.webview.webViewClient = object : WebViewClient() {
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                binding.progressbar.visibility = View.VISIBLE
+            }
+
+            override fun onPageCommitVisible(view: WebView?, url: String?) {
+                binding.progressbar.visibility = View.GONE
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                binding.progressbar.visibility = View.GONE
+            }
+
+        }
+
+        // this will enable the javascript settings
+        binding.webview.settings.javaScriptEnabled = true
+        binding.webview.settings.domStorageEnabled = true
+        binding.webview.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+        binding.webview.settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.NARROW_COLUMNS
+        binding.webview.settings.useWideViewPort = true
+
+
+        // if you want to enable zoom feature
+        binding.webview.settings.setSupportZoom(true)
+        binding.webview.loadUrl("https://www.sarangnews.app/contact-us/")
+
     }
 }

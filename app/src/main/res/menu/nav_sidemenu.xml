@@ -24,6 +24,7 @@
             android:id="@+id/nav_dark_mode"
             android:icon="@drawable/ic_dark_mode"
             android:title="@string/dark_mode"
+            android:visible="false"
             app:actionViewClass="androidx.appcompat.widget.SwitchCompat" />
 
         <item

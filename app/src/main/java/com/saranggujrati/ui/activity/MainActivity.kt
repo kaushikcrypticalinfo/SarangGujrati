@@ -81,7 +81,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
         setupUI()
-
+        setDarkMode(true)
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 //Log.w("Notification Token", "Fetching FCM registration token failed", task.exception)
@@ -171,7 +171,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
     }
 
     private fun setDarkMode(isDarkMode: Boolean) {
-        AppCompatDelegate.setDefaultNightMode(if (isDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
     }
 
     private fun displayValue(number: Int) {

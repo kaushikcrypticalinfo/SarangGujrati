@@ -1,7 +1,11 @@
 package com.saranggujrati.ui.fragment
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.*
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import com.saranggujrati.R
 import com.saranggujrati.ui.activity.MainActivity
 import com.saranggujrati.ui.isValidEmail
@@ -32,7 +36,7 @@ class AdvertiseWithUsFragment : BaseFragment<HomeViewModel>(), View.OnClickListe
         mActivity.enableViews(true)
         setHasOptionsMenu(true);
         attachListeners()
-
+        loadWebView()
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
@@ -69,6 +73,36 @@ class AdvertiseWithUsFragment : BaseFragment<HomeViewModel>(), View.OnClickListe
                     "\nMessage:: " + binding.edtMessage.text.toString()
             sendMail(requireContext(), name, body)
         }
+    }
+
+    private fun loadWebView() {
+        binding.webview.webViewClient = object : WebViewClient() {
+            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                binding.progressbar.visibility = View.VISIBLE
+            }
+
+            override fun onPageCommitVisible(view: WebView?, url: String?) {
+                binding.progressbar.visibility = View.GONE
+            }
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                binding.progressbar.visibility = View.GONE
+            }
+
+        }
+
+        // this will enable the javascript settings
+        binding.webview.settings.javaScriptEnabled = true
+        binding.webview.settings.domStorageEnabled = true
+        binding.webview.settings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+        binding.webview.settings.layoutAlgorithm = WebSettings.LayoutAlgorithm.NARROW_COLUMNS
+        binding.webview.settings.useWideViewPort = true
+
+
+        // if you want to enable zoom feature
+        binding.webview.settings.setSupportZoom(true)
+        binding.webview.loadUrl("https://www.sarangnews.app/advertise-with-us/")
+
     }
 }
 

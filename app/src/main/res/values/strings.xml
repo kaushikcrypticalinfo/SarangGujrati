@@ -41,7 +41,7 @@
     <string name="v_email">Please enter email address</string>
     <string name="v_password">Please enter password</string>
     <string name="v_code">Please enter code</string>
-    <string name="latest_gujrati_news">Latest Gujrati News</string>
+    <string name="latest_gujrati_news">Latest Gujarati News</string>
     <string name="gujarati_news_on_the_go">News On-The-Go</string>
     <string name="str_live_darshan_temple">લાઈવ મંદિર દર્શન</string>
     <string name="Featured_stories">Featured Stories</string>
@@ -73,7 +73,7 @@
     <string name="v_confirm_password">Please enter confirm password</string>
     <string name="logout">Logout</string>
     <string name="back_to_channel">Back to channel</string>
-    <string name="all_channels">All News Channels</string>
+    <string name="all_channels">Live News Channels</string>
     <string name="no">No</string>
     <string name="back_again_text">Please click BACK again to exit</string>
     <string name="update_profile">Update Profile</string>
@@ -86,7 +86,7 @@
     <string name="delete_account_title">Delete Account!</string>
     <string name="yes">Yes</string>
     <string name="delete_account_message">Are you sure you want to delete this account?</string>
-    <string name="all_news_paper">All News Paper</string>
+    <string name="all_news_paper">All Gujarati Newspapers</string>
     <string name="logout_message">Are you sure you want to logout?</string>
     <string name="str_contact_us">Contact us</string>
     <string name="str_privacy_policy">Privacy Policy</string>
