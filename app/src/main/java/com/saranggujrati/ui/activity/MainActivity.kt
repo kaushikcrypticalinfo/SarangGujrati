@@ -81,7 +81,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
         setupUI()
-        setDarkMode(true)
+        //setDarkMode(true)
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 //Log.w("Notification Token", "Fetching FCM registration token failed", task.exception)
@@ -238,6 +238,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
         when (item.itemId) {
             R.id.nav_home -> {
                 binding.appBarToolbar.viewPager.currentItem = 0
+                binding.drawerLayout.closeDrawers()
                 return true
             }
 

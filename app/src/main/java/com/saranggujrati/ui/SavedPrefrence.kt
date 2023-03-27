@@ -46,7 +46,7 @@ object SavedPrefrence {
 
     fun getIsDarkMode(context: Context) = getSharedPreference(
         context
-    )?.getBoolean(IS_DARK_MODE, false)
+    )?.getBoolean(IS_DARK_MODE, true)
 
     fun setIsDarkMode(context: Context, type: Boolean) {
         editor(context, IS_DARK_MODE, type)

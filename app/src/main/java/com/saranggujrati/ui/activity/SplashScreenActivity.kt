@@ -35,24 +35,22 @@ class SplashScreenActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(if (SavedPrefrence.getIsDarkMode(this)!!) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO)
 
 
+        val intent = when {
+            SavedPrefrence.getUserId(AppClass.appContext) != "" || SavedPrefrence.getIsGuest(this) == true -> {
+                Intent(this, MainActivity::class.java)
+            }
+            /*SavedPrefrence.getIsGuest(this) == true -> {
+                Intent(this, MainActivity::class.java)
+            }*/
+            else -> {
+                Intent(this, StartMainActivity::class.java)
+            }
+        }
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         // we used the postDelayed(Runnable, time) method
         // to send a message with a delayed time.
         Handler(Looper.getMainLooper()).postDelayed({
-
-            val intent = when {
-                SavedPrefrence.getUserId(AppClass.appContext) != "" -> {
-                    Intent(this, MainActivity::class.java)
-                }
-                SavedPrefrence.getIsGuest(this) == true -> {
-                    Intent(this, MainActivity::class.java)
-                }
-                else -> {
-                    Intent(this, StartMainActivity::class.java)
-                }
-            }
-
             startActivity(intent)
-            this.finish()
         }, 4000) // 3000 is the delayed time in milliseconds.
     }
 }
