@@ -21,7 +21,7 @@ android {
         targetSdk 33
         versionCode 3
         versionName "1.2"
-        setProperty("archivesBaseName", "SarangGujarati-" + getDate() + "-V" + versionName)
+        setProperty("archivesBaseName", getDate() + "-V" + versionName)
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
@@ -57,6 +57,11 @@ android {
 //          applicationIdSuffix ".marathi"
             resValue "string", "flavoured_app_name", "My News"
         }
+        kathiyawadi_khamir {
+            dimension 'newslanguage'
+//          applicationIdSuffix ".marathi"
+            resValue "string", "flavoured_app_name", "Kathiyawadi Khamir"
+        }
 
     }
 
@@ -68,6 +73,10 @@ android {
         marathi {
             java.srcDirs('src/marathi/java')
             res.srcDirs('src/marathi/res')
+        }
+        kathiyawadi_khamir {
+            java.srcDirs('src/kathiyawadi_khamir/java')
+            res.srcDirs('src/kathiyawadi_khamir/res')
         }
     }
 }

@@ -5,6 +5,7 @@ import com.saranggujrati.AppClass
 import com.saranggujrati.BuildConfig
 import com.saranggujrati.ui.SavedPrefrence
 import com.saranggujrati.utils.gujarati_flavors
+import com.saranggujrati.utils.kathiyawadi_khamir
 import com.saranggujrati.webservice.ApiService
 import com.saranggujrati.webservice.factory.QualifiedTypeConverterFactory
 import okhttp3.Authenticator
@@ -34,6 +35,7 @@ object RetrofitBuilder {
                         "siteid",
                         when (BuildConfig.FLAVOR) {
                             gujarati_flavors -> "1"
+                            kathiyawadi_khamir -> "7"
                             else -> "4"
                         }
                     )

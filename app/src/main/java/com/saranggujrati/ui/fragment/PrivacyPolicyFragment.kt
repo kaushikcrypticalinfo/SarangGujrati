@@ -13,7 +13,10 @@ import com.saranggujrati.extensions.formatHtmlText
 import com.saranggujrati.ui.activity.MainActivity
 import com.saranggujrati.ui.viewModel.HomeViewModel
 import com.performly.ext.obtainViewModel
+import com.saranggujrati.BuildConfig
 import com.saranggujrati.databinding.FragmentPrivacyPolicyBinding
+import com.saranggujrati.utils.gujarati_flavors
+import com.saranggujrati.utils.kathiyawadi_khamir
 
 class PrivacyPolicyFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
 
@@ -79,7 +82,10 @@ class PrivacyPolicyFragment : BaseFragment<HomeViewModel>(), View.OnClickListene
 
         // if you want to enable zoom feature
         binding.webview.settings.setSupportZoom(true)
-        binding.webview.loadUrl("https://www.sarangnews.app/app-policy-terms/")
+        when (BuildConfig.FLAVOR) {
+            gujarati_flavors -> binding.webview.loadUrl("https://www.sarangnews.app/app-policy-terms/")
+            kathiyawadi_khamir -> binding.webview.loadUrl("https://kathiyawadikhamir.com/introduction/")
+        }
 
     }
 }

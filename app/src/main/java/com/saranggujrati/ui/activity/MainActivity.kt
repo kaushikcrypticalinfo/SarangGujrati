@@ -47,9 +47,12 @@ import com.saranggujrati.webservice.Resource
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
+import com.saranggujrati.BuildConfig
 import com.saranggujrati.databinding.ActivityMainBinding
 import com.saranggujrati.ui.isOnline
 import com.saranggujrati.ui.visible
+import com.saranggujrati.utils.gujarati_flavors
+import com.saranggujrati.utils.kathiyawadi_khamir
 import kotlinx.coroutines.launch
 
 
@@ -207,7 +210,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
         } else {
             //You must regain the power of swipe for the drawer.
             binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-            binding.appBarToolbar.toolbar.title = getString(R.string.app_name)
+            binding.appBarToolbar.toolbar.title = getString(R.string.flavoured_app_name)
 
             val drawable = resources.getDrawable(R.drawable.ic_menu)
             val bitmap = drawable.toBitmap()

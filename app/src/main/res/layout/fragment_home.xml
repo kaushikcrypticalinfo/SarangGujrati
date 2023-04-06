@@ -92,7 +92,7 @@
                     android:fontFamily="@font/montserrat_extrabold"
                     android:paddingHorizontal="5dp"
                     android:paddingVertical="8dp"
-                    android:text="@string/app_name"
+                    android:text="@string/Featured_content"
                     android:textColor="?textColor"
                     android:textSize="14sp" />
 
