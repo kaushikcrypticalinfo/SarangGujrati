@@ -37,4 +37,6 @@ class RssFeedModelData {
     var feedType: String = ""
 
     var isBanner:Boolean = false
+
+    var isAddView:Boolean = false
 }

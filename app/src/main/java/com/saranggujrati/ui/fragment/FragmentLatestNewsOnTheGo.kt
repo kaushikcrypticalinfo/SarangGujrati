@@ -178,7 +178,7 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
                 parseDate(it.publishDate)
             }*/
 
-            var tempIndex = 2
+            /*var tempIndex = 2
             SavedPrefrence.getAdsCard(requireContext())?.data?.forEachIndexed { index, cardData ->
                 val blogData = RssFeedModelData()
                 blogData.isBanner = true
@@ -187,7 +187,7 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
                     newsList[tempIndex] = blogData
                     tempIndex += 6
                 }
-            }
+            }*/
 
             newsOnTheGoAdapter.notifyDataSetChanged()
         }

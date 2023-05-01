@@ -28,7 +28,7 @@ abstract class BaseActicvity <VM : BaseViewModel> : AppCompatActivity() {
 
             //initialize view model
             /*viewModel= ViewModelProvider(this, ViewModelFactory(RetrofitBuilder.apiService))
-                .get(initiali   zeViewModel())*/
+                .get(initializeViewModel())*/
 
             viewModel = initializeViewModel()
         //}

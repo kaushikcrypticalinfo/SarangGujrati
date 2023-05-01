@@ -49,17 +49,17 @@ android {
     productFlavors {
         gujarati {
             dimension 'newslanguage'
-//            applicationIdSuffix ".gujarati"
+            applicationIdSuffix ".gujarati"
             resValue "string", "flavoured_app_name", "Sarang Gujarati"
         }
         marathi {
             dimension 'newslanguage'
-//          applicationIdSuffix ".marathi"
+            applicationIdSuffix ".marathi"
             resValue "string", "flavoured_app_name", "My News"
         }
         kathiyawadi_khamir {
             dimension 'newslanguage'
-//          applicationIdSuffix ".marathi"
+            applicationIdSuffix ".kathiyawadi_khamir"
             resValue "string", "flavoured_app_name", "Kathiyawadi Khamir"
         }
 

@@ -135,6 +135,7 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
         binding.adView.adListener = object : AdListener() {
         }
     }
+
     private fun getAdSize(): AdSize {
         //Determine the screen width to use for the ad width.
         val display = requireActivity().windowManager.defaultDisplay
@@ -235,6 +236,18 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
                 if (tempIndex < blogList.size - 1) {
                     blogList[tempIndex] = blogData
                     tempIndex += 6
+                }
+            }
+
+            if (SavedPrefrence.getAdsCard(requireContext())?.data!!.isEmpty()) {
+                blogList.forEachIndexed { index, rssFeedModelData ->
+                    val blogData = RssFeedModelData()
+                    blogData.isBanner = true
+                    blogData.isAddView = true
+                    if (tempIndex < blogList.size - 1) {
+                        blogList[tempIndex] = blogData
+                        tempIndex += 6
+                    }
                 }
             }
 

@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
 
 import com.saranggujrati.databinding.RRssFeedItemBinding
 import com.saranggujrati.AppClass
@@ -42,6 +44,11 @@ class FeedListAdapter(private var categoryList: ArrayList<RssFeedModelData>) :
         if (holder is CategoryViewHolder) {
             val response: RssFeedModelData = categoryList[position]
             holder.bind(response)
+
+            val adRequest = AdRequest.Builder().build()
+            binding.adView.loadAd(adRequest)
+            binding.adView.adListener = object : AdListener() {
+            }
         }
     }
 
@@ -56,6 +63,12 @@ class FeedListAdapter(private var categoryList: ArrayList<RssFeedModelData>) :
 
             binding.groupNews.visibility = if (data.isBanner) GONE else VISIBLE
             binding.imgBanner.visibility = if (data.isBanner) VISIBLE else GONE
+            binding.adView.visibility = if (data.isAddView) VISIBLE else GONE
+
+            /*val adRequest = AdRequest.Builder().build()
+            binding.adView.loadAd(adRequest)
+            binding.adView.adListener = object : AdListener() {
+            }*/
 
             if (data.isBanner)
                 Glide.with(AppClass.appContext)

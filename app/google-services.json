@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "533857723057",
-    "project_id": "saranggujrati",
-    "storage_bucket": "saranggujrati.appspot.com"
+    "project_number": "311867921807",
+    "project_id": "sarang-gujrati-android",
+    "storage_bucket": "sarang-gujrati-android.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:533857723057:android:cc47f1370d8b63e06d3890",
+        "mobilesdk_app_id": "1:311867921807:android:4ff4dc67a60d4f78d027fa",
         "android_client_info": {
-          "package_name": "com.saranggujrati"
+          "package_name": "com.example.saranggujrati"
         }
       },
       "oauth_client": [
         {
-          "client_id": "533857723057-nedgu745mg0q6n1c1jshauc7tl2e49gl.apps.googleusercontent.com",
+          "client_id": "311867921807-plld6anc2vfeio1ded36pstr51ipa7qc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAlTfB_aW2CoKyW-zhcv8kbiA1yiF4-M5A"
+          "current_key": "AIzaSyAu8cr188rkW_trlksvGSJG_187Lq2BJ5g"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "533857723057-nedgu745mg0q6n1c1jshauc7tl2e49gl.apps.googleusercontent.com",
+              "client_id": "311867921807-plld6anc2vfeio1ded36pstr51ipa7qc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -36,27 +36,56 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:533857723057:android:2c8d425416d19d486d3890",
+        "mobilesdk_app_id": "1:311867921807:android:4e9c3fb6644463a8d027fa",
         "android_client_info": {
           "package_name": "com.saranggujrati.gujarati"
         }
       },
       "oauth_client": [
         {
-          "client_id": "533857723057-nedgu745mg0q6n1c1jshauc7tl2e49gl.apps.googleusercontent.com",
+          "client_id": "311867921807-plld6anc2vfeio1ded36pstr51ipa7qc.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAlTfB_aW2CoKyW-zhcv8kbiA1yiF4-M5A"
+          "current_key": "AIzaSyAu8cr188rkW_trlksvGSJG_187Lq2BJ5g"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "533857723057-nedgu745mg0q6n1c1jshauc7tl2e49gl.apps.googleusercontent.com",
+              "client_id": "311867921807-plld6anc2vfeio1ded36pstr51ipa7qc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311867921807:android:fc825b158a40bc1bd027fa",
+        "android_client_info": {
+          "package_name": "com.saranggujrati.kathiyawadi_khamir"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311867921807-plld6anc2vfeio1ded36pstr51ipa7qc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAu8cr188rkW_trlksvGSJG_187Lq2BJ5g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "311867921807-plld6anc2vfeio1ded36pstr51ipa7qc.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
