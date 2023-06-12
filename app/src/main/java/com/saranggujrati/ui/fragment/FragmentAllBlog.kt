@@ -1,10 +1,14 @@
 package com.saranggujrati.ui.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.view.*
-import androidx.annotation.NonNull
+import android.util.Log
+import android.view.KeyEvent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,10 +18,13 @@ import androidx.recyclerview.widget.SnapHelper
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
+import com.google.android.material.snackbar.Snackbar
+import com.performly.ext.obtainViewModel
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
 import com.saranggujrati.adapter.FeedListAdapter
-import com.saranggujrati.model.*
+import com.saranggujrati.databinding.FragmentAllNewsBlogBinding
+import com.saranggujrati.model.RssFeedModelData
 import com.saranggujrati.ui.SavedPrefrence
 import com.saranggujrati.ui.activity.MainActivity
 import com.saranggujrati.ui.activity.WebViewActivity
@@ -25,10 +32,6 @@ import com.saranggujrati.ui.isOnline
 import com.saranggujrati.ui.viewModel.AllBlogListViewModel
 import com.saranggujrati.ui.visible
 import com.saranggujrati.webservice.Resource
-import com.google.android.material.snackbar.Snackbar
-import com.performly.ext.obtainViewModel
-import com.saranggujrati.databinding.FragmentAllNewsBlogBinding
-import java.util.*
 
 
 class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListener {
@@ -39,6 +42,9 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
     lateinit var allBogAdapter: FeedListAdapter
 
     private var blogList = ArrayList<RssFeedModelData>()
+
+    var moreClick: Boolean = false
+    var backFromWebView: Boolean = false
 
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
         binding = FragmentAllNewsBlogBinding.inflate(inflater, container, false)
@@ -73,19 +79,27 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
                         mActivity.supportActionBar?.show()
                         mActivity.onBackPressed()
                     }
+
                     R.id.txtReadMore -> {
                         val i = Intent(requireContext(), WebViewActivity::class.java)
                         i.putExtra("url", blogList[position].link)
                         i.putExtra("title", blogList[position].title)
-                        startActivity(i)
+                        moreClick = true
+                        startActivityForResult(i, 1)
                     }
                 }
+            }
+
+            override fun onBannerClick(view: View, position: Int) {
+                val i = Intent(requireContext(), WebViewActivity::class.java)
+                i.putExtra("url", "https://www.google.com/")
+                i.putExtra("title", "Banner Ad")
+                startActivity(i)
             }
         }
         val snapHelper: SnapHelper = PagerSnapHelper()
         val linearLayoutManager = LinearLayoutManager(context)
-        with(binding.rvNewsFeed)
-        {
+        with(binding.rvNewsFeed) {
             layoutManager = linearLayoutManager
             snapHelper.attachToRecyclerView(this)
             adapter = allBogAdapter
@@ -98,7 +112,7 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
                 if (pos >= 0) {
                     val banner = blogList[pos].isBanner
                     binding.relativeLayout.visible(!banner)
-                    /*binding.adView.visible(!banner)*/
+                    binding.adView.visible(!banner)
                 }
             }
         })
@@ -109,6 +123,35 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
         getAllBlogList()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) { // Check if the request code matches and the result is successful
+            val receivedData =
+                data?.getStringExtra("close") // Replace "key" with the actual key used in Activity A
+            if (receivedData == "activity") {
+                backFromWebView = true
+            }
+            // Handle the received data here
+        }
+    }
+
+    private fun pushFragment() {
+        val fragmentManager = parentFragmentManager
+        val FragmentAllBlog = fragmentManager.findFragmentByTag("FragmentAllBlog")
+        if (FragmentAllBlog != null) {
+            fragmentManager.popBackStack()
+        }
+    }
+
+    override fun onPause() {
+        if (!moreClick) {
+            Log.e("onPause", "onPause")
+            mActivity.supportActionBar?.show()
+            pushFragment()
+        }
+        super.onPause()
+    }
 
     override fun onResume() {
         super.onResume()
@@ -126,14 +169,19 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
                 return false
             }
         })
+
+        if (backFromWebView) {
+            Log.e("onResume", "onResume")
+            mActivity.supportActionBar?.show()
+            pushFragment()
+        }
     }
 
     private fun loadBannerAd() {
         val adRequest = AdRequest.Builder().build()
 //        binding.adView.setAdSize(getAdSize())
         binding.adView.loadAd(adRequest)
-        binding.adView.adListener = object : AdListener() {
-        }
+        binding.adView.adListener = object : AdListener() {}
     }
 
     private fun getAdSize(): AdSize {
@@ -177,8 +225,7 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
                             val data = it.value.data
                             blogList.addAll(data.shuffled())
 
-                            if (blogList.isNotEmpty())
-                                getAllBlogList(blogList)
+                            if (blogList.isNotEmpty()) getAllBlogList(blogList)
                             else {
                                 binding.tvNoData.visibility = View.VISIBLE
                                 binding.rvNewsFeed.visibility = View.GONE
@@ -194,6 +241,7 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
                     }
                 }
+
                 is Resource.Failure -> {
                     binding.progressbar.isVisible = false
                     when {
@@ -206,6 +254,7 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
                                 ).show()
                             }
                         }
+
                         else -> {
                             Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
                                 .show()
@@ -223,19 +272,46 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
             binding.rvNewsFeed.visibility = View.GONE
             binding.appBarLayout.visibility = View.VISIBLE
         } else {
-            // Sorting all list data recent new first show
-            /*blogList.sortByDescending {
-                parseDate(it.publishDate)
-            }*/
 
-            var tempIndex = 2
-            SavedPrefrence.getAdsCard(requireContext())?.data?.forEachIndexed { index, cardData ->
+            var tempIndex = 2/*SavedPrefrence.getAdsCard(requireContext())?.data?.forEachIndexed { index, cardData ->
                 val blogData = RssFeedModelData()
                 blogData.isBanner = true
                 blogData.image = cardData.image
                 if (tempIndex < blogList.size - 1) {
                     blogList[tempIndex] = blogData
                     tempIndex += 6
+                }
+            }
+
+            if (SavedPrefrence.getAdsCard(requireContext())?.data!!.isEmpty()) {
+                blogList.forEachIndexed { index, rssFeedModelData ->
+                    val blogData = RssFeedModelData()
+                    blogData.isBanner = true
+                    blogData.isAddView = true
+                    if (tempIndex < blogList.size - 1) {
+                        blogList[tempIndex] = blogData
+                        tempIndex += 6
+                    }
+                }
+            }*/
+
+            SavedPrefrence.getAdsCard(requireContext())?.data?.forEachIndexed { index, cardData ->
+                val blogData = RssFeedModelData()
+                if (index <= SavedPrefrence.getAdsCard(requireContext())?.data!!.size) {
+                    blogData.isBanner = true
+                    blogData.image = cardData.image
+                }
+                if (tempIndex < blogList.size - 1) {
+                    blogList[tempIndex] = blogData
+                    tempIndex += 6
+                }
+                if (index == SavedPrefrence.getAdsCard(requireContext())?.data!!.size - 1) {
+                    var currentIndex = tempIndex
+                    while (currentIndex < blogList.size) {
+                        blogList[currentIndex].isAddView = true
+                        blogList[currentIndex].isBanner = true
+                        currentIndex += 6
+                    }
                 }
             }
 
@@ -258,6 +334,5 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
     override fun onClick(p0: View?) {
         TODO("Not yet implemented")
     }
-
 
 }

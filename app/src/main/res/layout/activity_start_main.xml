@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_app_bg">
+    android:background="@color/black">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,9 +59,10 @@
                             android:id="@+id/cbAgree"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:buttonTint="@color/white"
                             android:fontFamily="@font/poppins_regular"
                             android:text="@string/i_agree_txt"
-                            android:textColor="?textColor"
+                            android:textColor="@color/white"
                             android:textSize="10sp"
                             tools:ignore="SmallSp" />
 
@@ -80,7 +81,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
                             android:text="@string/and"
-                            android:textColor="?textColor"
+                            android:textColor="@color/white"
                             android:textSize="10sp" />
 
                         <androidx.appcompat.widget.AppCompatTextView

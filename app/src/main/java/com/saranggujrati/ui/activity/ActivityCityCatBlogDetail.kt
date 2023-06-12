@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.*
 import androidx.annotation.NonNull
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,6 +50,9 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
 
     var callCount = 0
 
+    var moreClick: Boolean = false
+    var backFromWebView: Boolean = false
+
     companion object {
         const val REQ_CODE_CITY_CAT_BLOG = 1001
         private const val EXTRA_ID = "EXTRA_ID"
@@ -79,6 +84,7 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
         binding.adView.adListener = object : AdListener() {
         }
     }
+
     private fun getAdSize(): AdSize {
         //Determine the screen width to use for the ad width.
         val display = windowManager.defaultDisplay
@@ -93,6 +99,7 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
         //return the optimal size depends on your orientation (landscape or portrait)
         return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth)
     }
+
     override fun setUpChildUI(savedInstanceState: Bundle?) {
         loadBannerAd()
         binding.icBack.setOnClickListener { finish() }
@@ -110,13 +117,22 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
                         mActivity.supportActionBar?.show()
                         mActivity.onBackPressed()
                     }
+
                     R.id.txtReadMore -> {
                         val i = Intent(this@ActivityCityCatBlogDetail, WebViewActivity::class.java)
                         i.putExtra("url", blogList[position].link)
                         i.putExtra("title", blogList[position].title)
+                        moreClick = true
                         startActivity(i)
                     }
                 }
+            }
+
+            override fun onBannerClick(view: View, position: Int) {
+                val i = Intent(this@ActivityCityCatBlogDetail, WebViewActivity::class.java)
+                i.putExtra("url", "https://www.google.com/")
+                i.putExtra("title", "Banner Ad")
+                startActivity(i)
             }
         }
 
@@ -183,13 +199,36 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
                             var tempIndex = 2
                             SavedPrefrence.getAdsCard(this)?.data?.forEachIndexed { index, cardData ->
                                 val blogData = RssFeedModelData()
-                                blogData.isBanner = true
-                                blogData.image = cardData.image
+                                if (index <= SavedPrefrence.getAdsCard(this)?.data!!.size) {
+                                    blogData.isBanner = true
+                                    blogData.image = cardData.image
+                                }
                                 if (tempIndex < blogList.size - 1) {
                                     blogList[tempIndex] = blogData
                                     tempIndex += 6
                                 }
+                                if (index == SavedPrefrence.getAdsCard(this)?.data!!.size - 1) {
+                                    var currentIndex = tempIndex
+                                    while (currentIndex < blogList.size) {
+                                        blogList[currentIndex].isAddView = true
+                                        blogList[currentIndex].isBanner = true
+                                        currentIndex += 6
+                                    }
+                                }
                             }
+
+                            if (SavedPrefrence.getAdsCard(this)?.data!!.isEmpty()) {
+                                blogList.forEachIndexed { index, rssFeedModelData ->
+                                    val blogData = RssFeedModelData()
+                                    blogData.isBanner = true
+                                    blogData.isAddView = true
+                                    if (tempIndex < blogList.size - 1) {
+                                        blogList[tempIndex] = blogData
+                                        tempIndex += 6
+                                    }
+                                }
+                            }
+
                             feedListAdapter.notifyDataSetChanged()
 
 
@@ -210,6 +249,7 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
                     }
                 }
+
                 is Resource.Failure -> {
                     binding.progressbar.isVisible = false
                     when {
@@ -222,6 +262,7 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
                                 ).show()
                             }
                         }
+
                         else -> {
                             Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
                                 .show()
@@ -240,5 +281,35 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
         binding = ActivityCitCatBlogBinding.inflate(layoutInflater)
         return binding.root
     }
+
+    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) { // Check if the request code matches and the result is successful
+            val receivedData =
+                data?.getStringExtra("close") // Replace "key" with the actual key used in Activity A
+            if (receivedData == "activity") {
+                backFromWebView = true
+            }
+            // Handle the received data here
+        }
+    }*/
+
+    override fun onStop() {
+        if (!moreClick) {
+            Log.e("onStop", "onStop")
+            finish()
+        }
+        super.onStop()
+    }
+
+   /* override fun onResume() {
+        super.onResume()
+        if (backFromWebView) {
+            Log.e("onResume", "onResume")
+            mActivity.supportActionBar?.show()
+            finish()
+        }
+    }*/
 
 }

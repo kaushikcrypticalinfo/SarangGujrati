@@ -268,17 +268,17 @@ class MainActivity : BaseActicvity<MainViewModel>(),
             }
 
             R.id.nav_advertise -> {
-                pushFragment(AdvertiseWithUsFragment())
+                pushFragment(AdvertiseWithUsFragment(), "AdvertiseWithUsFragment")
                 return true
             }
 
             R.id.nav_contact_us -> {
-                pushFragment(ContactUsFragment())
+                pushFragment(ContactUsFragment(), "ContactUsFragment")
                 return true
             }
 
             R.id.nav_policy_terms -> {
-                pushFragment(PrivacyPolicyFragment())
+                pushFragment(PrivacyPolicyFragment(), "PrivacyPolicyFragment")
                 return true
             }
 
@@ -301,11 +301,11 @@ class MainActivity : BaseActicvity<MainViewModel>(),
         binding.appBarToolbar.viewPager.adapter = adapter
     }
 
-    fun pushFragment(fragment: Fragment) {
+    fun pushFragment(fragment: Fragment, tag: String) {
 //fragment not in back stack, create it.
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.a_header_layout_content, fragment)
+        transaction.replace(R.id.a_header_layout_content, fragment, tag)
         transaction.addToBackStack(null)
         transaction.commit()
     }

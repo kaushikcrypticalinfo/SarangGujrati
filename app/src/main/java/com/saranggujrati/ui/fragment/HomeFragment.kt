@@ -130,6 +130,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     }
 
     override fun onResume() {
+        callApi()
         super.onResume()
     }
 
@@ -193,7 +194,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                 if (view.id == R.id.llMain) {
                     val b = Bundle()
                     b.putInt("position", position)
-                    mActivity.pushFragment(FragmentFeatureBlog(b))
+                    mActivity.pushFragment(FragmentFeatureBlog(b), "FragmentFeatureBlog")
                 }
             }
         }
@@ -202,16 +203,14 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         topMenuAdapter.adapterListener = object : TopMenuAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
                 when (position) {
-                    1 -> mActivity.pushFragment(FragmentAllBlog())
-                    2 -> mActivity.pushFragment(FragmentAllNewsPaper())
-                    3 -> mActivity.pushFragment(FragmentLatestNewsOnTheGo())
-                    4 -> mActivity.pushFragment(FragmentAllNewsChannel())
+                    1 -> mActivity.pushFragment(FragmentAllBlog(), "FragmentAllBlog")
+                    2 -> mActivity.pushFragment(FragmentAllNewsPaper(), "FragmentAllNewsPaper")
+                    3 -> mActivity.pushFragment(FragmentLatestNewsOnTheGo(), "FragmentLatestNewsOnTheGo")
+                    4 -> mActivity.pushFragment(FragmentAllNewsChannel(), "FragmentAllNewsChannel")
                 }
             }
         }
         binding.rvTopMenu.adapter = topMenuAdapter
-
-
     }
 
     private fun setRVLayoutManager() {
@@ -508,7 +507,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     override fun onClick(p0: View?) {
         when (p0) {
             binding.tvLiveTempleDarshan -> mActivity.pushFragment(
-                FrLiveTempleDarshanChannel()
+                FrLiveTempleDarshanChannel(),"FrLiveTempleDarshanChannel"
             )
         }
     }

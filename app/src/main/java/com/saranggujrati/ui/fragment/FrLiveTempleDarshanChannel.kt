@@ -2,6 +2,7 @@ package com.saranggujrati.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
@@ -33,6 +34,8 @@ class FrLiveTempleDarshanChannel : BaseFragment<NewsChannelViewModel>() {
 
     lateinit var pagingDemoAdapter: LiveTemplateAdapter
 
+    var moreClick: Boolean = false
+
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = FragmentAllNewsChannelBinding.inflate(inflater, container, false)
         return binding.root
@@ -40,6 +43,23 @@ class FrLiveTempleDarshanChannel : BaseFragment<NewsChannelViewModel>() {
 
     override fun initializeViewModel(): NewsChannelViewModel {
         return obtainViewModel(NewsChannelViewModel::class.java)
+    }
+
+    private fun pushFragment() {
+        val fragmentManager = parentFragmentManager
+        val FrLiveTempleDarshanChannel = fragmentManager.findFragmentByTag("FrLiveTempleDarshanChannel")
+        if (FrLiveTempleDarshanChannel != null) {
+            fragmentManager.popBackStack()
+        }
+    }
+
+    override fun onPause() {
+        if (!moreClick) {
+            Log.e("onPause", "onPause")
+            mActivity.supportActionBar?.show()
+            pushFragment()
+        }
+        super.onPause()
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
@@ -109,6 +129,7 @@ class FrLiveTempleDarshanChannel : BaseFragment<NewsChannelViewModel>() {
                     val i = Intent(requireContext(), YouTubeActivity::class.java)
                     i.putExtra("url", pagingDemoAdapter.snapshot()[position]?.url)
                     i.putExtra("videoName", pagingDemoAdapter.snapshot()[position]?.company_name)
+                    moreClick = true
                     startActivity(i)
                 }
             }

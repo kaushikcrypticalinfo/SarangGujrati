@@ -8,31 +8,68 @@
     android:background="?appBackground"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <RelativeLayout
+        android:id="@+id/rtl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        ads:layout_constraintBottom_toBottomOf="parent"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintStart_toStartOf="parent"
+        ads:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        android:background="@color/black">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imgBanner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            ads:adSize="MEDIUM_RECTANGLE"
+            ads:adUnitId="@string/banner_add_app_id"
+            android:layout_centerInParent="true"/>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/swipeUpImg"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/swipe_up"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+    <!--<androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imgBanner"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="fitXY"
-        android:src="@drawable/placeholder"
         ads:layout_constraintBottom_toBottomOf="parent"
         ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintHorizontal_bias="0.0"
         ads:layout_constraintStart_toStartOf="parent"
         ads:layout_constraintTop_toTopOf="parent"
-        ads:layout_constraintVertical_bias="0.0" />
+        ads:layout_constraintVertical_bias="0.0" />-->
 
-    <com.google.android.gms.ads.AdView
+    <!--<com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
         ads:adSize="MEDIUM_RECTANGLE"
-        android:background="@color/white"
         ads:adUnitId="@string/banner_add_app_id"
         ads:layout_constraintBottom_toBottomOf="parent"
         ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintStart_toStartOf="parent"
-        ads:layout_constraintTop_toTopOf="parent"/>
+        ads:layout_constraintTop_toTopOf="parent" />-->
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_news_image"
@@ -73,10 +110,10 @@
         android:layout_centerInParent="true"
         android:layout_marginHorizontal="15dp"
         android:background="@drawable/shape_bg_light_orange"
+        android:justificationMode="inter_word"
         android:paddingHorizontal="15dp"
         android:paddingVertical="10dp"
         android:scaleType="fitXY"
-        android:justificationMode="inter_word"
         android:src="@drawable/ic_share_white"
         android:text="Read More"
         android:textColor="@color/white"

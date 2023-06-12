@@ -1,7 +1,10 @@
 package com.saranggujrati.ui.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
@@ -102,6 +105,15 @@ class YouTubeActivity : YouTubeBaseActivity() {
             binding.adView.destroy()
         }
         super.onDestroy()
+    }
+
+    override fun onStop() {
+        Log.e("onStop", "onStop")
+        val resultIntent = Intent()
+        resultIntent.putExtra("close", "activity") // Replace "key" and "value" with the actual data you want to pass back
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
+        super.onStop()
     }
 
     private fun getYouTubeId(youTubeUrl: String): String? {

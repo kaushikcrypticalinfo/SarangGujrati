@@ -1,7 +1,9 @@
 package com.saranggujrati.ui.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -37,6 +39,8 @@ class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {
     lateinit var newsPaperResponse: NewsPaperListResponse
     lateinit var swipeContainer: SwipeRefreshLayout
 
+    var moreClick: Boolean = false
+    var backFromWebView: Boolean = false
 
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
         binding = FragmentAllNewsChannelBinding.inflate(inflater, container, false)
@@ -45,6 +49,45 @@ class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {
 
     override fun initializeViewModel(): NewsPaperViewModel {
         return obtainViewModel(NewsPaperViewModel::class.java)
+    }
+
+    private fun pushFragment() {
+        val fragmentManager = parentFragmentManager
+        val FragmentAllNewsPaper = fragmentManager.findFragmentByTag("FragmentAllNewsPaper")
+        if (FragmentAllNewsPaper != null) {
+            fragmentManager.popBackStack()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) { // Check if the request code matches and the result is successful
+            val receivedData =
+                data?.getStringExtra("close") // Replace "key" with the actual key used in Activity A
+            if (receivedData == "activity") {
+                backFromWebView = true
+            }
+            // Handle the received data here
+        }
+    }
+
+    override fun onPause() {
+        if (!moreClick) {
+            Log.e("onPause", "onPause")
+            mActivity.supportActionBar?.show()
+            pushFragment()
+        }
+        super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (backFromWebView) {
+            Log.e("onResume", "onResume")
+            mActivity.supportActionBar?.show()
+            pushFragment()
+        }
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
@@ -87,7 +130,8 @@ class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {
                     val i = Intent(requireContext(), WebViewActivity::class.java)
                     i.putExtra("url", newPaperlList[position]?.url)
                     i.putExtra("title", newPaperlList[position]?.title)
-                    startActivity(i)
+                    moreClick = true
+                    startActivityForResult(i,1)
                 }
             }
         }

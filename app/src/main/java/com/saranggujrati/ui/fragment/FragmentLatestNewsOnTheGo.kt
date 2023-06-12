@@ -1,7 +1,9 @@
 package com.saranggujrati.ui.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +31,9 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
     private lateinit var mActivity: MainActivity
     lateinit var binding: FragmentAllNewsBlogBinding
 
+    var moreClick: Boolean = false
+    var backFromWebView: Boolean = false
+
     lateinit var newsOnTheGoAdapter : NewsOnTheGoAdapter
     private var newsList = ArrayList<RssFeedModelData>()
 
@@ -39,6 +44,37 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
 
     override fun initializeViewModel(): AllBlogListViewModel {
         return obtainViewModel(AllBlogListViewModel::class.java)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) { // Check if the request code matches and the result is successful
+            val receivedData =
+                data?.getStringExtra("close") // Replace "key" with the actual key used in Activity A
+            if (receivedData == "activity") {
+                backFromWebView = true
+
+            }
+            // Handle the received data here
+        }
+    }
+
+    private fun pushFragment() {
+        val fragmentManager = parentFragmentManager
+        val FragmentLatestNewsOnTheGo = fragmentManager.findFragmentByTag("FragmentLatestNewsOnTheGo")
+        if (FragmentLatestNewsOnTheGo != null) {
+            fragmentManager.popBackStack()
+        }
+    }
+
+    override fun onPause() {
+        if (!moreClick) {
+            Log.e("onPause", "onPause")
+            mActivity.supportActionBar?.show()
+            pushFragment()
+        }
+        super.onPause()
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
@@ -68,7 +104,8 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
                         val i = Intent(requireContext(), WebViewActivity::class.java)
                         i.putExtra("url", newsList[position].link)
                         i.putExtra("title", newsList[position].title)
-                        startActivity(i)
+                        moreClick = true
+                        startActivityForResult(i, 1)
                     }
                 }
             }
@@ -102,6 +139,12 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
                 return false
             }
         })
+
+        if (backFromWebView) {
+            Log.e("onResume", "onResume")
+            mActivity.supportActionBar?.show()
+            pushFragment()
+        }
     }
 
     private fun getAllBlogList() {

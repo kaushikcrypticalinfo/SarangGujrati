@@ -14,7 +14,7 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="380dp"
         android:src="@drawable/ic_header_side_menu"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

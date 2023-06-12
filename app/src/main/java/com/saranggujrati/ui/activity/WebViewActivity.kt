@@ -1,7 +1,10 @@
 package com.saranggujrati.ui.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
@@ -86,5 +89,14 @@ class WebViewActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onStop() {
+        Log.e("onStop", "onStop")
+        val resultIntent = Intent()
+        resultIntent.putExtra("close", "activity") // Replace "key" and "value" with the actual data you want to pass back
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
+        super.onStop()
     }
 }

@@ -1,7 +1,9 @@
 package com.saranggujrati.adapter
 
+import android.app.Activity
 import android.os.Build
 import android.text.Html
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -13,8 +15,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.nativead.NativeAd
+import com.google.android.gms.ads.nativead.NativeAdOptions
+import com.google.android.gms.ads.nativead.NativeAdView
+import com.google.android.gms.ads.nativead.NativeAdViewHolder
 
 import com.saranggujrati.databinding.RRssFeedItemBinding
 import com.saranggujrati.AppClass
@@ -22,6 +29,7 @@ import com.saranggujrati.R
 
 import com.saranggujrati.extensions.formatHtmlText
 import com.saranggujrati.model.RssFeedModelData
+import timber.log.Timber
 
 class FeedListAdapter(private var categoryList: ArrayList<RssFeedModelData>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -31,12 +39,16 @@ class FeedListAdapter(private var categoryList: ArrayList<RssFeedModelData>) :
 
     interface AdapterListener {
         fun onClick(view: View, position: Int)
+
+        fun onBannerClick(view: View, position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
+
         binding = RRssFeedItemBinding.inflate(inflater, parent, false)
         return CategoryViewHolder(binding)
+
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -62,25 +74,23 @@ class FeedListAdapter(private var categoryList: ArrayList<RssFeedModelData>) :
         fun bind(data: RssFeedModelData) {
 
             binding.groupNews.visibility = if (data.isBanner) GONE else VISIBLE
-            binding.imgBanner.visibility = if (data.isBanner) VISIBLE else GONE
+            binding.imgBanner.visibility = if (data.isAddView) GONE else VISIBLE
+            binding.rtl.visibility = if (data.isBanner) VISIBLE else GONE
             binding.adView.visibility = if (data.isAddView) VISIBLE else GONE
 
-            /*val adRequest = AdRequest.Builder().build()
-            binding.adView.loadAd(adRequest)
-            binding.adView.adListener = object : AdListener() {
-            }*/
+            binding.swipeUpImg.postDelayed({
+                binding.swipeUpImg.visibility = if (data.isAddView) VISIBLE else GONE
+            }, 2000)
 
-            if (data.isBanner)
+            if (data.isBanner && !data.isAddView) {
                 Glide.with(AppClass.appContext)
-
                     .load(data.image)
                     .override(SIZE_ORIGINAL, SIZE_ORIGINAL)
                     .apply(
                         RequestOptions.placeholderOf(R.drawable.placeholder)
                             .error(R.drawable.placeholder)
                     ).into(binding.imgBanner)
-
-
+            }
 
             binding.tvNewsHighLight.text = data.title.trim()
 
@@ -99,6 +109,12 @@ class FeedListAdapter(private var categoryList: ArrayList<RssFeedModelData>) :
 
             binding.txtReadMore.setOnClickListener {
                 adapterListener?.onClick(it, adapterPosition)
+            }
+
+            binding.imgBanner.setOnClickListener {
+                if (!data.isAddView) {
+                    adapterListener?.onBannerClick(it, adapterPosition)
+                }
             }
 
         }
