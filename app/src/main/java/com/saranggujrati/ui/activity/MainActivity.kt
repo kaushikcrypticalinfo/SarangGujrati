@@ -1,59 +1,50 @@
 package com.saranggujrati.ui.activity
 
 import android.Manifest
+import android.app.Activity
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.*
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.ui.AppBarConfiguration
-import com.saranggujrati.R
-import com.saranggujrati.adapter.ViewPagerAdapter
-import com.saranggujrati.ui.SavedPrefrence
-import com.saranggujrati.ui.startNewActivity
-import com.saranggujrati.ui.viewModel.MainViewModel
-import com.google.android.material.navigation.NavigationView
-import com.performly.ext.obtainViewModel
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.saranggujrati.AppClass
-import androidx.core.app.ActivityCompat
-
-import android.content.pm.PackageManager
-
-import androidx.core.content.ContextCompat
-
-import android.app.Activity
-import androidx.appcompat.widget.SwitchCompat
-
-import android.widget.*
-
-import androidx.appcompat.app.AppCompatDelegate
-import android.graphics.Bitmap
-
-import android.graphics.drawable.BitmapDrawable
-
-import android.graphics.drawable.Drawable
-import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-
-import com.saranggujrati.ui.fragment.*
-import com.saranggujrati.webservice.Resource
+import androidx.navigation.ui.AppBarConfiguration
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.messaging.FirebaseMessaging
-import com.saranggujrati.BuildConfig
+import com.performly.ext.obtainViewModel
+import com.saranggujrati.AppClass
+import com.saranggujrati.R
+import com.saranggujrati.adapter.ViewPagerAdapter
 import com.saranggujrati.databinding.ActivityMainBinding
-import com.saranggujrati.ui.isOnline
-import com.saranggujrati.ui.visible
-import com.saranggujrati.utils.gujarati_flavors
-import com.saranggujrati.utils.kathiyawadi_khamir
-import kotlinx.coroutines.launch
+import com.saranggujrati.ui.SavedPrefrence
+import com.saranggujrati.ui.fragment.AdvertiseWithUsFragment
+import com.saranggujrati.ui.fragment.ContactUsFragment
+import com.saranggujrati.ui.fragment.HomeFragment
+import com.saranggujrati.ui.fragment.PrivacyPolicyFragment
+import com.saranggujrati.ui.startNewActivity
+import com.saranggujrati.ui.viewModel.MainViewModel
+import com.saranggujrati.webservice.Resource
 
 
 class MainActivity : BaseActicvity<MainViewModel>(),
@@ -286,6 +277,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
                 startNewActivity(LoginActivity::class.java)
                 return true
             }
+
             R.id.nav_Logout -> {
                 showAlertDialogForLogout()
                 return true
@@ -326,6 +318,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
                     super.onBackPressed()
                     return
                 }
+
                 count == 0 -> {
                     if (doubleBackToExitPressedOnce) {
                         enableViews(false)
@@ -341,6 +334,7 @@ class MainActivity : BaseActicvity<MainViewModel>(),
                         doubleBackToExitPressedOnce = false
                     }, 2000)
                 }
+
                 else -> {
                     enableViews(false)
                     mDrawerToggle.syncState()
@@ -393,11 +387,11 @@ class MainActivity : BaseActicvity<MainViewModel>(),
                         }
                     }
                 }
+
                 is Resource.Failure -> {
                 }
             }
         })
     }
-
 
 }

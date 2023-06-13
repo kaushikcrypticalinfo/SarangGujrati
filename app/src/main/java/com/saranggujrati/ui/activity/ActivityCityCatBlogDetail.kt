@@ -1,13 +1,12 @@
 package com.saranggujrati.ui.activity
 
+import android.R.attr.data
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.*
-import androidx.annotation.NonNull
-import androidx.core.content.ContentProviderCompat.requireContext
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,16 +20,21 @@ import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
-import com.saranggujrati.adapter.*
+import com.saranggujrati.adapter.FeedListAdapter
 import com.saranggujrati.databinding.ActivityCitCatBlogBinding
-import com.saranggujrati.model.*
+import com.saranggujrati.model.RssFeedModelData
 import com.saranggujrati.ui.SavedPrefrence
 import com.saranggujrati.ui.isOnline
 import com.saranggujrati.ui.viewModel.CityCatBlogDetailViewModel
 import com.saranggujrati.ui.visible
+import com.saranggujrati.utils.KEY
+import com.saranggujrati.utils.VALUE
 import com.saranggujrati.webservice.Resource
 import timber.log.Timber
 
+private const val EXTRA_ID = "EXTRA_ID"
+private const val EXTRA_PARENT_ID = "EXTRA_PARENT_ID"
+private const val EXTRA_NAME = "EXTRA_NAME"
 
 class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
     View.OnClickListener {
@@ -53,7 +57,7 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
     var moreClick: Boolean = false
     var backFromWebView: Boolean = false
 
-    companion object {
+    /*companion object {
         const val REQ_CODE_CITY_CAT_BLOG = 1001
         private const val EXTRA_ID = "EXTRA_ID"
         private const val EXTRA_PARENT_ID = "EXTRA_PARENT_ID"
@@ -70,8 +74,7 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
             intent.putExtra(EXTRA_NAME, name)
             activity.startActivityForResult(intent, REQ_CODE_CITY_CAT_BLOG)
         }
-
-    }
+    }*/
 
     override fun initializeViewModel(): CityCatBlogDetailViewModel {
         return obtainViewModel(CityCatBlogDetailViewModel::class.java)
@@ -101,7 +104,11 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
+
+        readIntent()
+
         loadBannerAd()
+
         binding.icBack.setOnClickListener { finish() }
 
         binding.imgRefresh.setOnClickListener {
@@ -123,7 +130,7 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
                         i.putExtra("url", blogList[position].link)
                         i.putExtra("title", blogList[position].title)
                         moreClick = true
-                        startActivity(i)
+                        startActivityForResult(i, 1)
                     }
                 }
             }
@@ -157,7 +164,6 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
             }
         })
 
-        readIntent()
 
         binding.tvTitle.text = name
 
@@ -232,12 +238,12 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
                             feedListAdapter.notifyDataSetChanged()
 
 
-                            if (blogList.isNotEmpty())
-//                                callLiveFeesListApi(dummyFeedlist, callCount)
-                            else {
-                                binding.tvNoData.visibility = View.VISIBLE
-                                binding.rvNewsFeed.visibility = View.GONE
-                            }
+                            /* if (blogList.isNotEmpty())
+ //                                callLiveFeesListApi(dummyFeedlist, callCount)
+                             else {
+                                 binding.tvNoData.visibility = View.VISIBLE
+                                 binding.rvNewsFeed.visibility = View.GONE
+                             }*/
 
                             binding.tvNoData.visibility =
                                 if (blogList.isNotEmpty()) View.GONE else View.VISIBLE
@@ -282,34 +288,41 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
         return binding.root
     }
 
-    /*override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) { // Check if the request code matches and the result is successful
             val receivedData =
-                data?.getStringExtra("close") // Replace "key" with the actual key used in Activity A
-            if (receivedData == "activity") {
+                data?.getStringExtra(KEY) // Replace "key" with the actual key used in Activity A
+            if (receivedData == VALUE) {
                 backFromWebView = true
             }
             // Handle the received data here
         }
-    }*/
+    }
 
     override fun onStop() {
         if (!moreClick) {
             Log.e("onStop", "onStop")
+            passData()
             finish()
         }
         super.onStop()
     }
 
-   /* override fun onResume() {
+    override fun onResume() {
         super.onResume()
         if (backFromWebView) {
             Log.e("onResume", "onResume")
-            mActivity.supportActionBar?.show()
+            passData()
             finish()
         }
-    }*/
+    }
+
+    fun passData() {
+        val intent = Intent()
+        intent.putExtra(KEY, VALUE)
+        setResult(Activity.RESULT_CANCELED, intent)
+    }
 
 }

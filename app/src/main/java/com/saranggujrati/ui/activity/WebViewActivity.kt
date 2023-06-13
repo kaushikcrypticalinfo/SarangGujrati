@@ -14,6 +14,8 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import com.saranggujrati.databinding.ActivityWebviewBinding
+import com.saranggujrati.utils.KEY
+import com.saranggujrati.utils.VALUE
 
 
 class WebViewActivity : AppCompatActivity() {
@@ -94,7 +96,7 @@ class WebViewActivity : AppCompatActivity() {
     override fun onStop() {
         Log.e("onStop", "onStop")
         val resultIntent = Intent()
-        resultIntent.putExtra("close", "activity") // Replace "key" and "value" with the actual data you want to pass back
+        resultIntent.putExtra(KEY, VALUE) // Replace "key" and "value" with the actual data you want to pass back
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
         super.onStop()

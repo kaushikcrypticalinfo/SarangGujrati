@@ -30,6 +30,9 @@ const val RSS_FEED_DATE_FORMAT_T = "yyyy-MM-dd'T'hh:mm:ssZ"
 const val STARTING_PAGE_INDEX = 1
 const val NETWORK_PAGE_SIZE = 10
 
+const val KEY = "close"
+const val VALUE = "activity"
+
 const val gujarati_flavors = "gujarati"
 const val kathiyawadi_khamir = "kathiyawadi_khamir"
 

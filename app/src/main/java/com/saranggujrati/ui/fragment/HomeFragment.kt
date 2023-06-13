@@ -1,14 +1,21 @@
 package com.saranggujrati.ui.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.*
+import com.google.android.material.snackbar.Snackbar
+import com.performly.ext.obtainViewModel
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
+import com.saranggujrati.adapter.*
+import com.saranggujrati.databinding.FragmentHomeBinding
 import com.saranggujrati.model.*
 import com.saranggujrati.model.onDemand.OnDemandData
 import com.saranggujrati.ui.SavedPrefrence
@@ -18,15 +25,15 @@ import com.saranggujrati.ui.activity.YouTubeActivity
 import com.saranggujrati.ui.isOnline
 import com.saranggujrati.ui.viewModel.HomeViewModel
 import com.saranggujrati.ui.visible
+import com.saranggujrati.utils.KEY
+import com.saranggujrati.utils.VALUE
 import com.saranggujrati.webservice.Resource
-import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
-import com.performly.ext.obtainViewModel
-import com.saranggujrati.adapter.*
-import com.saranggujrati.databinding.FragmentHomeBinding
 import java.util.*
-import kotlin.collections.ArrayList
 
+const val REQ_CODE_CITY_CAT_BLOG = 1001
+private const val EXTRA_ID = "EXTRA_ID"
+private const val EXTRA_PARENT_ID = "EXTRA_PARENT_ID"
+private const val EXTRA_NAME = "EXTRA_NAME"
 
 class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
 
@@ -47,6 +54,8 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     lateinit var topMenuAdapter: TopMenuAdapter
     private var topMenuItemList = ArrayList<ApiRecordData>()
 
+    var fragmentBackFromButton: Boolean = false
+
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -55,6 +64,19 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     override fun initializeViewModel(): HomeViewModel {
         return obtainViewModel(HomeViewModel::class.java)
     }
+
+    private var launchActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_CANCELED) {
+                if (result.data?.getStringExtra(KEY) == VALUE) {
+                    Log.e("RESULT", "TRUE")
+                    fragmentBackFromButton = true
+                } else {
+                    Log.e("RESULT", "FALSE")
+                    fragmentBackFromButton = false
+                }
+            }
+        }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
         mActivity = (activity as MainActivity)
@@ -80,6 +102,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                 is Resource.Loading -> {
                     binding.progressbar.visible(true)
                 }
+
                 is Resource.Success -> {
                     binding.progressbar.visible(false)
                     if (it.value.status) {
@@ -99,6 +122,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                         topMenuAdapter.notifyDataSetChanged()
                     }
                 }
+
                 is Resource.Failure -> {
                     binding.progressbar.visible(false)
                     when {
@@ -111,6 +135,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                                 ).show()
                             }
                         }
+
                         else -> {
                             Snackbar.make(
                                 binding.layout,
@@ -130,8 +155,11 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     }
 
     override fun onResume() {
-        callApi()
         super.onResume()
+        if (fragmentBackFromButton) {
+            callApi()
+        }
+
     }
 
     private fun setAdapter() {
@@ -140,9 +168,14 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
             override fun onClick(view: View, position: Int) {
                 if (view.id == R.id.tvCity) {
                     val data = topCitiesList[position]
-                    ActivityCityCatBlogDetail.startActivity(
+                    /*ActivityCityCatBlogDetail.startActivity(
                         activity!!, data.parent_id, data.id.toString(), data.name
-                    )
+                    )*/
+                    val intent = Intent(context, ActivityCityCatBlogDetail::class.java)
+                    intent.putExtra(EXTRA_PARENT_ID, data.parent_id)
+                    intent.putExtra(EXTRA_ID, data.id.toString())
+                    intent.putExtra(EXTRA_NAME, data.name)
+                    launchActivity.launch(intent)
                 }
             }
         }
@@ -181,9 +214,14 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
             override fun onClick(view: View, position: Int) {
                 if (view.id == R.id.llMain) {
                     val data = categoryList[position]
-                    ActivityCityCatBlogDetail.startActivity(
+                    /*ActivityCityCatBlogDetail.startActivity(
                         activity!!, data.parent_id, data.id.toString(), data.name
-                    )
+                    )*/
+                    val intent = Intent(activity, ActivityCityCatBlogDetail::class.java)
+                    intent.putExtra(EXTRA_PARENT_ID, data.parent_id)
+                    intent.putExtra(EXTRA_ID, data.id.toString())
+                    intent.putExtra(EXTRA_NAME, data.name)
+                    launchActivity.launch(intent)
                 }
             }
         }
@@ -205,7 +243,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                 when (position) {
                     1 -> mActivity.pushFragment(FragmentAllBlog(), "FragmentAllBlog")
                     2 -> mActivity.pushFragment(FragmentAllNewsPaper(), "FragmentAllNewsPaper")
-                    3 -> mActivity.pushFragment(FragmentLatestNewsOnTheGo(), "FragmentLatestNewsOnTheGo")
+                    3 -> mActivity.pushFragment(FragmentLatestNewsOnTheGo(),"FragmentLatestNewsOnTheGo")
                     4 -> mActivity.pushFragment(FragmentAllNewsChannel(), "FragmentAllNewsChannel")
                 }
             }
@@ -276,6 +314,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                     }
 
                 }
+
                 is Resource.Failure -> {
                     binding.rvTopCities.progressbar.visible(false)
                     when {
@@ -288,6 +327,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                                 ).show()
                             }
                         }
+
                         else -> {
                             Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
                                 .show()
@@ -345,6 +385,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                     }
                     getFeatureList(it.value)
                 }
+
                 is Resource.Failure -> {
                     binding.rvFeaturedStories.progressbar.visible(false)
                     setFeatureStoryLblVisisbility()
@@ -358,6 +399,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                                 ).show()
                             }
                         }
+
                         else -> {
                             Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
                                 .show()
@@ -400,6 +442,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                                 ).show()
                             }
                         }
+
                         else -> {
                             Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
                                 .show()
@@ -454,6 +497,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
                     }
                 }
+
                 is Resource.Failure -> {
                     binding.rvTopCategory.progressbar.visible(false)
                     when {
@@ -466,6 +510,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                                 ).show()
                             }
                         }
+
                         else -> {
 
                             Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
@@ -507,7 +552,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     override fun onClick(p0: View?) {
         when (p0) {
             binding.tvLiveTempleDarshan -> mActivity.pushFragment(
-                FrLiveTempleDarshanChannel(),"FrLiveTempleDarshanChannel"
+                FrLiveTempleDarshanChannel(), "FrLiveTempleDarshanChannel"
             )
         }
     }

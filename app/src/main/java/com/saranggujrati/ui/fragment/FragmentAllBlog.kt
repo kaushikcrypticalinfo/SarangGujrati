@@ -9,7 +9,9 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -31,6 +33,8 @@ import com.saranggujrati.ui.activity.WebViewActivity
 import com.saranggujrati.ui.isOnline
 import com.saranggujrati.ui.viewModel.AllBlogListViewModel
 import com.saranggujrati.ui.visible
+import com.saranggujrati.utils.KEY
+import com.saranggujrati.utils.VALUE
 import com.saranggujrati.webservice.Resource
 
 
@@ -42,6 +46,8 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
     lateinit var allBogAdapter: FeedListAdapter
 
     private var blogList = ArrayList<RssFeedModelData>()
+
+    private lateinit var mDrawerToggle: ActionBarDrawerToggle
 
     var moreClick: Boolean = false
     var backFromWebView: Boolean = false
@@ -128,8 +134,8 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
 
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) { // Check if the request code matches and the result is successful
             val receivedData =
-                data?.getStringExtra("close") // Replace "key" with the actual key used in Activity A
-            if (receivedData == "activity") {
+                data?.getStringExtra(KEY) // Replace "key" with the actual key used in Activity A
+            if (receivedData == VALUE) {
                 backFromWebView = true
             }
             // Handle the received data here
@@ -148,6 +154,7 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
         if (!moreClick) {
             Log.e("onPause", "onPause")
             mActivity.supportActionBar?.show()
+            mActivity.enableViews(false)
             pushFragment()
         }
         super.onPause()
@@ -173,6 +180,7 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
         if (backFromWebView) {
             Log.e("onResume", "onResume")
             mActivity.supportActionBar?.show()
+            mActivity.enableViews(false)
             pushFragment()
         }
     }

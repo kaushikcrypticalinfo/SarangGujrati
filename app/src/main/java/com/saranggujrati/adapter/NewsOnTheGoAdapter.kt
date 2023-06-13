@@ -1,21 +1,26 @@
 package com.saranggujrati.adapter
 
+
 import android.graphics.Color
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
 import com.saranggujrati.databinding.ItemNewsOnTheGoBinding
 import com.saranggujrati.model.RssFeedModelData
 import com.saranggujrati.ui.SavedPrefrence
+
 
 class NewsOnTheGoAdapter(private var newsList: ArrayList<RssFeedModelData>) :
     RecyclerView.Adapter<ViewHolder>() {
@@ -39,12 +44,20 @@ class NewsOnTheGoAdapter(private var newsList: ArrayList<RssFeedModelData>) :
             holder.bind(response)
         }
 
-        if (SavedPrefrence.getIsDarkMode(binding.dividerLineTwo.context)!!) {
-            binding.dividerLineOne.setBackgroundColor(Color.parseColor("#ffffff"))
-            binding.dividerLineTwo.setBackgroundColor(Color.parseColor("#ffffff"))
-            binding.dividerLineThree.setBackgroundColor(Color.parseColor("#ffffff"))
-            binding.dividerLineFour.setBackgroundColor(Color.parseColor("#ffffff"))
-        }
+       /* if (SavedPrefrence.getIsDarkMode(binding.dividerLineOne.context)!!) {
+            binding.dividerLineOne.setBackgroundColor(
+                ContextCompat.getColor(
+                    binding.dividerLineOne.context,
+                    R.color.light_grey
+                )
+            )
+            binding.dividerLineThree.setBackgroundColor(
+                ContextCompat.getColor(
+                    binding.dividerLineThree.context,
+                    R.color.light_grey
+                )
+            )
+        }*/
 
         if (position % 3 == 0) {
             val adRequest = AdRequest.Builder().build()

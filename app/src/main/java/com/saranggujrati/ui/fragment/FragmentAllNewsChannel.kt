@@ -21,6 +21,8 @@ import com.saranggujrati.ui.viewModel.NewsChannelViewModel
 import com.saranggujrati.ui.visible
 import com.performly.ext.obtainViewModel
 import com.saranggujrati.databinding.FragmentAllNewsChannelBinding
+import com.saranggujrati.utils.KEY
+import com.saranggujrati.utils.VALUE
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -51,8 +53,8 @@ class FragmentAllNewsChannel : BaseFragment<NewsChannelViewModel>() {
 
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) { // Check if the request code matches and the result is successful
             val receivedData =
-                data?.getStringExtra("close") // Replace "key" with the actual key used in Activity A
-            if (receivedData == "activity") {
+                data?.getStringExtra(KEY) // Replace "key" with the actual key used in Activity A
+            if (receivedData == VALUE) {
                 backFromWebView = true
 
             }
@@ -72,6 +74,7 @@ class FragmentAllNewsChannel : BaseFragment<NewsChannelViewModel>() {
         if (!moreClick) {
             Log.e("onPause", "onPause")
             mActivity.supportActionBar?.show()
+            mActivity.enableViews(false)
             pushFragment()
         }
         super.onPause()
@@ -82,6 +85,7 @@ class FragmentAllNewsChannel : BaseFragment<NewsChannelViewModel>() {
         if (backFromWebView) {
             Log.e("onResume", "onResume")
             mActivity.supportActionBar?.show()
+            mActivity.enableViews(false)
             pushFragment()
         }
     }

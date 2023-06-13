@@ -1,5 +1,6 @@
 package com.saranggujrati.ui.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -22,6 +23,8 @@ import com.saranggujrati.ui.viewModel.NewsChannelViewModel
 import com.saranggujrati.ui.visible
 import com.performly.ext.obtainViewModel
 import com.saranggujrati.databinding.FragmentAllNewsChannelBinding
+import com.saranggujrati.utils.KEY
+import com.saranggujrati.utils.VALUE
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlin.collections.ArrayList
@@ -35,6 +38,7 @@ class FrLiveTempleDarshanChannel : BaseFragment<NewsChannelViewModel>() {
     lateinit var pagingDemoAdapter: LiveTemplateAdapter
 
     var moreClick: Boolean = false
+    var backFromWebView: Boolean = false
 
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View {
         binding = FragmentAllNewsChannelBinding.inflate(inflater, container, false)
@@ -43,6 +47,20 @@ class FrLiveTempleDarshanChannel : BaseFragment<NewsChannelViewModel>() {
 
     override fun initializeViewModel(): NewsChannelViewModel {
         return obtainViewModel(NewsChannelViewModel::class.java)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) { // Check if the request code matches and the result is successful
+            val receivedData =
+                data?.getStringExtra(KEY) // Replace "key" with the actual key used in Activity A
+            if (receivedData == VALUE) {
+                backFromWebView = true
+
+            }
+            // Handle the received data here
+        }
     }
 
     private fun pushFragment() {
@@ -60,6 +78,16 @@ class FrLiveTempleDarshanChannel : BaseFragment<NewsChannelViewModel>() {
             pushFragment()
         }
         super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (backFromWebView) {
+            Log.e("onResume", "onResume")
+            mActivity.supportActionBar?.show()
+            mActivity.enableViews(false)
+            pushFragment()
+        }
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
@@ -130,7 +158,7 @@ class FrLiveTempleDarshanChannel : BaseFragment<NewsChannelViewModel>() {
                     i.putExtra("url", pagingDemoAdapter.snapshot()[position]?.url)
                     i.putExtra("videoName", pagingDemoAdapter.snapshot()[position]?.company_name)
                     moreClick = true
-                    startActivity(i)
+                    startActivityForResult(i,1)
                 }
             }
         }

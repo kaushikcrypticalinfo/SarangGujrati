@@ -3,6 +3,7 @@ package com.saranggujrati.ui.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.provider.SyncStateContract.Constants
 import android.util.DisplayMetrics
 import android.util.Log
 import com.google.android.gms.ads.AdListener
@@ -12,6 +13,8 @@ import com.saranggujrati.R
 import com.google.android.youtube.player.*
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.saranggujrati.databinding.ActivityYoutubeBinding
+import com.saranggujrati.utils.KEY
+import com.saranggujrati.utils.VALUE
 import java.util.regex.Pattern
 
 
@@ -110,7 +113,7 @@ class YouTubeActivity : YouTubeBaseActivity() {
     override fun onStop() {
         Log.e("onStop", "onStop")
         val resultIntent = Intent()
-        resultIntent.putExtra("close", "activity") // Replace "key" and "value" with the actual data you want to pass back
+        resultIntent.putExtra(KEY, VALUE) // Replace "key" and "value" with the actual data you want to pass back
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
         super.onStop()

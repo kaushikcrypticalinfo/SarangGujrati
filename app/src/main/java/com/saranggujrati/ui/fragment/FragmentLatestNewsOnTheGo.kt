@@ -25,6 +25,8 @@ import com.saranggujrati.ui.activity.WebViewActivity
 import com.saranggujrati.ui.isOnline
 import com.saranggujrati.ui.viewModel.AllBlogListViewModel
 import com.saranggujrati.ui.visible
+import com.saranggujrati.utils.KEY
+import com.saranggujrati.utils.VALUE
 import com.saranggujrati.webservice.Resource
 
 class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
@@ -51,8 +53,8 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
 
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) { // Check if the request code matches and the result is successful
             val receivedData =
-                data?.getStringExtra("close") // Replace "key" with the actual key used in Activity A
-            if (receivedData == "activity") {
+                data?.getStringExtra(KEY) // Replace "key" with the actual key used in Activity A
+            if (receivedData == VALUE) {
                 backFromWebView = true
 
             }
@@ -72,6 +74,7 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
         if (!moreClick) {
             Log.e("onPause", "onPause")
             mActivity.supportActionBar?.show()
+            mActivity.enableViews(false)
             pushFragment()
         }
         super.onPause()
@@ -143,6 +146,7 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
         if (backFromWebView) {
             Log.e("onResume", "onResume")
             mActivity.supportActionBar?.show()
+            mActivity.enableViews(false)
             pushFragment()
         }
     }

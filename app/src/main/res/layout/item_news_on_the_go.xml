@@ -26,13 +26,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerInParent="true"
-        android:layout_marginHorizontal="15dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/shape_bg_blue"
         android:fontFamily="@font/montserrat_regular"
         android:paddingHorizontal="15dp"
         android:paddingVertical="10dp"
-        android:textColor="@color/white"
+        android:textColor="@color/app_grey"
         android:textSize="12sp"
         ads:layout_constraintEnd_toStartOf="@+id/txtReadMore_news_on_the_go"
         ads:layout_constraintHorizontal_bias="0.059"
@@ -46,16 +44,13 @@
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_centerInParent="true"
-        android:layout_marginHorizontal="15dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/shape_bg_light_orange"
-        android:justificationMode="inter_word"
         android:paddingHorizontal="15dp"
         android:paddingVertical="10dp"
         android:scaleType="fitXY"
         android:src="@drawable/ic_share_white"
         android:text="Read More"
-        android:textColor="@color/white"
+        android:textColor="@color/app_orange"
         ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintHorizontal_bias="0.5"
         ads:layout_constraintStart_toEndOf="@+id/tvNewsPaperName_news_on_the_go"
@@ -87,20 +82,10 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="5dp"
-        android:background="#e7e7e7"
+        android:background="@color/light_grey"
         ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintStart_toStartOf="parent"
         ads:layout_constraintTop_toBottomOf="@+id/txtReadMore_news_on_the_go" />
-
-    <View
-        android:id="@+id/dividerLineTwo"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="1dp"
-        android:background="#e7e7e7"
-        ads:layout_constraintEnd_toEndOf="parent"
-        ads:layout_constraintStart_toStartOf="parent"
-        ads:layout_constraintTop_toBottomOf="@+id/dividerLineOne" />
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
@@ -112,32 +97,22 @@
         ads:adUnitId="@string/banner_add_app_id"
         ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintStart_toStartOf="parent"
-        ads:layout_constraintTop_toBottomOf="@+id/dividerLineTwo" />
+        ads:layout_constraintTop_toBottomOf="@+id/dividerLineOne" />
 
     <View
         android:id="@+id/dividerLineThree"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="10dp"
-        android:background="#e7e7e7"
+        android:background="@color/light_grey"
         ads:layout_constraintEnd_toEndOf="parent"
         ads:layout_constraintStart_toStartOf="parent"
         ads:layout_constraintTop_toBottomOf="@+id/adView" />
-
-    <View
-        android:id="@+id/dividerLineFour"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="2dp"
-        android:background="#e7e7e7"
-        ads:layout_constraintEnd_toEndOf="parent"
-        ads:layout_constraintStart_toStartOf="parent"
-        ads:layout_constraintTop_toBottomOf="@+id/dividerLineThree" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/groupAdView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        ads:constraint_referenced_ids="dividerLineThree,adView,dividerLineFour" />
+        ads:constraint_referenced_ids="dividerLineThree,adView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

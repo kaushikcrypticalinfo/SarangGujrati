@@ -25,6 +25,8 @@ import com.saranggujrati.webservice.Resource
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
 import com.saranggujrati.databinding.FragmentAllNewsChannelBinding
+import com.saranggujrati.utils.KEY
+import com.saranggujrati.utils.VALUE
 import kotlin.collections.ArrayList
 
 class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {
@@ -64,8 +66,8 @@ class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {
 
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) { // Check if the request code matches and the result is successful
             val receivedData =
-                data?.getStringExtra("close") // Replace "key" with the actual key used in Activity A
-            if (receivedData == "activity") {
+                data?.getStringExtra(KEY) // Replace "key" with the actual key used in Activity A
+            if (receivedData == VALUE) {
                 backFromWebView = true
             }
             // Handle the received data here
@@ -76,6 +78,7 @@ class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {
         if (!moreClick) {
             Log.e("onPause", "onPause")
             mActivity.supportActionBar?.show()
+            mActivity.enableViews(false)
             pushFragment()
         }
         super.onPause()
@@ -86,6 +89,7 @@ class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {
         if (backFromWebView) {
             Log.e("onResume", "onResume")
             mActivity.supportActionBar?.show()
+            mActivity.enableViews(false)
             pushFragment()
         }
     }
