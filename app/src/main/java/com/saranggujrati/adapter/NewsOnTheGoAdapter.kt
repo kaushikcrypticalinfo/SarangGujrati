@@ -27,6 +27,7 @@ class NewsOnTheGoAdapter(private var newsList: ArrayList<RssFeedModelData>) :
 
     var adapterListener: AdapterListener? = null
     lateinit var binding: ItemNewsOnTheGoBinding
+    val adRequest = AdRequest.Builder().build()
 
     interface AdapterListener {
         fun onClick(view: View, position: Int)
@@ -44,23 +45,23 @@ class NewsOnTheGoAdapter(private var newsList: ArrayList<RssFeedModelData>) :
             holder.bind(response)
         }
 
-       /* if (SavedPrefrence.getIsDarkMode(binding.dividerLineOne.context)!!) {
-            binding.dividerLineOne.setBackgroundColor(
-                ContextCompat.getColor(
-                    binding.dividerLineOne.context,
-                    R.color.light_grey
-                )
-            )
-            binding.dividerLineThree.setBackgroundColor(
-                ContextCompat.getColor(
-                    binding.dividerLineThree.context,
-                    R.color.light_grey
-                )
-            )
-        }*/
+        /* if (SavedPrefrence.getIsDarkMode(binding.dividerLineOne.context)!!) {
+             binding.dividerLineOne.setBackgroundColor(
+                 ContextCompat.getColor(
+                     binding.dividerLineOne.context,
+                     R.color.light_grey
+                 )
+             )
+             binding.dividerLineThree.setBackgroundColor(
+                 ContextCompat.getColor(
+                     binding.dividerLineThree.context,
+                     R.color.light_grey
+                 )
+             )
+         }*/
 
         if (position % 3 == 0) {
-            val adRequest = AdRequest.Builder().build()
+            /*val adRequest = AdRequest.Builder().build()*/
             binding.adView.loadAd(adRequest)
             binding.adView.adListener = object : AdListener() {
             }

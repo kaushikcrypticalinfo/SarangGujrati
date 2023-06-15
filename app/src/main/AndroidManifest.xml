@@ -80,7 +80,8 @@
 
         <activity
             android:name=".ui.activity.YouTubeActivity"
-            android:theme="@style/Theme.SarangGujrati.NoActionBar" />
+            android:theme="@style/Theme.SarangGujrati.NoActionBar"
+            android:hardwareAccelerated="true"/>
 
         <activity
             android:name=".ui.activity.WebViewActivity"

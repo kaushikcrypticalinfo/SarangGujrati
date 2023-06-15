@@ -36,6 +36,7 @@ class FeedListAdapter(private var categoryList: ArrayList<RssFeedModelData>) :
 
     var adapterListener: AdapterListener? = null
     lateinit var binding: RRssFeedItemBinding
+    val adRequest = AdRequest.Builder().build()
 
     interface AdapterListener {
         fun onClick(view: View, position: Int)
@@ -57,7 +58,7 @@ class FeedListAdapter(private var categoryList: ArrayList<RssFeedModelData>) :
             val response: RssFeedModelData = categoryList[position]
             holder.bind(response)
 
-            val adRequest = AdRequest.Builder().build()
+           /* val adRequest = AdRequest.Builder().build()*/
             binding.adView.loadAd(adRequest)
             binding.adView.adListener = object : AdListener() {
             }
@@ -83,10 +84,8 @@ class FeedListAdapter(private var categoryList: ArrayList<RssFeedModelData>) :
             }, 2000)
 
             if (data.isBanner && !data.isAddView) {
-                Glide.with(AppClass.appContext)
-                    .load(data.image)
-                    .override(SIZE_ORIGINAL, SIZE_ORIGINAL)
-                    .apply(
+                Glide.with(AppClass.appContext).load(data.image)
+                    .override(SIZE_ORIGINAL, SIZE_ORIGINAL).apply(
                         RequestOptions.placeholderOf(R.drawable.placeholder)
                             .error(R.drawable.placeholder)
                     ).into(binding.imgBanner)
