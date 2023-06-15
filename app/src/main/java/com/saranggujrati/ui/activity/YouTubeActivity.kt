@@ -2,9 +2,11 @@ package com.saranggujrati.ui.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
+import android.view.WindowManager.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
@@ -13,6 +15,8 @@ import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerFullScreenListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.ui.views.YouTubePlayerSeekBarListener
 import com.saranggujrati.R
 import com.saranggujrati.databinding.ActivityYoutubeBinding
 import com.saranggujrati.utils.KEY
@@ -31,11 +35,15 @@ class YouTubeActivity : AppCompatActivity() {
     var videoName: String? = null
     var videoId: String? = null
 
+    var state: PlayerConstants.PlayerState = PlayerConstants.PlayerState.UNKNOWN
+        private set
+    var currentSecond: Float = 0f
+        private set
+    var videoDuration: Float = 0f
+        private set
+
+
     private lateinit var mActivity: MainActivity
-
-    private var ytPlayer: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer? =
-        null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -145,8 +153,20 @@ class YouTubeActivity : AppCompatActivity() {
     private fun playVideo() {
         binding.youtubePlayer.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer) {
-                ytPlayer = youTubePlayer
                 youTubePlayer.cueVideo(videoId!!, 0f)
+                youTubePlayer.play()
+                binding.youtubePlayer.addFullScreenListener(object :
+                    YouTubePlayerFullScreenListener {
+                    override fun onYouTubePlayerEnterFullScreen() {
+                        Timber.e("enterFullScreen")
+                        enterFullScreen()
+                    }
+
+                    override fun onYouTubePlayerExitFullScreen() {
+                        Timber.e("exitFullScreen")
+                        exitFullScreen()
+                    }
+                })
             }
 
             override fun onError(
@@ -155,7 +175,31 @@ class YouTubeActivity : AppCompatActivity() {
             ) {
                 Timber.tag("Error").e(error.toString())
             }
+
+            override fun onCurrentSecond(
+                youTubePlayer: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer,
+                second: Float
+            ) {
+                currentSecond = second
+            }
+
+            override fun onVideoDuration(
+                youTubePlayer: com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer,
+                duration: Float
+            ) {
+                videoDuration = duration
+            }
+
         })
+
+    }
+
+    private fun enterFullScreen() {
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+    }
+
+    private fun exitFullScreen() {
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     /*private fun playVideo() {
