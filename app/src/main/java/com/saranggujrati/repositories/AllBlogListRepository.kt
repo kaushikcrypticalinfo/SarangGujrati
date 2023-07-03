@@ -6,6 +6,6 @@ class AllBlogListRepository(private val api: ApiService) : BaseRepository() {
     suspend fun getRssFeedList(id: String) =
         safeApiCall { api.getRssFeedList() }
 
-    suspend fun getRssLatestNews() =
-        safeApiCall { api.getRssLatestNews() }
+    suspend fun getRssLatestNews(id: String) =
+        safeApiCall { api.getRssLatestNews(id) }
 }

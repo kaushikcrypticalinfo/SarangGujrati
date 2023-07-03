@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
@@ -46,6 +45,8 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
     lateinit var allBogAdapter: FeedListAdapter
 
     private var blogList = ArrayList<RssFeedModelData>()
+    val scrolledPositions = mutableListOf<Int>()
+    var idString: String = ""
 
     private lateinit var mDrawerToggle: ActionBarDrawerToggle
 
@@ -71,7 +72,10 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
         }
 
         binding.imgRefresh.setOnClickListener {
-            viewModel.getRssLatestNews()
+            blogList.clear()
+            idString = ""
+            scrolledPositions.clear()
+            viewModel.getRssLatestNews(idString)
         }
 
         binding.tvTitle.text = getString(R.string.latest_gujrati_news)
@@ -115,10 +119,22 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val pos = linearLayoutManager.findLastCompletelyVisibleItemPosition()
+                Log.e("pos", pos.toString())
                 if (pos >= 0) {
                     val banner = blogList[pos].isBanner
                     binding.relativeLayout.visible(!banner)
                     binding.adView.visible(!banner)
+                }
+
+                if (dy > 0 && pos % 8 == 0 && !scrolledPositions.contains(pos) && blogList.isNotEmpty()) {
+                    scrolledPositions.add(pos)
+                    Log.e("pos", "This is 8th position: $pos")
+                    Log.e("posList", scrolledPositions.toString())
+
+                    idString = blogList.map { it.id }.filterNotNull().joinToString(",")
+                    Log.e("idString", idString)
+
+                    viewModel.getRssLatestNews(idString)
                 }
             }
         })
@@ -132,13 +148,12 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) { // Check if the request code matches and the result is successful
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             val receivedData =
-                data?.getStringExtra(KEY) // Replace "key" with the actual key used in Activity A
+                data?.getStringExtra(KEY)
             if (receivedData == VALUE) {
                 backFromWebView = true
             }
-            // Handle the received data here
         }
     }
 
@@ -192,26 +207,10 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
         binding.adView.adListener = object : AdListener() {}
     }
 
-    private fun getAdSize(): AdSize {
-        //Determine the screen width to use for the ad width.
-        val display = requireActivity().windowManager.defaultDisplay
-        val outMetrics = DisplayMetrics()
-        display.getMetrics(outMetrics)
-        val widthPixels = outMetrics.widthPixels.toFloat()
-        val density = outMetrics.density
-
-        //you can also pass your selected width here in dp
-        val adWidth = (widthPixels / density).toInt()
-
-        //return the optimal size depends on your orientation (landscape or portrait)
-        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(requireContext(), adWidth)
-    }
-
 
     private fun getAllBlogList() {
         setupObservers()
-        viewModel.getRssLatestNews()
-
+        viewModel.getRssLatestNews(idString)
     }
 
     //setup observer
@@ -226,12 +225,15 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
 
                 is Resource.Success -> {
                     //when refresh data clear old data
-                    blogList.clear()
+                    //blogList.clear()
                     if (it.value.status) {
                         if (it.value.status) {
                             binding.progressbar.visible(false)
                             val data = it.value.data
                             blogList.addAll(data.shuffled())
+
+                            idString = blogList.map { it.id }.filterNotNull().joinToString(",")
+                            Log.e("refreshIdString", idString)
 
                             if (blogList.isNotEmpty()) getAllBlogList(blogList)
                             else {
@@ -281,27 +283,7 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
             binding.appBarLayout.visibility = View.VISIBLE
         } else {
 
-            var tempIndex = 2/*SavedPrefrence.getAdsCard(requireContext())?.data?.forEachIndexed { index, cardData ->
-                val blogData = RssFeedModelData()
-                blogData.isBanner = true
-                blogData.image = cardData.image
-                if (tempIndex < blogList.size - 1) {
-                    blogList[tempIndex] = blogData
-                    tempIndex += 6
-                }
-            }
-
-            if (SavedPrefrence.getAdsCard(requireContext())?.data!!.isEmpty()) {
-                blogList.forEachIndexed { index, rssFeedModelData ->
-                    val blogData = RssFeedModelData()
-                    blogData.isBanner = true
-                    blogData.isAddView = true
-                    if (tempIndex < blogList.size - 1) {
-                        blogList[tempIndex] = blogData
-                        tempIndex += 6
-                    }
-                }
-            }*/
+            var tempIndex = 2
 
             SavedPrefrence.getAdsCard(requireContext())?.data?.forEachIndexed { index, cardData ->
                 val blogData = RssFeedModelData()

@@ -156,6 +156,7 @@ interface ApiService {
     @GET("rss-feed-json/0")
     @Json
     suspend fun getRssLatestNews(
+        @Header("exclude_ids") token: String,
     ): FeedResponse
 
     @GET("rss-feed-json/{parentId}/{id}")

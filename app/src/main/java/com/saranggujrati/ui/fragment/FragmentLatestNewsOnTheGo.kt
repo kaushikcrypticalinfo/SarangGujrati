@@ -10,16 +10,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
-import com.saranggujrati.adapter.FeedListAdapter
 import com.saranggujrati.adapter.NewsOnTheGoAdapter
 import com.saranggujrati.databinding.FragmentAllNewsBlogBinding
+import com.saranggujrati.loadmore.EndlessScrollListener
 import com.saranggujrati.model.RssFeedModelData
-import com.saranggujrati.ui.SavedPrefrence
 import com.saranggujrati.ui.activity.MainActivity
 import com.saranggujrati.ui.activity.WebViewActivity
 import com.saranggujrati.ui.isOnline
@@ -36,8 +37,13 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
     var moreClick: Boolean = false
     var backFromWebView: Boolean = false
 
-    lateinit var newsOnTheGoAdapter : NewsOnTheGoAdapter
+    lateinit var newsOnTheGoAdapter: NewsOnTheGoAdapter
     private var newsList = ArrayList<RssFeedModelData>()
+    lateinit var mLayoutManager: RecyclerView.LayoutManager
+
+    lateinit var endlessScrollListener: EndlessScrollListener
+
+    var idString: String = ""
 
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
         binding = FragmentAllNewsBlogBinding.inflate(inflater, container, false)
@@ -51,20 +57,19 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) { // Check if the request code matches and the result is successful
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             val receivedData =
-                data?.getStringExtra(KEY) // Replace "key" with the actual key used in Activity A
+                data?.getStringExtra(KEY)
             if (receivedData == VALUE) {
                 backFromWebView = true
-
             }
-            // Handle the received data here
         }
     }
 
     private fun pushFragment() {
         val fragmentManager = parentFragmentManager
-        val FragmentLatestNewsOnTheGo = fragmentManager.findFragmentByTag("FragmentLatestNewsOnTheGo")
+        val FragmentLatestNewsOnTheGo =
+            fragmentManager.findFragmentByTag("FragmentLatestNewsOnTheGo")
         if (FragmentLatestNewsOnTheGo != null) {
             fragmentManager.popBackStack()
         }
@@ -87,14 +92,16 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
         }
 
         binding.imgRefresh.setOnClickListener {
-            viewModel.getRssLatestNews()
+            idString = ""
+            endlessScrollListener.resetState()
+            getAllBlogList()
         }
 
         binding.adView.visibility = View.GONE
-
         binding.tvTitle.text = getString(R.string.gujarati_news_on_the_go)
 
-        newsOnTheGoAdapter = NewsOnTheGoAdapter(newsList)
+        attachAdapter()
+        setRVScrollListener()
 
         newsOnTheGoAdapter.adapterListener = object : NewsOnTheGoAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
@@ -103,6 +110,7 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
                         mActivity.supportActionBar?.show()
                         mActivity.onBackPressed()
                     }
+
                     R.id.txtReadMore_news_on_the_go -> {
                         val i = Intent(requireContext(), WebViewActivity::class.java)
                         i.putExtra("url", newsList[position].link)
@@ -114,16 +122,24 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
             }
         }
 
-        binding.rvNewsFeed.apply {
-            layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        /*binding.rvNewsFeed.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = newsOnTheGoAdapter
-        }
+        }*/
 
         mActivity = (activity as MainActivity)
         mActivity.enableViews(true)
         mActivity.supportActionBar?.hide()
         getAllBlogList()
+    }
+
+    private fun attachAdapter() {
+        newsOnTheGoAdapter = NewsOnTheGoAdapter(newsList)
+        mLayoutManager = LinearLayoutManager((AppClass.appContext))
+        binding.rvNewsFeed.layoutManager = mLayoutManager
+        binding.rvNewsFeed.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.rvNewsFeed.adapter = newsOnTheGoAdapter
     }
 
     override fun onResume() {
@@ -153,8 +169,29 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
 
     private fun getAllBlogList() {
         setupObservers()
-        viewModel.getRssLatestNews()
 
+        newsList.clear()
+        val insertSize: Int = newsList.size
+        val insertPos: Int = newsList.size - insertSize
+        binding.rvNewsFeed.post {
+            newsOnTheGoAdapter.notifyItemRangeInserted(insertPos, insertSize)
+        }
+
+        viewModel.getRssLatestNews("")
+    }
+
+    private fun setRVScrollListener() {
+        endlessScrollListener =
+            object : EndlessScrollListener(mLayoutManager as LinearLayoutManager, 1) {
+                override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                    if (newsList.isNotEmpty()) {
+                        viewModel.getRssLatestNews(idString)
+                    } else {
+                        endlessScrollListener.isLastPage()
+                    }
+                }
+            }
+        binding.rvNewsFeed.addOnScrollListener(endlessScrollListener)
     }
 
     private fun setupObservers() {
@@ -167,13 +204,14 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
                 }
 
                 is Resource.Success -> {
-                    //when refresh data clear old data
-                    newsList.clear()
                     if (it.value.status) {
                         if (it.value.status) {
                             binding.progressbar.visible(false)
                             val data = it.value.data
                             newsList.addAll(data.shuffled())
+
+                            idString = newsList.map { it.id }.filterNotNull().joinToString(",")
+                            Log.e("refreshIdString", idString)
 
                             if (newsList.isNotEmpty())
                                 getAllBlogList(newsList)
@@ -192,6 +230,7 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
                         Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG).show()
                     }
                 }
+
                 is Resource.Failure -> {
                     binding.progressbar.isVisible = false
                     when {
@@ -204,6 +243,7 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
                                 ).show()
                             }
                         }
+
                         else -> {
                             Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
                                 .show()

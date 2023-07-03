@@ -4,6 +4,10 @@ import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
 
 class RssFeedModelData {
+    @SerializedName("id")
+    @Expose
+    var id: Int? = null
+
     @SerializedName("title")
     @Expose
     var title: String = ""
@@ -32,11 +36,11 @@ class RssFeedModelData {
     @Expose
     var publishDate: String = ""
 
-  @SerializedName("feed_type")
+    @SerializedName("feed_type")
     @Expose
     var feedType: String = ""
 
-    var isBanner:Boolean = false
+    var isBanner: Boolean = false
 
-    var isAddView:Boolean = false
+    var isAddView: Boolean = false
 }

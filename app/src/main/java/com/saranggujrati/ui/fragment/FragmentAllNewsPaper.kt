@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
 import com.saranggujrati.adapter.AllNewsPaperAdapter
@@ -39,7 +38,6 @@ class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {
     lateinit var endlessScrollListener: EndlessScrollListener
     var nextPageUrl: String? = null
     lateinit var newsPaperResponse: NewsPaperListResponse
-    lateinit var swipeContainer: SwipeRefreshLayout
 
     var moreClick: Boolean = false
     var backFromWebView: Boolean = false
@@ -135,7 +133,7 @@ class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {
                     i.putExtra("url", newPaperlList[position]?.url)
                     i.putExtra("title", newPaperlList[position]?.title)
                     moreClick = true
-                    startActivityForResult(i,1)
+                    startActivityForResult(i, 1)
                 }
             }
         }
@@ -217,6 +215,7 @@ class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {
                                 ).show()
                             }
                         }
+
                         else -> {
                             Snackbar.make(binding.layout, it.value.message, Snackbar.LENGTH_LONG)
                                 .show()
