@@ -49,6 +49,8 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
     lateinit var feedListAdapter: FeedListAdapter
 
     private var blogList = ArrayList<RssFeedModelData>()
+    val scrolledPositions = mutableListOf<Int>()
+    var idString: String = ""
 
     lateinit var binding: ActivityCitCatBlogBinding
 
@@ -112,7 +114,10 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
         binding.icBack.setOnClickListener { finish() }
 
         binding.imgRefresh.setOnClickListener {
-            viewModel.getRssFeedList(parentId, id)
+            blogList.clear()
+            idString = ""
+            scrolledPositions.clear()
+            viewModel.getRssFeedList(parentId, id, idString)
         }
 
         feedListAdapter = FeedListAdapter(blogList)
@@ -156,10 +161,22 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val pos = linearLayoutManager.findLastCompletelyVisibleItemPosition()
+                Log.e("pos", pos.toString())
                 if (pos >= 0) {
                     val banner = blogList[pos].isBanner
                     binding.relativeLayout.visible(!banner)
                     binding.adView.visible(!banner)
+                }
+
+                if (dy > 0 && pos % 8 == 0 && !scrolledPositions.contains(pos) && blogList.isNotEmpty()) {
+                    scrolledPositions.add(pos)
+                    Log.e("pos", "This is 8th position: $pos")
+                    Log.e("posList", scrolledPositions.toString())
+
+                    idString = blogList.map { it.id }.filterNotNull().joinToString(",")
+                    Log.e("idString", idString)
+
+                    viewModel.getRssFeedList(parentId, id, idString)
                 }
             }
         })
@@ -181,7 +198,7 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
 
     private fun getAllBlogList(parentId: String, id: String) {
         setupObservers()
-        viewModel.getRssFeedList(parentId, id)
+        viewModel.getRssFeedList(parentId, id, idString)
     }
 
     //setup observer
@@ -195,12 +212,15 @@ class ActivityCityCatBlogDetail : BaseActicvity<CityCatBlogDetailViewModel>(),
 
                 is Resource.Success -> {
                     //when refresh data clear old data
-                    blogList.clear()
+                    //blogList.clear()
                     if (it.value.status) {
                         if (it.value.status) {
                             binding.progressbar.visible(false)
                             val data = it.value.data
                             blogList.addAll(data.shuffled())
+
+                            idString = blogList.map { it.id }.filterNotNull().joinToString(",")
+                            Log.e("refreshIdString", idString)
 
                             var tempIndex = 2
                             SavedPrefrence.getAdsCard(this)?.data?.forEachIndexed { index, cardData ->

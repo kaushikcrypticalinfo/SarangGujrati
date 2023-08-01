@@ -7,8 +7,8 @@ class CityCategoryBlogDetailRepository(private val api: ApiService) : BaseReposi
     suspend fun getCityCatBlogDetail(id: String) =
         safeApiCall { api.getCitiesCategoriesDetailBlog(id) }
 
-    suspend fun getRssFeedList(parentId: String, id: String) =
-        safeApiCall { api.getRssFeedList(parentId,id) }
+    suspend fun getRssFeedList(parentId: String, id: String, exclude_ids: String) =
+        safeApiCall { api.getRssFeedList(parentId, id, exclude_ids) }
 
     suspend fun getFeedLiveData(url: String) =
         safeApiCall { api.getFeedLiveData(url) }

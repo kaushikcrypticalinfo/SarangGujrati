@@ -35,4 +35,5 @@ const val VALUE = "activity"
 
 const val gujarati_flavors = "gujarati"
 const val kathiyawadi_khamir = "kathiyawadi_khamir"
+const val odia = "odia"
 

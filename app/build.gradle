@@ -19,8 +19,8 @@ android {
         applicationId "com.saranggujrati"
         minSdk 21
         targetSdk 33
-        versionCode 4
-        versionName "1.3"
+        versionCode 5
+        versionName "1.4"
         setProperty("archivesBaseName", getDate() + "-V" + versionName)
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -52,6 +52,11 @@ android {
 //            applicationIdSuffix ".gujarati"
             resValue "string", "flavoured_app_name", "Sarang Gujarati"
         }
+        odia {
+            dimension 'newslanguage'
+            applicationIdSuffix ".odia"
+            resValue "string", "flavoured_app_name", "Sarang Odia"
+        }
         marathi {
             dimension 'newslanguage'
             applicationIdSuffix ".marathi"
@@ -69,6 +74,10 @@ android {
         gujarati {
             java.srcDirs('src/gujarati/java')
             res.srcDirs('src/gujarati/res')
+        }
+        odia {
+            java.srcDirs('src/odia/java')
+            res.srcDirs('src/odia/res')
         }
         marathi {
             java.srcDirs('src/marathi/java')

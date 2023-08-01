@@ -164,6 +164,7 @@ interface ApiService {
     suspend fun getRssFeedList(
         @Path("parentId") parentId: String,
         @Path("id") id: String,
+        @Header("exclude_ids") token: String,
     ): FeedResponse
 
     @GET("full-screen-card-list")

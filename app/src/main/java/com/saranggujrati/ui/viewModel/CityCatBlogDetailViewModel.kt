@@ -36,10 +36,10 @@ class CityCatBlogDetailViewModel(private val repository: CityCategoryBlogDetailR
             _cityCatBlogDetailResponse.value = repository.getCityCatBlogDetail(id)
         }
 
-    fun getRssFeedList(parentId: String, id: String) =
+    fun getRssFeedList(parentId: String, id: String, exclude_ids: String) =
         viewModelScope.launch {
             _feedList.value = Resource.Loading
-            _feedList.value = repository.getRssFeedList(parentId,id)
+            _feedList.value = repository.getRssFeedList(parentId, id, exclude_ids)
         }
 
     fun getLiveData(url: String) =
