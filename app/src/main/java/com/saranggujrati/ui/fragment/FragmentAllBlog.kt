@@ -34,6 +34,7 @@ import com.saranggujrati.ui.viewModel.AllBlogListViewModel
 import com.saranggujrati.ui.visible
 import com.saranggujrati.utils.KEY
 import com.saranggujrati.utils.VALUE
+import com.saranggujrati.utils.topMenuName
 import com.saranggujrati.webservice.Resource
 
 
@@ -63,7 +64,7 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
-
+        val dataValue = arguments?.getString(topMenuName)
         loadBannerAd()
 
         binding.icBack.setOnClickListener {
@@ -78,7 +79,11 @@ class FragmentAllBlog : BaseFragment<AllBlogListViewModel>(), View.OnClickListen
             viewModel.getRssLatestNews(idString)
         }
 
-        binding.tvTitle.text = getString(R.string.latest_gujrati_news)
+        if (dataValue != null) {
+            binding.tvTitle.text = dataValue
+        } else {
+            binding.tvTitle.text = "Latest News"
+        }
 
         allBogAdapter = FeedListAdapter(blogList)
 

@@ -27,6 +27,7 @@ import com.saranggujrati.ui.viewModel.HomeViewModel
 import com.saranggujrati.ui.visible
 import com.saranggujrati.utils.KEY
 import com.saranggujrati.utils.VALUE
+import com.saranggujrati.utils.topMenuName
 import com.saranggujrati.webservice.Resource
 import java.util.*
 
@@ -55,6 +56,8 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     private var topMenuItemList = ArrayList<ApiRecordData>()
 
     var fragmentBackFromButton: Boolean = false
+
+    var lblTemple: String = ""
 
     override fun getLayoutView(inflater: LayoutInflater, container: ViewGroup?): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -113,8 +116,12 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                         it.value.data.let { it ->
                             it.find { it.id == 5 && it.found == true }?.let {
                                 binding.tvLiveTempleDarshan.visible(true)
+                                binding.txtTempleDarshan.text = it.name
+                                lblTemple = it.name!!
                             } ?: kotlin.run {
                                 binding.tvLiveTempleDarshan.visible(false)
+                                binding.txtTempleDarshan.text = ""
+                                lblTemple = ""
                             }
                         }
 
@@ -240,11 +247,41 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
         topMenuAdapter = TopMenuAdapter(topMenuItemList)
         topMenuAdapter.adapterListener = object : TopMenuAdapter.AdapterListener {
             override fun onClick(view: View, position: Int) {
+                val bundle = Bundle()
+                val correspondingItem =
+                    topMenuItemList.find { it.id == position }
                 when (position) {
-                    1 -> mActivity.pushFragment(FragmentAllBlog(), "FragmentAllBlog")
-                    2 -> mActivity.pushFragment(FragmentAllNewsPaper(), "FragmentAllNewsPaper")
-                    3 -> mActivity.pushFragment(FragmentLatestNewsOnTheGo(),"FragmentLatestNewsOnTheGo")
-                    4 -> mActivity.pushFragment(FragmentAllNewsChannel(), "FragmentAllNewsChannel")
+                    1 -> {
+                        bundle.putString(topMenuName, correspondingItem?.name)
+                        mActivity.pushFragment(FragmentAllBlog(), "FragmentAllBlog", bundle)
+                    }
+
+                    2 -> {
+                        bundle.putString(topMenuName, correspondingItem?.name)
+                        mActivity.pushFragment(
+                            FragmentAllNewsPaper(),
+                            "FragmentAllNewsPaper",
+                            bundle
+                        )
+                    }
+
+                    3 -> {
+                        bundle.putString(topMenuName, correspondingItem?.name)
+                        mActivity.pushFragment(
+                            FragmentLatestNewsOnTheGo(),
+                            "FragmentLatestNewsOnTheGo",
+                            bundle
+                        )
+                    }
+
+                    4 -> {
+                        bundle.putString(topMenuName, correspondingItem?.name)
+                        mActivity.pushFragment(
+                            FragmentAllNewsChannel(),
+                            "FragmentAllNewsChannel",
+                            bundle
+                        )
+                    }
                 }
             }
         }
@@ -550,10 +587,14 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
     }
 
     override fun onClick(p0: View?) {
+        val bundle = Bundle()
         when (p0) {
-            binding.tvLiveTempleDarshan -> mActivity.pushFragment(
-                FrLiveTempleDarshanChannel(), "FrLiveTempleDarshanChannel"
-            )
+            binding.tvLiveTempleDarshan -> {
+                bundle.putString(topMenuName, lblTemple)
+                mActivity.pushFragment(
+                    FrLiveTempleDarshanChannel(), "FrLiveTempleDarshanChannel"
+                )
+            }
         }
     }
 

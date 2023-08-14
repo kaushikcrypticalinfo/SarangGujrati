@@ -26,6 +26,7 @@ const val RSS_FEED_DATE_FORMAT = "EEE, d MMM yyyy HH:mm:ss Z"
 const val RSS_FEED_DATE_FORMAT_GMT = "EEE, d MMM yyyy HH:mm:ss zzz"
 const val RSS_FEED_DATE_FORMAT_T = "yyyy-MM-dd'T'hh:mm:ssZ"
 
+const val topMenuName = "topMenuName"
 
 const val STARTING_PAGE_INDEX = 1
 const val NETWORK_PAGE_SIZE = 10

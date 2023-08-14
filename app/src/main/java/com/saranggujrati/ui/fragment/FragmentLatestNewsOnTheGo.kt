@@ -28,6 +28,7 @@ import com.saranggujrati.ui.viewModel.AllBlogListViewModel
 import com.saranggujrati.ui.visible
 import com.saranggujrati.utils.KEY
 import com.saranggujrati.utils.VALUE
+import com.saranggujrati.utils.topMenuName
 import com.saranggujrati.webservice.Resource
 
 class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
@@ -86,6 +87,8 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
+        val dataValue = arguments?.getString(topMenuName)
+
         binding.icBack.setOnClickListener {
             mActivity.supportActionBar?.show()
             mActivity.onBackPressed()
@@ -98,7 +101,12 @@ class FragmentLatestNewsOnTheGo : BaseFragment<AllBlogListViewModel>() {
         }
 
         binding.adView.visibility = View.GONE
-        binding.tvTitle.text = getString(R.string.gujarati_news_on_the_go)
+        if (dataValue != null) {
+            binding.tvTitle.text = dataValue
+        }else {
+            binding.tvTitle.text = getString(R.string.gujarati_news_on_the_go)
+        }
+
 
         attachAdapter()
         setRVScrollListener()

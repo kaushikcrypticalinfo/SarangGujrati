@@ -26,6 +26,7 @@ import com.performly.ext.obtainViewModel
 import com.saranggujrati.databinding.FragmentAllNewsChannelBinding
 import com.saranggujrati.utils.KEY
 import com.saranggujrati.utils.VALUE
+import com.saranggujrati.utils.topMenuName
 import kotlin.collections.ArrayList
 
 class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {
@@ -94,8 +95,15 @@ class FragmentAllNewsPaper : BaseFragment<NewsPaperViewModel>() {
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
 
+        val dataValue = arguments?.getString(topMenuName)
+
         mActivity = (activity as MainActivity)
-        mActivity.toolbar.title = getString(R.string.all_news_paper)
+
+        if (dataValue != null) {
+            mActivity.toolbar.title = dataValue
+        } else {
+            mActivity.toolbar.title = "All Newspaper"
+        }
         mActivity.enableViews(true)
         setAdapter()
         setRVLayoutManager()

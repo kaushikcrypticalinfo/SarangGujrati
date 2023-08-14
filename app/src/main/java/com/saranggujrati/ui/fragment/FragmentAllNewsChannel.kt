@@ -23,6 +23,7 @@ import com.performly.ext.obtainViewModel
 import com.saranggujrati.databinding.FragmentAllNewsChannelBinding
 import com.saranggujrati.utils.KEY
 import com.saranggujrati.utils.VALUE
+import com.saranggujrati.utils.topMenuName
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -91,8 +92,14 @@ class FragmentAllNewsChannel : BaseFragment<NewsChannelViewModel>() {
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
+        val dataValue = arguments?.getString(topMenuName)
+
         mActivity = (activity as MainActivity)
-        mActivity.toolbar.title = getString(R.string.all_channels)
+        if (dataValue != null) {
+            mActivity.toolbar.title = dataValue
+        } else {
+            mActivity.toolbar.title = getString(R.string.all_channels)
+        }
         mActivity.enableViews(true)
 
         binding.rvAllNewsChannel.progressbar.visible(true)

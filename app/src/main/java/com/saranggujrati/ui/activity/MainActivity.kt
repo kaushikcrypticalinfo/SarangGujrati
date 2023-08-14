@@ -293,10 +293,11 @@ class MainActivity : BaseActicvity<MainViewModel>(),
         binding.appBarToolbar.viewPager.adapter = adapter
     }
 
-    fun pushFragment(fragment: Fragment, tag: String) {
+    fun pushFragment(fragment: Fragment, tag: String, data: Bundle? = null) {
 //fragment not in back stack, create it.
         val fragmentManager = supportFragmentManager
         val transaction = fragmentManager.beginTransaction()
+        fragment.arguments = data
         transaction.replace(R.id.a_header_layout_content, fragment, tag)
         transaction.addToBackStack(null)
         transaction.commit()

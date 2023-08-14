@@ -25,6 +25,7 @@ import com.performly.ext.obtainViewModel
 import com.saranggujrati.databinding.FragmentAllNewsChannelBinding
 import com.saranggujrati.utils.KEY
 import com.saranggujrati.utils.VALUE
+import com.saranggujrati.utils.topMenuName
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlin.collections.ArrayList
@@ -91,8 +92,16 @@ class FrLiveTempleDarshanChannel : BaseFragment<NewsChannelViewModel>() {
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
+        val dataValue = arguments?.getString(topMenuName)
+
         mActivity = (activity as MainActivity)
-        mActivity.toolbar.title = getString(R.string.str_live_darshan_temple)
+
+        if (dataValue != null) {
+            mActivity.toolbar.title = dataValue
+        } else {
+            mActivity.toolbar.title = "Live Temple Darshan"
+        }
+
         mActivity.enableViews(true)
 
         binding.rvAllNewsChannel.progressbar.visible(true)
