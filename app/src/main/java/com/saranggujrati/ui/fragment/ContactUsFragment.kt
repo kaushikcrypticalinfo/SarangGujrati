@@ -11,12 +11,14 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.performly.ext.obtainViewModel
+import com.saranggujrati.BuildConfig
 import com.saranggujrati.R
 import com.saranggujrati.databinding.FragmentContactUsBinding
 import com.saranggujrati.ui.activity.MainActivity
 import com.saranggujrati.ui.isValidEmail
 import com.saranggujrati.ui.sendMail
 import com.saranggujrati.ui.viewModel.HomeViewModel
+import com.saranggujrati.utils.kathiyawadi_khamir
 
 
 class ContactUsFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
@@ -109,6 +111,9 @@ class ContactUsFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
 
         // if you want to enable zoom feature
         binding.webview.settings.setSupportZoom(true)
-        binding.webview.loadUrl("https://www.sarangnews.app/contact-us/")
+        when (BuildConfig.FLAVOR) {
+            kathiyawadi_khamir -> binding.webview.loadUrl("https://kathiyawadikhamir.com/app-contact-us")
+            else -> binding.webview.loadUrl("https://www.sarangnews.app/contact-us/")
+        }
     }
 }

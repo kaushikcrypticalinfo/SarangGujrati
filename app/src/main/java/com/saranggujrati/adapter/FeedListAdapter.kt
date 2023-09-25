@@ -1,9 +1,7 @@
 package com.saranggujrati.adapter
 
-import android.app.Activity
 import android.os.Build
 import android.text.Html
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -16,20 +14,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.google.android.gms.ads.*
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import com.google.android.gms.ads.nativead.NativeAd
-import com.google.android.gms.ads.nativead.NativeAdOptions
-import com.google.android.gms.ads.nativead.NativeAdView
-import com.google.android.gms.ads.nativead.NativeAdViewHolder
-
-import com.saranggujrati.databinding.RRssFeedItemBinding
 import com.saranggujrati.AppClass
 import com.saranggujrati.R
-
+import com.saranggujrati.databinding.RRssFeedItemBinding
 import com.saranggujrati.extensions.formatHtmlText
 import com.saranggujrati.model.RssFeedModelData
-import timber.log.Timber
 
 class FeedListAdapter(private var categoryList: ArrayList<RssFeedModelData>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {

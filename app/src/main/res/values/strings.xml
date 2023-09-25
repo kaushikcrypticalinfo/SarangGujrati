@@ -2,8 +2,10 @@
     <string name="app_name">Sarang Gujarati</string>
     <string name="api_key">AIzaSyDbCHpHjoiWINRI3bgLeXfCNBwGXv28FSo</string>
 
-<!--    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>--> <!--Old app unit id-->
-    <string name="banner_add_app_id">ca-app-pub-3125008321195277/8293686391</string><!--New app unit id planetgujarat@gmail.com-->
+<!--<string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>--> <!--Old app unit id-->
+<!--Sarang Unit Id <string name="banner_ad_unit_id">ca-app-pub-3125008321195277/8293686391</string>-->
+<!--Odia Unit Id <string name="banner_ad_unit_id">ca-app-pub-3125008321195277/8129951708</string>-->
+    <string name="banner_add_app_id">ca-app-pub-3125008321195277/8129951708</string><!--New app unit id planetgujarat@gmail.com-->
 
     <string name="facebook_app_id">1234</string>
     <string name="fb_login_protocol_scheme">fb1243</string>

@@ -109,23 +109,26 @@ class HomeFragment : BaseFragment<HomeViewModel>(), View.OnClickListener {
                 is Resource.Success -> {
                     binding.progressbar.visible(false)
                     if (it.value.status) {
-                        topMenuItemList.apply {
-                            clear()
-                            addAll(it.value.data.filter { it.id != 5 && it.found == true })
-                        }
-                        it.value.data.let { it ->
-                            it.find { it.id == 5 && it.found == true }?.let {
-                                binding.tvLiveTempleDarshan.visible(true)
-                                binding.txtTempleDarshan.text = it.name
-                                lblTemple = it.name!!
-                            } ?: kotlin.run {
-                                binding.tvLiveTempleDarshan.visible(false)
-                                binding.txtTempleDarshan.text = ""
-                                lblTemple = ""
+                        if (it.value.data.isEmpty()) {
+                            binding.rtlBtn.visible(false)
+                            binding.tvLiveTempleDarshan.visible(false)
+                        } else {
+                            topMenuItemList.apply {
+                                clear()
+                                addAll(it.value.data.filter { it.id != 5 && it.found == true })
+                            }
+                            it.value.data.let { it ->
+                                it.find { it.id == 5 && it.found == true && it.name != null }?.let {
+                                    binding.tvLiveTempleDarshan.visible(true)
+                                    binding.txtTempleDarshan.text = it.name
+                                    lblTemple = it.name!!
+                                } ?: kotlin.run {
+                                    binding.tvLiveTempleDarshan.visible(false)
+                                    binding.txtTempleDarshan.text = ""
+                                    lblTemple = ""
+                                }
                             }
                         }
-
-
                         topMenuAdapter.notifyDataSetChanged()
                     }
                 }

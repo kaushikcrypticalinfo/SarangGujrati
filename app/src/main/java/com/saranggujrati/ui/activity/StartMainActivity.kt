@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.performly.ext.obtainViewModel
+import com.saranggujrati.BuildConfig
 import com.saranggujrati.R
 import com.saranggujrati.databinding.ActivityStartMainBinding
 import com.saranggujrati.ui.SavedPrefrence
@@ -23,6 +24,7 @@ import com.saranggujrati.ui.isOnline
 import com.saranggujrati.ui.startNewActivity
 import com.saranggujrati.ui.viewModel.LoginViewModel
 import com.saranggujrati.ui.visible
+import com.saranggujrati.utils.kathiyawadi_khamir
 import com.saranggujrati.webservice.Resource
 import kotlinx.coroutines.launch
 
@@ -48,7 +50,7 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
     }
 
     override fun setUpChildUI(savedInstanceState: Bundle?) {
-        Log.e("sta","One Time")
+        Log.e("sta", "One Time")
         setupUI()
     }
 
@@ -262,6 +264,7 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
                 is Resource.Loading -> {
                     progressBar.visible(true)
                 }
+
                 is Resource.Success -> {
                     if (it.value.status) {
                         progressBar.visible(false)
@@ -282,6 +285,7 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
                     }
 
                 }
+
                 is Resource.Failure -> {
                     progressBar.visible(false)
 
@@ -295,6 +299,7 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
                                 ).show()
                             }
                         }
+
                         else -> {
                             Snackbar.make(view, it.value.message, Snackbar.LENGTH_LONG).show()
 
@@ -309,6 +314,7 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
             }
         })
     }
+
     //Reset Password
     private fun setupObserversResetPassword(
         dialog: BottomSheetDialog,
@@ -321,6 +327,7 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
                 is Resource.Loading -> {
                     progressBar.visible(true)
                 }
+
                 is Resource.Success -> {
                     if (it.value.status) {
                         progressBar.visible(false)
@@ -332,6 +339,7 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
                         binding.progressbar.visible(false)
                     }
                 }
+
                 is Resource.Failure -> {
                     progressBar.visible(false)
 
@@ -345,6 +353,7 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
                                 ).show()
                             }
                         }
+
                         else -> {
                             Snackbar.make(view, it.value.message, Snackbar.LENGTH_LONG).show()
                         }
@@ -360,18 +369,40 @@ class StartMainActivity : BaseActicvity<LoginViewModel>(), View.OnClickListener 
             binding.tvGuest -> clickOnGuest()
             binding.tvForgotPassword -> openForgotPasswordDialogue()
             binding.tvTerms -> {
-                val browserIntent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://www.sarangnews.app/terms-conditions/")
-                )
+                val browserIntent: Intent = when (BuildConfig.FLAVOR) {
+                    kathiyawadi_khamir -> {
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://kathiyawadikhamir.com/app-privacy-policy")
+                        )
+                    }
+
+                    else -> {
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://www.sarangnews.app/terms-conditions/")
+                        )
+                    }
+                }
                 startActivity(browserIntent)
             }
 
             binding.tvPrivacyPolicy -> {
-                val browserIntent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://www.sarangnews.app/privacy-policy/")
-                )
+                val browserIntent: Intent = when (BuildConfig.FLAVOR) {
+                    kathiyawadi_khamir -> {
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://kathiyawadikhamir.com/app-privacy-policy")
+                        )
+                    }
+
+                    else -> {
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://www.sarangnews.app/privacy-policy/")
+                        )
+                    }
+                }
                 startActivity(browserIntent)
             }
         }

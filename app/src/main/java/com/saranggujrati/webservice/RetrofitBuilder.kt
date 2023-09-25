@@ -1,9 +1,7 @@
 package com.example.retrofitcoroutineexample.data.api
 
 
-import com.saranggujrati.AppClass
 import com.saranggujrati.BuildConfig
-import com.saranggujrati.ui.SavedPrefrence
 import com.saranggujrati.utils.gujarati_flavors
 import com.saranggujrati.utils.kathiyawadi_khamir
 import com.saranggujrati.utils.odia
@@ -21,7 +19,8 @@ import java.util.concurrent.TimeUnit
 object RetrofitBuilder {
 
 //    private const val BASE_URL = "https://sarangnews.app/gujarati/api/"
-    private const val BASE_URL = "http://newsnmore.in/api/"
+//    private const val BASE_URL = "http://newsnmore.in/api/"
+    private const val BASE_URL = "https://kathiyawadikhamir.in/api/"
 
     //print responce in json format
     private fun getRetrofitClient(authenticator: Authenticator? = null): OkHttpClient {
